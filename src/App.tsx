@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { useState, useMemo, useCallback, useEffect } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap, Circle } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './App.css'
@@ -79,6 +79,25 @@ const createClusterIcon = (count: number, types: Record<string, number>) => {
   })
 }
 
+const createUserLocationIcon = () => {
+  return L.divIcon({
+    className: 'user-location-marker',
+    html: '<div class="user-marker"><div class="user-marker-pulse"></div><div class="user-marker-dot"></div></div>',
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  })
+}
+
+function MapController({ center, zoom }: { center: [number, number] | null, zoom: number | null }) {
+  const map = useMap()
+  useEffect(() => {
+    if (center && zoom) {
+      map.setView(center, zoom)
+    }
+  }, [center, zoom, map])
+  return null
+}
+
 function VisibleMarkersHandler({
   facilities,
   onVisibleChange
@@ -142,6 +161,10 @@ function App() {
   const [visibleMarkers, setVisibleMarkers] = useState<ReligiousFacility[]>([])
   const [clusters, setClusters] = useState<Array<{lat: number, lng: number, count: number, types: Record<string, number>, facilities: ReligiousFacility[]}>>([])
   const [listPage, setListPage] = useState(1)
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
+  const [isLocating, setIsLocating] = useState(false)
+  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null)
+  const [mapZoom, setMapZoom] = useState<number | null>(null)
   const ITEMS_PER_PAGE = 20
 
   const filteredFacilities = useMemo(() => {
@@ -163,6 +186,41 @@ function App() {
     setClusters(newClusters)
   }, [])
 
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert('이 브라우저에서는 위치 서비스를 지원하지 않습니다.')
+      return
+    }
+
+    setIsLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords
+        setUserLocation([latitude, longitude])
+        setMapCenter([latitude, longitude])
+        setMapZoom(14)
+        setIsLocating(false)
+      },
+      (error) => {
+        setIsLocating(false)
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert('위치 정보 접근이 거부되었습니다. 브라우저 설정에서 위치 권한을 허용해주세요.')
+            break
+          case error.POSITION_UNAVAILABLE:
+            alert('위치 정보를 사용할 수 없습니다.')
+            break
+          case error.TIMEOUT:
+            alert('위치 정보 요청 시간이 초과되었습니다.')
+            break
+          default:
+            alert('위치를 가져오는 중 오류가 발생했습니다.')
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    )
+  }
+
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
     return filteredFacilities.slice(start, start + ITEMS_PER_PAGE)
@@ -175,6 +233,28 @@ function App() {
     filteredFacilities.forEach(f => counts[f.type]++)
     return counts
   }, [filteredFacilities])
+
+  const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+    const R = 6371
+    const dLat = (lat2 - lat1) * Math.PI / 180
+    const dLng = (lng2 - lng1) * Math.PI / 180
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    return R * c
+  }
+
+  const nearbyFacilities = useMemo(() => {
+    if (!userLocation) return []
+    return filteredFacilities
+      .map(f => ({
+        ...f,
+        distance: getDistance(userLocation[0], userLocation[1], f.lat, f.lng)
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 10)
+  }, [userLocation, filteredFacilities])
 
   return (
     <div className="app">
@@ -214,7 +294,7 @@ function App() {
         )}
       </div>
 
-      <div className="region-filter">
+      <div className="filter-row">
         <select
           value={selectedRegion}
           onChange={(e) => setSelectedRegion(e.target.value)}
@@ -224,6 +304,13 @@ function App() {
             <option key={region} value={region}>{region}</option>
           ))}
         </select>
+        <button
+          className={`location-btn${isLocating ? ' loading' : ''}`}
+          onClick={handleGetLocation}
+          disabled={isLocating}
+        >
+          {isLocating ? '📍 찾는 중...' : '📍 내 위치'}
+        </button>
       </div>
 
       <div className="view-toggle">
@@ -243,6 +330,9 @@ function App() {
 
       <div className="results-info">
         검색 결과: <strong>{filteredFacilities.length.toLocaleString()}</strong>개
+        {userLocation && nearbyFacilities.length > 0 && (
+          <span className="nearby-info"> · 가장 가까운 시설: {nearbyFacilities[0].name} ({nearbyFacilities[0].distance.toFixed(1)}km)</span>
+        )}
       </div>
 
       {viewMode === 'map' ? (
@@ -257,10 +347,27 @@ function App() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            <MapController center={mapCenter} zoom={mapZoom} />
             <VisibleMarkersHandler
               facilities={filteredFacilities}
               onVisibleChange={handleVisibleChange}
             />
+            {userLocation && (
+              <>
+                <Marker position={userLocation} icon={createUserLocationIcon()}>
+                  <Popup>
+                    <div className="user-popup">
+                      <strong>📍 현재 위치</strong>
+                    </div>
+                  </Popup>
+                </Marker>
+                <Circle
+                  center={userLocation}
+                  radius={1000}
+                  pathOptions={{ color: '#4F46E5', fillColor: '#4F46E5', fillOpacity: 0.1 }}
+                />
+              </>
+            )}
             {clusters.map((cluster, i) => (
               <Marker
                 key={`cluster-${i}`}
@@ -302,6 +409,29 @@ function App() {
         </div>
       ) : (
         <div className="list-container">
+          {userLocation && nearbyFacilities.length > 0 && (
+            <div className="nearby-section">
+              <h3>📍 내 주변 시설</h3>
+              <div className="nearby-list">
+                {nearbyFacilities.slice(0, 5).map(facility => (
+                  <div
+                    key={`nearby-${facility.id}`}
+                    className="nearby-card"
+                    onClick={() => setSelectedFacility(facility)}
+                  >
+                    <span className="nearby-icon" style={{ background: RELIGION_CONFIG[facility.type].gradient }}>
+                      {RELIGION_CONFIG[facility.type].icon}
+                    </span>
+                    <div className="nearby-info-text">
+                      <span className="nearby-name">{facility.name}</span>
+                      <span className="nearby-distance">{facility.distance.toFixed(1)}km</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="facility-list">
             {paginatedList.map(facility => (
               <div
@@ -323,9 +453,13 @@ function App() {
                       {facility.denomination && ` · ${facility.denomination}`}
                     </span>
                   </div>
+                  <span className="source-badge">카카오</span>
                 </div>
                 <p className="facility-address">{facility.roadAddress || facility.address}</p>
-                {facility.phone && <p className="facility-phone">📞 {facility.phone}</p>}
+                <div className="facility-meta">
+                  {facility.phone && <span className="facility-phone">📞 {facility.phone}</span>}
+                  {facility.website && <span className="facility-website">🌐 웹사이트</span>}
+                </div>
               </div>
             ))}
           </div>
@@ -371,6 +505,11 @@ function App() {
               </div>
             </div>
 
+            <div className="data-source">
+              <span className="source-icon">📍</span>
+              <span>데이터 출처: <strong>카카오맵</strong></span>
+            </div>
+
             {selectedFacility.isCult && (
               <div className="cult-warning">
                 ⚠️ 주의: 이단/사이비 의심 시설입니다
@@ -381,6 +520,11 @@ function App() {
             <div className="modal-section">
               <h4>📍 주소</h4>
               <p>{selectedFacility.roadAddress || selectedFacility.address}</p>
+              {userLocation && (
+                <p className="distance-info">
+                  현재 위치에서 {getDistance(userLocation[0], userLocation[1], selectedFacility.lat, selectedFacility.lng).toFixed(1)}km
+                </p>
+              )}
             </div>
 
             {selectedFacility.phone && (
@@ -404,6 +548,13 @@ function App() {
               </div>
             )}
 
+            {selectedFacility.category && (
+              <div className="modal-section">
+                <h4>📂 분류</h4>
+                <p>{selectedFacility.category}</p>
+              </div>
+            )}
+
             <div className="modal-actions">
               {selectedFacility.kakaoUrl && (
                 <a
@@ -417,7 +568,7 @@ function App() {
               )}
               {selectedFacility.website && (
                 <a
-                  href={selectedFacility.website}
+                  href={selectedFacility.website.startsWith('http') ? selectedFacility.website : `https://${selectedFacility.website}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="action-btn website"
@@ -433,13 +584,31 @@ function App() {
                   📞 전화
                 </a>
               )}
+              <a
+                href={`https://map.naver.com/v5/search/${encodeURIComponent(selectedFacility.name + ' ' + selectedFacility.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="action-btn naver"
+              >
+                🗺️ 네이버맵
+              </a>
+            </div>
+
+            <div className="modal-footer">
+              <p className="data-note">
+                ℹ️ 이 정보는 카카오맵에서 수집되었습니다. 최신 정보와 다를 수 있으니 방문 전 확인해주세요.
+              </p>
             </div>
           </div>
         </div>
       )}
 
       <footer>
-        <p>데이터 출처: 카카오맵 | 총 {facilities.length.toLocaleString()}개 시설</p>
+        <p>
+          데이터 출처:
+          <a href="https://map.kakao.com" target="_blank" rel="noopener noreferrer"> 카카오맵</a>
+          {' '}| 총 {facilities.length.toLocaleString()}개 시설
+        </p>
       </footer>
     </div>
   )
