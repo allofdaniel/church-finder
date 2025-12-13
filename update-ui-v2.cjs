@@ -1,4 +1,8 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+const fs = require('fs');
+const path = require('path');
+
+// New App.tsx with full tooltip and dark mode
+const appContent = `import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
@@ -157,7 +161,7 @@ function App() {
     : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
 
   return (
-    <div className={`app ${darkMode ? 'dark' : ''}`}>
+    <div className={\`app \${darkMode ? 'dark' : ''}\`}>
       <header className="header">
         <div className="header-content">
           <div className="logo">
@@ -188,7 +192,7 @@ function App() {
               {Object.entries(RELIGION_CONFIG).map(([type, config]) => (
                 <button
                   key={type}
-                  className={`type-btn ${selectedType === type ? 'active' : ''}`}
+                  className={\`type-btn \${selectedType === type ? 'active' : ''}\`}
                   onClick={() => setSelectedType(selectedType === type ? 'all' : type as ReligionType)}
                   style={{ '--type-color': config.color } as React.CSSProperties}
                 >
@@ -274,7 +278,7 @@ function App() {
                     }}
                   >
                     <div
-                      className={`custom-marker ${facility.type}`}
+                      className={\`custom-marker \${facility.type}\`}
                       style={{ '--marker-color': RELIGION_CONFIG[facility.type].markerColor } as React.CSSProperties}
                     >
                       {RELIGION_CONFIG[facility.type].icon}
@@ -315,7 +319,7 @@ function App() {
                         {popupFacility.phone && (
                           <div className="popup-info-row">
                             <span className="popup-info-icon">📞</span>
-                            <a href={`tel:${popupFacility.phone}`} className="popup-phone-link">{popupFacility.phone}</a>
+                            <a href={\`tel:\${popupFacility.phone}\`} className="popup-phone-link">{popupFacility.phone}</a>
                           </div>
                         )}
                         {userLocation && (
@@ -342,7 +346,7 @@ function App() {
                           🗺️ 카카오맵
                         </a>
                         <a
-                          href={`https://map.naver.com/v5/search/${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}`}
+                          href={\`https://map.naver.com/v5/search/\${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}\`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="popup-btn naver"
@@ -351,7 +355,7 @@ function App() {
                         </a>
                         {isValidWebsite(popupFacility.website) && popupFacility.website && (
                           <a
-                            href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`}
+                            href={popupFacility.website.startsWith('http') ? popupFacility.website : \`https://\${popupFacility.website}\`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="popup-btn website"
@@ -360,7 +364,7 @@ function App() {
                           </a>
                         )}
                         {popupFacility.phone && (
-                          <a href={`tel:${popupFacility.phone}`} className="popup-btn call">
+                          <a href={\`tel:\${popupFacility.phone}\`} className="popup-btn call">
                             📞 전화
                           </a>
                         )}
@@ -436,7 +440,7 @@ function App() {
                 <h2>{popupFacility.name}</h2>
                 <span className="modal-type">
                   {RELIGION_CONFIG[popupFacility.type].label}
-                  {popupFacility.denomination && ` · ${popupFacility.denomination}`}
+                  {popupFacility.denomination && \` · \${popupFacility.denomination}\`}
                 </span>
               </div>
             </div>
@@ -444,7 +448,7 @@ function App() {
             {popupFacility.isCult && (
               <div className="cult-warning">
                 ⚠️ 주의: 이단/사이비 의심 시설
-                {popupFacility.cultType && ` (${popupFacility.cultType})`}
+                {popupFacility.cultType && \` (\${popupFacility.cultType})\`}
               </div>
             )}
 
@@ -494,7 +498,7 @@ function App() {
               </a>
               {isValidWebsite(popupFacility.website) && popupFacility.website && (
                 <a
-                  href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`}
+                  href={popupFacility.website.startsWith('http') ? popupFacility.website : \`https://\${popupFacility.website}\`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="action-btn website"
@@ -503,12 +507,12 @@ function App() {
                 </a>
               )}
               {popupFacility.phone && (
-                <a href={`tel:${popupFacility.phone}`} className="action-btn call">
+                <a href={\`tel:\${popupFacility.phone}\`} className="action-btn call">
                   📞 전화
                 </a>
               )}
               <a
-                href={`https://map.naver.com/v5/search/${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}`}
+                href={\`https://map.naver.com/v5/search/\${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}\`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="action-btn naver"
@@ -536,3 +540,842 @@ function App() {
 }
 
 export default App
+`;
+
+// New CSS with dark mode and improved popup
+const cssContent = `* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+  --accent-color: #4F46E5;
+  --accent-hover: #4338CA;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+body.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #334155;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.3s, color 0.3s;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  font-size: 2rem;
+}
+
+.logo-text h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.update-date {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.total-count {
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: 600;
+}
+
+/* Main Container */
+.main-container {
+  display: flex;
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: var(--bg-secondary);
+  padding: 1.5rem;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+}
+
+.filter-section h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.type-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.type-btn:hover {
+  border-color: var(--type-color);
+  background: var(--bg-tertiary);
+}
+
+.type-btn.active {
+  border-color: var(--type-color);
+  background: var(--type-color);
+  color: white;
+}
+
+.type-icon {
+  font-size: 1.25rem;
+}
+
+.type-label {
+  flex: 1;
+  font-weight: 500;
+}
+
+.type-count {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.region-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-right: 2.5rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.results-count {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.results-count strong {
+  color: var(--accent-color);
+  font-size: 1.125rem;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.view-toggle button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 0.75rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-toggle button.active {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Map */
+.map-container {
+  flex: 1;
+  position: relative;
+  min-height: 500px;
+}
+
+.custom-marker {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--marker-color);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.custom-marker:hover {
+  transform: scale(1.2);
+  z-index: 1000;
+}
+
+.map-legend {
+  position: absolute;
+  bottom: 2rem;
+  left: 1rem;
+  background: var(--bg-secondary);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Full Popup Styles */
+.full-popup .maplibregl-popup-content {
+  padding: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.popup-full {
+  padding: 1rem;
+  min-width: 280px;
+  max-width: 320px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.popup-type-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+.popup-cult-badge {
+  padding: 0.25rem 0.5rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.popup-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.popup-denomination {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.popup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--bg-tertiary);
+  border-radius: 0.75rem;
+}
+
+.popup-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.popup-info-icon {
+  flex-shrink: 0;
+}
+
+.popup-phone-link {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.popup-phone-link:hover {
+  text-decoration: underline;
+}
+
+.popup-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.popup-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.625rem 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.popup-btn.kakao {
+  background: #FEE500;
+  color: #3C1E1E;
+}
+
+.popup-btn.naver {
+  background: #03C75A;
+  color: white;
+}
+
+.popup-btn.website {
+  background: #6366F1;
+  color: white;
+}
+
+.popup-btn.call {
+  background: #10B981;
+  color: white;
+}
+
+.popup-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* List */
+.list-container {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+  background: var(--bg-primary);
+}
+
+.facility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.facility-card {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.facility-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-color);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-type {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.has-website {
+  font-size: 1rem;
+}
+
+.card-address {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.card-phone, .card-distance {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--accent-color);
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  padding: 0 1rem;
+  font-weight: 500;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--bg-secondary);
+  border-radius: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+.modal-title h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-type {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.cult-warning {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-weight: 500;
+}
+
+.info-distance {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  margin-top: 0.25rem;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.action-btn.kakao {
+  background: #FEE500;
+  color: #3C1E1E;
+}
+
+.action-btn.website {
+  background: #6366F1;
+  color: white;
+}
+
+.action-btn.call {
+  background: #10B981;
+  color: white;
+}
+
+.action-btn.naver {
+  background: #03C75A;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.data-source {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Footer */
+.footer {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.footer a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+/* Maplibre Popup Override */
+.maplibregl-popup-content {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-radius: 1rem !important;
+  padding: 0 !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.maplibregl-popup-close-button {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.maplibregl-popup-close-button:hover {
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .type-filters {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .type-btn {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .map-container {
+    min-height: 400px;
+  }
+
+  .facility-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .popup-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .header-right {
+    gap: 0.5rem;
+  }
+
+  .total-count {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+`;
+
+// Write files
+fs.writeFileSync(path.join(__dirname, 'src', 'App.tsx'), appContent);
+fs.writeFileSync(path.join(__dirname, 'src', 'App.css'), cssContent);
+
+console.log('UI v2 업데이트 완료!');
+console.log('- 마커 클릭 시 바로 전체 정보가 툴팁에 표시됨');
+console.log('- 다크모드/라이트모드 토글 추가');
+console.log('- 시스템 테마 자동 감지');
+console.log('- localStorage에 테마 저장');
