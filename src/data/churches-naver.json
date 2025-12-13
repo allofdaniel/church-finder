@@ -1,0 +1,722 @@
+[
+  {
+    "name": "가회동성당",
+    "address": "서울특별시 종로구 가회동 30-3 천주교회",
+    "roadAddress": "서울특별시 종로구 북촌로 57 가회동천주교회",
+    "phone": "",
+    "url": "http://gahoe.or.kr/",
+    "category": "종교>천주교",
+    "source": "naver"
+  },
+  {
+    "name": "대한예수교장로회 새문안교회",
+    "address": "서울특별시 종로구 신문로1가 42 새문안교회",
+    "roadAddress": "서울특별시 종로구 새문안로 79 새문안교회",
+    "phone": "",
+    "url": "http://www.saemoonan.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "연동교회",
+    "address": "서울특별시 종로구 연지동 136-12 연동교회",
+    "roadAddress": "서울특별시 종로구 김상옥로 37 연동교회",
+    "phone": "",
+    "url": "http://www.ydpc.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "중앙교회",
+    "address": "서울특별시 종로구 인사동 194-4",
+    "roadAddress": "서울특별시 종로구 인사동5길 25",
+    "phone": "",
+    "url": "https://central21.org",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "명륜중앙교회",
+    "address": "서울특별시 종로구 명륜2가 101-6",
+    "roadAddress": "서울특별시 종로구 성균관로6길 8",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "소망교회",
+    "address": "서울특별시 강남구 신사동 624 교회",
+    "roadAddress": "서울특별시 강남구 압구정로36길 55 교회",
+    "phone": "",
+    "url": "http://www.somang.net/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "베이직교회",
+    "address": "서울특별시 강남구 논현동 32-20",
+    "roadAddress": "서울특별시 강남구 도산대로24길 29",
+    "phone": "",
+    "url": "http://www.basicchurch.or.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "삼성제일교회",
+    "address": "서울특별시 강남구 삼성동 93 교회",
+    "roadAddress": "서울특별시 강남구 영동대로118길 39 교회",
+    "phone": "",
+    "url": "http://www.sfirst.org",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "천주교논현2동성당",
+    "address": "서울특별시 강남구 논현동 99-23",
+    "roadAddress": "서울특별시 강남구 선릉로145길 17",
+    "phone": "",
+    "url": "http://www.nh2sd.or.kr/",
+    "category": "종교>천주교",
+    "source": "naver"
+  },
+  {
+    "name": "남서울은혜장로교회",
+    "address": "서울특별시 강남구 수서동 750-1",
+    "roadAddress": "서울특별시 강남구 광평로20길 17",
+    "phone": "",
+    "url": "http://www.nsgrace.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "남서울교회",
+    "address": "서울특별시 영등포구 신길동 4003 남서울교회",
+    "roadAddress": "서울특별시 영등포구 신풍로16길 1 남서울교회",
+    "phone": "",
+    "url": "https://www.namseoulch.com/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "여의도순복음교회",
+    "address": "서울특별시 영등포구 여의도동 11",
+    "roadAddress": "서울특별시 영등포구 국회대로76길 15",
+    "phone": "",
+    "url": "http://www.yfgc.com/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "시광교회",
+    "address": "서울특별시 영등포구 문래동5가 9 영등포 벽산디지털밸리 1502호",
+    "roadAddress": "서울특별시 영등포구 경인로71길 70 영등포 벽산디지털밸리 1502호",
+    "phone": "",
+    "url": "https://seetheglory.or.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "서울에스라교회",
+    "address": "서울특별시 영등포구 양평동4가 31-3",
+    "roadAddress": "서울특별시 영등포구 선유로 252",
+    "phone": "",
+    "url": "http://ezra.or.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "양평동교회",
+    "address": "서울특별시 영등포구 양평동4가 184",
+    "roadAddress": "서울특별시 영등포구 양평로20길 7",
+    "phone": "",
+    "url": "https://www.youtube.com/@ypdch/featured",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "온누리교회",
+    "address": "서울특별시 서초구 양재동 55 횃불선교회관",
+    "roadAddress": "서울특별시 서초구 바우뫼로31길 70 횃불선교회관",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "사랑의교회",
+    "address": "서울특별시 서초구 서초동 1541-1",
+    "roadAddress": "서울특별시 서초구 반포대로 121",
+    "phone": "",
+    "url": "http://www.sarang.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "방주교회",
+    "address": "서울특별시 서초구 방배동 425-2",
+    "roadAddress": "서울특별시 서초구 방배천로24길 8",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "예수사랑교회",
+    "address": "서울특별시 서초구 서초동 1687-2 지하 2층",
+    "roadAddress": "서울특별시 서초구 서초중앙로24길 55 지하 2층",
+    "phone": "",
+    "url": "http://www.jxlovechurch.com",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "남서울교회",
+    "address": "서울특별시 서초구 반포동 4-12 남서울교회",
+    "roadAddress": "서울특별시 서초구 신반포로19길 36 남서울교회",
+    "phone": "",
+    "url": "http://namseoul.org",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "하늘비전침례교회",
+    "address": "서울특별시 송파구 잠실동 302-5 하늘비전교회",
+    "roadAddress": "서울특별시 송파구 백제고분로12길 30 하늘비전교회",
+    "phone": "",
+    "url": "http://www.hvbc.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "예한교회",
+    "address": "서울특별시 송파구 신천동 20-7",
+    "roadAddress": "서울특별시 송파구 올림픽로 417",
+    "phone": "",
+    "url": "http://www.yehanbc.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "임마누엘교회",
+    "address": "서울특별시 송파구 방이동 45-4 임마누엘교회감리교",
+    "roadAddress": "서울특별시 송파구 위례성대로 28 임마누엘교회감리교",
+    "phone": "",
+    "url": "http://www.imc.or.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "수동교회",
+    "address": "서울특별시 송파구 방이동 124-6",
+    "roadAddress": "서울특별시 송파구 가락로33길 3",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "참좋은교회",
+    "address": "서울특별시 송파구 장지동 841-4 라자) 5층 505호(, 대진프",
+    "roadAddress": "서울특별시 송파구 충민로2길 28 라자) 5층 505호(장지동, 대진프",
+    "phone": "",
+    "url": "https://www.youtube.com/@verygoodchurch",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "우리들교회",
+    "address": "경기도 성남시 분당구 판교동 654",
+    "roadAddress": "경기도 성남시 분당구 안양판교로 1219",
+    "phone": "",
+    "url": "http://home.woori.cc/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "할렐루야교회",
+    "address": "경기도 성남시 분당구 야탑동 132 할렐루야교회",
+    "roadAddress": "경기도 성남시 분당구 야탑로 368 할렐루야교회",
+    "phone": "",
+    "url": "https://www.hcc.or.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "한마음개혁교회",
+    "address": "경기도 성남시 분당구 야탑동 174-6 5층 501호",
+    "roadAddress": "경기도 성남시 분당구 야탑로 243 5층 501호",
+    "phone": "",
+    "url": "http://cafe.naver.com/hmchurch/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "지구촌교회 분당채플",
+    "address": "경기도 성남시 분당구 구미동 10",
+    "roadAddress": "경기도 성남시 분당구 미금일로154번길 6",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "갈보리교회",
+    "address": "경기도 성남시 분당구 이매동 360-1",
+    "roadAddress": "경기도 성남시 분당구 이매로 132",
+    "phone": "",
+    "url": "http://merecalvary.com/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "천주교 수원성지",
+    "address": "경기도 수원시 팔달구 북수동 316",
+    "roadAddress": "경기도 수원시 팔달구 정조로 842",
+    "phone": "",
+    "url": "http://suwons.net/",
+    "category": "종교>천주교",
+    "source": "naver"
+  },
+  {
+    "name": "수원중앙 침례교회",
+    "address": "경기도 수원시 팔달구 교동 144-2",
+    "roadAddress": "경기도 수원시 팔달구 매산로 108",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "예수교 장로회 한국총공회 수산교회",
+    "address": "경기도 수원시 팔달구 인계동 909-69",
+    "roadAddress": "경기도 수원시 팔달구 인계로39번길 11",
+    "phone": "",
+    "url": "http://susanchurch.or.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "수원성결교회",
+    "address": "경기도 수원시 팔달구 교동 14-12",
+    "roadAddress": "경기도 수원시 팔달구 팔달산로 313-16",
+    "phone": "",
+    "url": "http://suwon.or.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "은혜와진리교회",
+    "address": "경기도 수원시 팔달구 인계동 941",
+    "roadAddress": "경기도 수원시 팔달구 장다리로314번길 3",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "기쁨이있는교회 카페",
+    "address": "경기도 고양시 일산동구 장항동 765",
+    "roadAddress": "경기도 고양시 일산동구 중앙로 1305-56",
+    "phone": "",
+    "url": "",
+    "category": "음식점>카페,디저트",
+    "source": "naver"
+  },
+  {
+    "name": "제자광성교회 비전센터",
+    "address": "경기도 고양시 일산동구 정발산동 1140",
+    "roadAddress": "경기도 고양시 일산동구 일산로 462",
+    "phone": "",
+    "url": "http://www.jejaks.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "광림교회",
+    "address": "경기도 고양시 일산동구 정발산동 1209 광림교회",
+    "roadAddress": "경기도 고양시 일산동구 무궁화로 179 광림교회",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "하나님얼굴구하는교회",
+    "address": "경기도 고양시 일산동구 장항동 902 상가 동관 2층",
+    "roadAddress": "경기도 고양시 일산동구 중앙로 1129 상가 동관 2층",
+    "phone": "",
+    "url": "https://www.youtube.com/channel/UCw9Z9D-NMXQBobzYniRbxsg",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "제자광성교회",
+    "address": "경기도 고양시 일산동구 중산동 1796",
+    "roadAddress": "경기도 고양시 일산동구 하늘마을1로 72",
+    "phone": "",
+    "url": "http://www.jejaks.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "드림교회",
+    "address": "인천광역시 남동구 논현동 738-6",
+    "roadAddress": "인천광역시 남동구 앵고개로 787",
+    "phone": "",
+    "url": "https://www.instagram.com/i_dreamchurch",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "사랑침례교회",
+    "address": "인천광역시 남동구 서창동 672",
+    "roadAddress": "인천광역시 남동구 서창방산로 83",
+    "phone": "",
+    "url": "http://www.cbck.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "백송교회",
+    "address": "인천광역시 남동구 서창동 575-2 백송교회",
+    "roadAddress": "인천광역시 남동구 장아산로205번길 16 백송교회",
+    "phone": "",
+    "url": "http://baeksong.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "영복교회",
+    "address": "인천광역시 남동구 서창동 723-3 영복빌딩",
+    "roadAddress": "인천광역시 남동구 서창남로 16-20 영복빌딩",
+    "phone": "",
+    "url": "http://www.youngbok.co.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "소망이풍성한교회",
+    "address": "인천광역시 남동구 논현동 632-2 아이플렉스 9층, 902호",
+    "roadAddress": "인천광역시 남동구 논고개로123번길 17 아이플렉스 9층, 902호",
+    "phone": "",
+    "url": "https://www.instagram.com/sopoongch/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "대한예수교장로회 세계로교회",
+    "address": "인천광역시 부평구 청천동 484 산청로 70 세계로교회",
+    "roadAddress": "인천광역시 부평구 산청로 70 산청로 70 세계로교회",
+    "phone": "",
+    "url": "",
+    "category": "여행,명소>종교시설",
+    "source": "naver"
+  },
+  {
+    "name": "산곡장로교회",
+    "address": "인천광역시 부평구 산곡동 281-12",
+    "roadAddress": "인천광역시 부평구 부영로 199",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "새빛교회",
+    "address": "인천광역시 부평구 갈산동 391",
+    "roadAddress": "인천광역시 부평구 주부토로 146",
+    "phone": "",
+    "url": "http://www.saevit.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "세계로선민교회",
+    "address": "인천광역시 부평구 삼산동 435-7",
+    "roadAddress": "인천광역시 부평구 장제로340번길 26-13",
+    "phone": "",
+    "url": "https://youtube.com/@sunminchurch",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "동암교회",
+    "address": "인천광역시 부평구 십정동 498-4",
+    "roadAddress": "인천광역시 부평구 경인로701번길 70",
+    "phone": "",
+    "url": "http://www.dongamchurch.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "부산온누리교회",
+    "address": "부산광역시 해운대구 좌동 877 부산온누리교회",
+    "roadAddress": "부산광역시 해운대구 대천로 98 부산온누리교회",
+    "phone": "",
+    "url": "http://www.onnurips.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "라이트하우스교회",
+    "address": "부산광역시 해운대구 좌동 1483-3 10층",
+    "roadAddress": "부산광역시 해운대구 세실로27번길 13 10층",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "수영로교회",
+    "address": "부산광역시 해운대구 우동 1418-1 수영로교회",
+    "roadAddress": "부산광역시 해운대구 해운대해변로 43 수영로교회",
+    "phone": "",
+    "url": "http://www.sooyoungro.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "해운대신일교회",
+    "address": "부산광역시 해운대구 우동 957-40",
+    "roadAddress": "부산광역시 해운대구 해운대로469번길 10",
+    "phone": "",
+    "url": "http://sinilch.com/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "해운교회",
+    "address": "부산광역시 해운대구 우동 1530",
+    "roadAddress": "부산광역시 해운대구 해운대로469번나길 60",
+    "phone": "",
+    "url": "http://www.haewoon.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "양정교회",
+    "address": "부산광역시 부산진구 양정동 350-8",
+    "roadAddress": "부산광역시 부산진구 양지로11번길 67",
+    "phone": "",
+    "url": "https://www.youtube.com/@%EC%96%91%EC%A0%95%EA%B5%90%ED%9A%8C-n2r",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "넘치는교회",
+    "address": "부산광역시 부산진구 양정동 319-2",
+    "roadAddress": "부산광역시 부산진구 동평로397번길 20",
+    "phone": "",
+    "url": "http://www.ncnc.or.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "양정중앙교회",
+    "address": "부산광역시 부산진구 양정동 353-3 양정중앙교회",
+    "roadAddress": "부산광역시 부산진구 양지로5번길 31 양정중앙교회",
+    "phone": "",
+    "url": "http://yjchurch.or.kr/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "성광교회",
+    "address": "부산광역시 부산진구 연지동 418",
+    "roadAddress": "부산광역시 부산진구 성지로153번길 123",
+    "phone": "",
+    "url": "https://youtube.com/@성광교회부산초읍",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "당감제일교회",
+    "address": "부산광역시 부산진구 당감동 239-1",
+    "roadAddress": "부산광역시 부산진구 동평로100번길 44",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "천주교대구대교구 주교좌계산대성당",
+    "address": "대구광역시 중구 계산동2가 71-1",
+    "roadAddress": "대구광역시 중구 서성로 10",
+    "phone": "",
+    "url": "http://www.gyesancathedral.kr",
+    "category": "종교>천주교",
+    "source": "naver"
+  },
+  {
+    "name": "천주교 대구대교구청",
+    "address": "대구광역시 중구 남산동 225-1 .",
+    "roadAddress": "대구광역시 중구 남산로4길 112 .",
+    "phone": "",
+    "url": "http://www.daegu-archdiocese.or.kr/",
+    "category": "종교>천주교",
+    "source": "naver"
+  },
+  {
+    "name": "대구제일교회",
+    "address": "대구광역시 중구 동산동 234 대구제일교회교육관",
+    "roadAddress": "대구광역시 중구 국채보상로102길 50 대구제일교회교육관",
+    "phone": "",
+    "url": "http://www.firstch.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "대한성공회대구교회",
+    "address": "대구광역시 중구 동문동 11",
+    "roadAddress": "대구광역시 중구 경상감영길 234",
+    "phone": "",
+    "url": "https://blog.naver.com/skhdgc",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "삼덕교회",
+    "address": "대구광역시 중구 삼덕동2가 149-28",
+    "roadAddress": "대구광역시 중구 공평로4길 11",
+    "phone": "",
+    "url": "http://www.samduk.org/",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "오메가교회",
+    "address": "대전광역시 서구 도안동 1483 오메가교회",
+    "roadAddress": "대전광역시 서구 도안중로 304-10 오메가교회",
+    "phone": "",
+    "url": "https://www.youtube.com/@OMEGACHURCH",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "해오름교회",
+    "address": "대전광역시 서구 가수원동 795-1",
+    "roadAddress": "대전광역시 서구 가수원중로 27",
+    "phone": "",
+    "url": "http://www.haeoreum.or.kr",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "오메가교회",
+    "address": "대전광역시 서구 도안동 1483",
+    "roadAddress": "대전광역시 서구 도안중로 304-10",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "새로남교회",
+    "address": "대전광역시 서구 만년동 286",
+    "roadAddress": "대전광역시 서구 대덕대로 378",
+    "phone": "",
+    "url": "https://youtube.com/@srnchurch",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "오롯이교회",
+    "address": "대전광역시 서구 관저동 1399 돌샘빌딩 4층",
+    "roadAddress": "대전광역시 서구 관저동로 64-63 돌샘빌딩 4층",
+    "phone": "",
+    "url": "https://blog.naver.com/orosi_church",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "광주안디옥교회",
+    "address": "광주광역시 서구 쌍촌동 888-2 안디옥교회",
+    "roadAddress": "광주광역시 서구 마륵복개로 188 안디옥교회",
+    "phone": "",
+    "url": "https://youtube.com/@gjantioch_church",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "천주교광주대교구청",
+    "address": "광주광역시 서구 쌍촌동 997-1",
+    "roadAddress": "광주광역시 서구 상무대로 980",
+    "phone": "",
+    "url": "http://www.gjcatholic.or.kr/",
+    "category": "종교>천주교",
+    "source": "naver"
+  },
+  {
+    "name": "서문교회",
+    "address": "광주광역시 서구 농성동 131-7 서문교회",
+    "roadAddress": "광주광역시 서구 월산로 166 서문교회",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "벧샬롬교회",
+    "address": "광주광역시 서구 화정동 783-26 2층",
+    "roadAddress": "광주광역시 서구 상무대로1081번길 3 2층",
+    "phone": "",
+    "url": "http://www.bschurch.net",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "금호벧엘교회",
+    "address": "광주광역시 서구 금호동 341-6 벧엘교회",
+    "roadAddress": "광주광역시 서구 금호심곡길 4 벧엘교회",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "남울산교회",
+    "address": "울산광역시 남구 신정동 441-21",
+    "roadAddress": "울산광역시 남구 중앙로300번길 21",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "울산성광교회",
+    "address": "울산광역시 남구 신정동 695-1",
+    "roadAddress": "울산광역시 남구 돋질로 30",
+    "phone": "",
+    "url": "https://www.youtube.com/channel/UCA-QOOJRWll4LaMZ94AYrTw",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "영신교회",
+    "address": "울산광역시 남구 삼산동 207-12",
+    "roadAddress": "",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "동산교회",
+    "address": "울산광역시 남구 야음동 579-8",
+    "roadAddress": "울산광역시 남구 대암로129번길 6-1",
+    "phone": "",
+    "url": "",
+    "category": "종교>개신교",
+    "source": "naver"
+  },
+  {
+    "name": "천주교무거성당",
+    "address": "울산광역시 남구 무거동 1547-3",
+    "roadAddress": "울산광역시 남구 신복로46번길 35-8",
+    "phone": "",
+    "url": "http://cafe.daum.net/mugeo-cth",
+    "category": "종교>천주교",
+    "source": "naver"
+  }
+]
