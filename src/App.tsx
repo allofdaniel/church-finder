@@ -1,10 +1,9 @@
 import { useState, useMemo, useCallback } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './App.css'
 
-// @ts-expect-error - JSON import
 import allReligiousData from './data/all-religious.json'
 
 interface ReligiousFacility {
