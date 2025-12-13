@@ -1,4 +1,8 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+const fs = require('fs');
+const path = require('path');
+
+// New App.tsx with Maplibre
+const appContent = `import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import Map, { Marker, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
@@ -170,7 +174,7 @@ function App() {
               {Object.entries(RELIGION_CONFIG).map(([type, config]) => (
                 <button
                   key={type}
-                  className={`type-btn ${selectedType === type ? 'active' : ''}`}
+                  className={\`type-btn \${selectedType === type ? 'active' : ''}\`}
                   onClick={() => setSelectedType(selectedType === type ? 'all' : type as ReligionType)}
                   style={{ '--type-color': config.color } as React.CSSProperties}
                 >
@@ -256,7 +260,7 @@ function App() {
                     }}
                   >
                     <div
-                      className={`custom-marker ${facility.type}`}
+                      className={\`custom-marker \${facility.type}\`}
                       style={{ '--marker-color': RELIGION_CONFIG[facility.type].markerColor } as React.CSSProperties}
                     >
                       {RELIGION_CONFIG[facility.type].icon}
@@ -353,7 +357,7 @@ function App() {
                 <h2>{selectedFacility.name}</h2>
                 <span className="modal-type">
                   {RELIGION_CONFIG[selectedFacility.type].label}
-                  {selectedFacility.denomination && ` · ${selectedFacility.denomination}`}
+                  {selectedFacility.denomination && \` · \${selectedFacility.denomination}\`}
                 </span>
               </div>
             </div>
@@ -361,7 +365,7 @@ function App() {
             {selectedFacility.isCult && (
               <div className="cult-warning">
                 ⚠️ 주의: 이단/사이비 의심 시설
-                {selectedFacility.cultType && ` (${selectedFacility.cultType})`}
+                {selectedFacility.cultType && \` (\${selectedFacility.cultType})\`}
               </div>
             )}
 
@@ -411,7 +415,7 @@ function App() {
               </a>
               {isValidWebsite(selectedFacility.website) && selectedFacility.website && (
                 <a
-                  href={selectedFacility.website.startsWith('http') ? selectedFacility.website : `https://${selectedFacility.website}`}
+                  href={selectedFacility.website.startsWith('http') ? selectedFacility.website : \`https://\${selectedFacility.website}\`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="action-btn website"
@@ -420,12 +424,12 @@ function App() {
                 </a>
               )}
               {selectedFacility.phone && (
-                <a href={`tel:${selectedFacility.phone}`} className="action-btn call">
+                <a href={\`tel:\${selectedFacility.phone}\`} className="action-btn call">
                   📞 전화
                 </a>
               )}
               <a
-                href={`https://map.naver.com/v5/search/${encodeURIComponent(selectedFacility.roadAddress || selectedFacility.address)}`}
+                href={\`https://map.naver.com/v5/search/\${encodeURIComponent(selectedFacility.roadAddress || selectedFacility.address)}\`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="action-btn naver"
@@ -453,3 +457,665 @@ function App() {
 }
 
 export default App
+`;
+
+// New App.css with improved UI
+const cssContent = `* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-icon {
+  font-size: 2rem;
+}
+
+.logo-text h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.update-date {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.total-count {
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: 600;
+}
+
+/* Main Container */
+.main-container {
+  display: flex;
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: white;
+  padding: 1.5rem;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+}
+
+.filter-section h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.type-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.type-btn:hover {
+  border-color: var(--type-color);
+  background: #f8fafc;
+}
+
+.type-btn.active {
+  border-color: var(--type-color);
+  background: var(--type-color);
+  color: white;
+}
+
+.type-icon {
+  font-size: 1.25rem;
+}
+
+.type-label {
+  flex: 1;
+  font-weight: 500;
+}
+
+.type-count {
+  font-size: 0.875rem;
+  opacity: 0.7;
+}
+
+.region-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-right: 2.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4F46E5;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #94a3b8;
+  cursor: pointer;
+}
+
+.results-count {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.results-count strong {
+  color: #4F46E5;
+  font-size: 1.125rem;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.view-toggle button {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-toggle button.active {
+  background: #4F46E5;
+  color: white;
+  border-color: #4F46E5;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Map */
+.map-container {
+  flex: 1;
+  position: relative;
+  min-height: 500px;
+}
+
+.custom-marker {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--marker-color);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.custom-marker:hover {
+  transform: scale(1.2);
+  z-index: 1000;
+}
+
+.map-legend {
+  position: absolute;
+  bottom: 2rem;
+  left: 1rem;
+  background: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Popup */
+.map-popup {
+  padding: 0.5rem;
+  min-width: 200px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.popup-icon {
+  font-size: 1.25rem;
+}
+
+.popup-address {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.popup-phone {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.popup-detail-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: #4F46E5;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.popup-detail-btn:hover {
+  background: #4338CA;
+}
+
+/* List */
+.list-container {
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+}
+
+.facility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.facility-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.facility-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-color: #4F46E5;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-type {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.has-website {
+  font-size: 1rem;
+}
+
+.card-address {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.card-phone, .card-distance {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #4F46E5;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  padding: 0 1rem;
+  font-weight: 500;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+.modal-title h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-type {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.cult-warning {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-weight: 500;
+}
+
+.info-distance {
+  display: block;
+  font-size: 0.75rem;
+  color: #4F46E5;
+  margin-top: 0.25rem;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.action-btn.kakao {
+  background: #FEE500;
+  color: #3C1E1E;
+}
+
+.action-btn.website {
+  background: #6366F1;
+  color: white;
+}
+
+.action-btn.call {
+  background: #10B981;
+  color: white;
+}
+
+.action-btn.naver {
+  background: #03C75A;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.data-source {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* Footer */
+.footer {
+  background: white;
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer p {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.footer a {
+  color: #4F46E5;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .type-filters {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .type-btn {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .map-container {
+    min-height: 400px;
+  }
+
+  .facility-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+`;
+
+// Write files
+fs.writeFileSync(path.join(__dirname, 'src', 'App.tsx'), appContent);
+fs.writeFileSync(path.join(__dirname, 'src', 'App.css'), cssContent);
+
+console.log('App.tsx and App.css updated successfully!');
+console.log('- Maplibre GL map');
+console.log('- Custom emoji markers for each religion type');
+console.log('- Improved sidebar layout');
+console.log('- Data update date display');
+console.log('- Better card and modal design');
