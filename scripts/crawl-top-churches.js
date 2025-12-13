@@ -9,36 +9,57 @@ import puppeteer from 'puppeteer';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, '../src/data');
 
-const CONCURRENT_PAGES = 10; // 안정적인 동시 페이지 수
-const TOP_N = 1000; // 상위 N개만 크롤링
-const TIMEOUT = 10000;
+const CONCURRENT_PAGES = 10;
+const TOP_N = 1000;
+const TIMEOUT = 15000;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // =============================================================================
-// 카카오맵 상세 페이지 크롤링
+// 카카오맵 상세 페이지 크롤링 (수정된 선택자)
 // =============================================================================
 async function scrapeKakaoDetail(page, url) {
     try {
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: TIMEOUT });
-        await sleep(1500); // 페이지 렌더링 대기
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: TIMEOUT });
+        await sleep(2000);
 
         const data = await page.evaluate(() => {
             const result = { website: null, serviceTime: null, description: null };
 
-            // 홈페이지
-            const homepageLink = document.querySelector('a.link_homepage');
-            if (homepageLink) result.website = homepageLink.href;
+            // 홈페이지 - link_detail 클래스 사용
+            const homepageLinks = document.querySelectorAll('a.link_detail');
+            for (const link of homepageLinks) {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('http') && !href.includes('kakao.com')) {
+                    result.website = href;
+                    break;
+                }
+            }
 
-            // 영업시간
-            const timeEl = document.querySelector('.txt_operation') ||
-                document.querySelector('.list_operation') ||
-                document.querySelector('.time_operation');
-            if (timeEl) result.serviceTime = timeEl.innerText.trim().substring(0, 200);
+            // 영업시간 - 다양한 선택자 시도
+            const timeSelectors = [
+                '.txt_operation',
+                '.list_operation li',
+                '.cont_info .txt_detail',
+                '.info_fold .info_tit:contains("영업")'
+            ];
 
-            // 설명
-            const descEl = document.querySelector('.txt_intro');
-            if (descEl) result.description = descEl.innerText.trim().substring(0, 300);
+            for (const sel of timeSelectors) {
+                try {
+                    const el = document.querySelector(sel);
+                    if (el && el.innerText) {
+                        result.serviceTime = el.innerText.trim().substring(0, 300);
+                        break;
+                    }
+                } catch { }
+            }
+
+            // 상세 설명
+            const descEl = document.querySelector('.txt_intro') ||
+                document.querySelector('.cont_essential .txt_address');
+            if (descEl) {
+                result.description = descEl.innerText.trim().substring(0, 300);
+            }
 
             return result;
         });
@@ -59,7 +80,8 @@ async function processBatch(browser, facilities) {
             try {
                 await page.setRequestInterception(true);
                 page.on('request', (req) => {
-                    if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
+                    const type = req.resourceType();
+                    if (['image', 'stylesheet', 'font', 'media'].includes(type)) {
                         req.abort();
                     } else {
                         req.continue();
@@ -89,7 +111,7 @@ async function processBatch(browser, facilities) {
 // 메인
 // =============================================================================
 async function main() {
-    console.log(`🚀 TOP ${TOP_N} 교회 상세 크롤링 시작...`);
+    console.log(`🚀 TOP ${TOP_N} 상세 크롤링 시작 (수정된 버전)...`);
     console.log(`⚡ 동시 페이지: ${CONCURRENT_PAGES}개\n`);
 
     const browser = await puppeteer.launch({
@@ -97,43 +119,60 @@ async function main() {
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
 
-    const filePath = path.join(DATA_DIR, 'churches.json');
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    // 모든 종교시설 파일 처리
+    const files = ['churches.json', 'catholics.json', 'temples.json'];
 
-    // TOP N개만 선택 (이름 길이로 대형 교회 추정 - 간단한 휴리스틱)
-    const topChurches = data.slice(0, TOP_N);
-    console.log(`📂 대상: ${topChurches.length}건\n`);
+    for (const fileName of files) {
+        const filePath = path.join(DATA_DIR, fileName);
+        if (!fs.existsSync(filePath)) continue;
 
-    const startTime = Date.now();
-    const results = [];
+        console.log(`\n📂 ${fileName} 처리 중...`);
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
-    for (let i = 0; i < topChurches.length; i += CONCURRENT_PAGES) {
-        const batch = topChurches.slice(i, i + CONCURRENT_PAGES);
-        const batchResults = await processBatch(browser, batch);
-        results.push(...batchResults);
+        const topItems = data.slice(0, TOP_N);
+        console.log(`   대상: ${topItems.length}건`);
 
-        const progress = Math.min(i + CONCURRENT_PAGES, topChurches.length);
-        const percent = ((progress / topChurches.length) * 100).toFixed(1);
-        const elapsed = ((Date.now() - startTime) / 1000 / 60).toFixed(1);
-        process.stdout.write(`\r⏳ ${progress}/${topChurches.length} (${percent}%) - ${elapsed}분`);
+        const startTime = Date.now();
+        const results = [];
+
+        for (let i = 0; i < topItems.length; i += CONCURRENT_PAGES) {
+            const batch = topItems.slice(i, i + CONCURRENT_PAGES);
+            const batchResults = await processBatch(browser, batch);
+            results.push(...batchResults);
+
+            const progress = Math.min(i + CONCURRENT_PAGES, topItems.length);
+            const percent = ((progress / topItems.length) * 100).toFixed(1);
+            const elapsed = ((Date.now() - startTime) / 1000 / 60).toFixed(1);
+            process.stdout.write(`\r   ⏳ ${progress}/${topItems.length} (${percent}%) - ${elapsed}분`);
+        }
+
+        // 결과 병합
+        const updatedData = [...results, ...data.slice(TOP_N)];
+
+        const withWebsite = results.filter(d => d.website).length;
+        const withTime = results.filter(d => d.serviceTime).length;
+
+        console.log(`\n   ✅ 홈페이지: ${withWebsite}건, 예배시간: ${withTime}건`);
+
+        fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
+        console.log(`   💾 저장 완료`);
     }
 
     await browser.close();
 
-    // 결과 병합: TOP N은 업데이트, 나머지는 그대로
-    const updatedData = [...results, ...data.slice(TOP_N)];
+    // 통합 파일 갱신
+    console.log('\n📂 전체 통합 파일 업데이트...');
+    let allData = [];
+    for (const f of [...files, 'cults.json']) {
+        const fp = path.join(DATA_DIR, f);
+        if (fs.existsSync(fp)) {
+            allData.push(...JSON.parse(fs.readFileSync(fp, 'utf-8')));
+        }
+    }
+    const uniqueAll = Array.from(new Map(allData.map(item => [item.id, item])).values());
+    fs.writeFileSync(path.join(DATA_DIR, 'all-religious.json'), JSON.stringify(uniqueAll, null, 2));
 
-    // 통계
-    const withWebsite = results.filter(d => d.website).length;
-    const withTime = results.filter(d => d.serviceTime).length;
-
-    console.log(`\n\n✅ 홈페이지: ${withWebsite}건, 예배시간: ${withTime}건`);
-
-    fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
-    console.log(`💾 저장 완료: churches.json`);
-
-    const totalTime = ((Date.now() - startTime) / 1000 / 60).toFixed(1);
-    console.log(`\n🎉 완료! 총 소요시간: ${totalTime}분`);
+    console.log('🎉 완료!');
 }
 
 main().catch(console.error);
