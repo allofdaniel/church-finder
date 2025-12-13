@@ -54,6 +54,18 @@ const RELIGION_CONFIG = {
 
 const REGIONS = ['전체', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
 
+// 유효한 웹사이트 URL인지 확인 (policy.daum.net 등 잘못된 URL 필터링)
+const isValidWebsite = (url: string | null): boolean => {
+  if (!url) return false
+  const invalidPatterns = [
+    'policy.daum.net',
+    'policy.kakao.com',
+    'cs.kakao.com',
+    'cs.daum.net'
+  ]
+  return !invalidPatterns.some(pattern => url.includes(pattern))
+}
+
 const facilities: ReligiousFacility[] = allReligiousData
 
 const createMarkerIcon = (type: 'church' | 'catholic' | 'temple') => {
@@ -458,7 +470,7 @@ function App() {
                 <p className="facility-address">{facility.roadAddress || facility.address}</p>
                 <div className="facility-meta">
                   {facility.phone && <span className="facility-phone">📞 {facility.phone}</span>}
-                  {facility.website && <span className="facility-website">🌐 웹사이트</span>}
+                  {isValidWebsite(facility.website) && <span className="facility-website">🌐 웹사이트</span>}
                 </div>
               </div>
             ))}
@@ -566,9 +578,9 @@ function App() {
                   🗺️ 카카오맵
                 </a>
               )}
-              {selectedFacility.website && (
+              {isValidWebsite(selectedFacility.website) && selectedFacility.website && (
                 <a
-                  href={selectedFacility.website.startsWith('http') ? selectedFacility.website : `https://${selectedFacility.website}`}
+                  href={selectedFacility.website?.startsWith('http') ? selectedFacility.website : `https://${selectedFacility.website}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="action-btn website"
@@ -585,7 +597,7 @@ function App() {
                 </a>
               )}
               <a
-                href={`https://map.naver.com/v5/search/${encodeURIComponent(selectedFacility.name + ' ' + selectedFacility.address)}`}
+                href={`https://map.naver.com/v5/search/${encodeURIComponent(selectedFacility.roadAddress || selectedFacility.address)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="action-btn naver"
