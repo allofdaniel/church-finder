@@ -118,12 +118,16 @@ function App() {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   }
 
+  const handleMapMouseDown = useCallback(() => {
+    // 지도 어디든 클릭하면 필터 해제
+    if (selectedType !== 'all') setSelectedType('all')
+  }, [selectedType])
+
   const handleGeolocate = useCallback((e: any) => setUserLocation({ lat: e.coords.latitude, lng: e.coords.longitude }), [])
 
   const handleMapClick = useCallback((e: any) => {
     const features = e.features
     if (!features || features.length === 0) {
-      if (selectedType !== 'all') setSelectedType('all')
       setPopupFacility(null)
       return
     }
@@ -139,7 +143,7 @@ function App() {
       const [lng, lat] = feature.geometry.coordinates
       setPopupFacility({ id: props.id, name: props.name, type: props.type, address: props.address, roadAddress: props.roadAddress, phone: props.phone, lat, lng, kakaoUrl: props.kakaoUrl, category: props.category, denomination: props.denomination, isCult: props.isCult === 'true' || props.isCult === true, cultType: props.cultType, region: props.region, website: props.website, serviceTime: null, pastor: null })
     }
-  }, [selectedType])
+  }, [])
 
   useEffect(() => setListPage(1), [selectedType, selectedRegion, searchQuery])
 
@@ -206,7 +210,7 @@ function App() {
         <main className="content">
           {viewMode === 'map' ? (
             <div className="map-container">
-              <Map ref={mapRef} {...viewState} onMove={evt => setViewState(evt.viewState)} style={{ width: '100%', height: '100%' }} mapStyle={mapStyle} interactiveLayerIds={['clusters', 'unclustered-point']} onClick={handleMapClick}>
+              <Map ref={mapRef} {...viewState} onMove={evt => setViewState(evt.viewState)} style={{ width: '100%', height: '100%' }} mapStyle={mapStyle} interactiveLayerIds={['clusters', 'unclustered-point']} onClick={handleMapClick} onMouseDown={handleMapMouseDown}>
                 <NavigationControl position="top-right" />
                 <GeolocateControl position="top-right" onGeolocate={handleGeolocate} trackUserLocation />
                 <Source id="facilities" type="geojson" data={geojsonData} cluster={true} clusterMaxZoom={14} clusterRadius={50}>
