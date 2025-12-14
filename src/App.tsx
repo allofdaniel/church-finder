@@ -109,10 +109,26 @@ function App() {
     })
   }, [selectedType, selectedRegion, searchQuery])
 
-  // 모든 필터링된 시설 표시 (제한 제거)
+  // 줌 레벨에 따라 마커 수 제한 (성능 최적화)
   const visibleFacilities = useMemo(() => {
+    const zoom = viewState.zoom
+    let maxMarkers = 500
+    if (zoom >= 12) maxMarkers = 3000
+    else if (zoom >= 10) maxMarkers = 1500
+    else if (zoom >= 8) maxMarkers = 800
+
+    // 현재 뷰포트 중심 기준으로 가까운 시설 우선 표시
+    const centerLat = viewState.latitude
+    const centerLng = viewState.longitude
+
     return filteredFacilities
-  }, [filteredFacilities])
+      .map(f => ({
+        ...f,
+        dist: Math.abs(f.lat - centerLat) + Math.abs(f.lng - centerLng)
+      }))
+      .sort((a, b) => a.dist - b.dist)
+      .slice(0, maxMarkers)
+  }, [filteredFacilities, viewState.zoom, viewState.latitude, viewState.longitude])
 
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
