@@ -70,7 +70,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('darkMode') === 'true' ||
-             window.matchMedia('(prefers-color-scheme: dark)').matches
+        window.matchMedia('(prefers-color-scheme: dark)').matches
     }
     return false
   })
@@ -79,7 +79,7 @@ function App() {
     latitude: 36.5,
     zoom: 7
   })
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null)
+  const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null)
   const mapRef = useRef<any>(null)
   const ITEMS_PER_PAGE = 20
 
@@ -96,25 +96,17 @@ function App() {
       if (searchQuery) {
         const q = searchQuery.toLowerCase()
         return f.name.toLowerCase().includes(q) ||
-               f.address.toLowerCase().includes(q) ||
-               (f.denomination && f.denomination.toLowerCase().includes(q))
+          f.address.toLowerCase().includes(q) ||
+          (f.denomination && f.denomination.toLowerCase().includes(q))
       }
       return true
     })
   }, [selectedType, selectedRegion, searchQuery])
 
+  // 모든 필터링된 시설 표시 (제한 제거)
   const visibleFacilities = useMemo(() => {
-    if (viewState.zoom < 10) {
-      const byRegion: Record<string, ReligiousFacility[]> = {}
-      filteredFacilities.forEach(f => {
-        const region = f.region.split(' ')[0]
-        if (!byRegion[region]) byRegion[region] = []
-        if (byRegion[region].length < 50) byRegion[region].push(f)
-      })
-      return Object.values(byRegion).flat()
-    }
-    return filteredFacilities.slice(0, viewState.zoom >= 14 ? 2000 : viewState.zoom >= 12 ? 1000 : 500)
-  }, [filteredFacilities, viewState.zoom])
+    return filteredFacilities
+  }, [filteredFacilities])
 
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
@@ -133,10 +125,10 @@ function App() {
     const R = 6371
     const dLat = (lat2 - lat1) * Math.PI / 180
     const dLng = (lng2 - lng1) * Math.PI / 180
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2)
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     return R * c
   }
 
