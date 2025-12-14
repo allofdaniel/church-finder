@@ -144,9 +144,85 @@ function App() {
 
   const mapStyle = darkMode ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json' : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
 
-  const clusterLayer: any = { id: 'clusters', type: 'circle', source: 'facilities', filter: ['has', 'point_count'], paint: { 'circle-color': ['step', ['get', 'point_count'], '#51bbd6', 100, '#f1f075', 500, '#f28cb1', 1000, '#e74c3c'], 'circle-radius': ['step', ['get', 'point_count'], 20, 100, 25, 500, 30, 1000, 40], 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' } }
-  const clusterCountLayer: any = { id: 'cluster-count', type: 'symbol', source: 'facilities', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count_abbreviated}', 'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'], 'text-size': 14 }, paint: { 'text-color': '#fff' } }
-  const unclusteredPointLayer: any = { id: 'unclustered-point', type: 'circle', source: 'facilities', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': ['match', ['get', 'type'], 'church', '#6366F1', 'catholic', '#EC4899', 'temple', '#10B981', 'cult', '#EF4444', '#888'], 'circle-radius': 8, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' } }
+  // 히트맵 스타일 클러스터 (숫자 없이 색상 농도로 표현)
+  const clusterLayer: any = {
+    id: 'clusters',
+    type: 'circle',
+    source: 'facilities',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'point_count'],
+        10, 'rgba(99, 102, 241, 0.4)',
+        50, 'rgba(139, 92, 246, 0.5)',
+        100, 'rgba(236, 72, 153, 0.55)',
+        300, 'rgba(244, 114, 182, 0.6)',
+        500, 'rgba(251, 146, 60, 0.65)',
+        1000, 'rgba(239, 68, 68, 0.7)',
+        3000, 'rgba(220, 38, 38, 0.8)'
+      ],
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['get', 'point_count'],
+        10, 18,
+        50, 24,
+        100, 32,
+        300, 42,
+        500, 52,
+        1000, 65,
+        3000, 85
+      ],
+      'circle-blur': 0.7,
+      'circle-opacity': 0.85
+    }
+  }
+  // 클러스터 내부 밝은 코어 (히트맵 효과)
+  const clusterCoreLayer: any = {
+    id: 'cluster-core',
+    type: 'circle',
+    source: 'facilities',
+    filter: ['has', 'point_count'],
+    paint: {
+      'circle-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'point_count'],
+        10, 'rgba(165, 180, 252, 0.6)',
+        100, 'rgba(251, 207, 232, 0.7)',
+        500, 'rgba(254, 215, 170, 0.75)',
+        1000, 'rgba(254, 202, 202, 0.8)'
+      ],
+      'circle-radius': [
+        'interpolate',
+        ['linear'],
+        ['get', 'point_count'],
+        10, 6,
+        50, 9,
+        100, 12,
+        300, 16,
+        500, 20,
+        1000, 26,
+        3000, 35
+      ],
+      'circle-blur': 0.4
+    }
+  }
+  const unclusteredPointLayer: any = {
+    id: 'unclustered-point',
+    type: 'circle',
+    source: 'facilities',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+      'circle-color': ['match', ['get', 'type'], 'church', '#6366F1', 'catholic', '#EC4899', 'temple', '#10B981', 'cult', '#EF4444', '#888'],
+      'circle-radius': 7,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': 'rgba(255,255,255,0.9)',
+      'circle-opacity': 0.9
+    }
+  }
 
   return (
     <div className={`app ${darkMode ? 'dark' : ''}`}>
@@ -210,7 +286,7 @@ function App() {
                 <GeolocateControl position="top-right" onGeolocate={handleGeolocate} trackUserLocation />
                 <Source id="facilities" type="geojson" data={geojsonData} cluster={true} clusterMaxZoom={14} clusterRadius={50}>
                   <Layer {...clusterLayer} />
-                  <Layer {...clusterCountLayer} />
+                  <Layer {...clusterCoreLayer} />
                   <Layer {...unclusteredPointLayer} />
                 </Source>
                 {popupFacility && (
@@ -239,21 +315,21 @@ function App() {
               </Map>
               <div className="map-legend glass">
                 <div className="legend-header">
-                  <span className="legend-icon">📊</span>
-                  <span className="legend-title">시설 분포</span>
+                  <span className="legend-icon">🔥</span>
+                  <span className="legend-title">시설 밀집도</span>
                 </div>
                 <div className="legend-section">
-                  <div className="legend-section-title">밀집도</div>
-                  <div className="legend-clusters">
-                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #51bbd6, #3a9fbf)' }}></span><span>~99</span></div>
-                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #f1f075, #e0d960)' }}></span><span>100+</span></div>
-                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #f28cb1, #e07399)' }}></span><span>500+</span></div>
-                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}></span><span>1000+</span></div>
+                  <div className="heatmap-gradient">
+                    <div className="gradient-bar"></div>
+                    <div className="gradient-labels">
+                      <span>적음</span>
+                      <span>많음</span>
+                    </div>
                   </div>
                 </div>
                 <div className="legend-divider"></div>
                 <div className="legend-section">
-                  <div className="legend-section-title">유형</div>
+                  <div className="legend-section-title">시설 유형</div>
                   <div className="legend-types">
                     <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>교회</span></div>
                     <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>성당</span></div>
