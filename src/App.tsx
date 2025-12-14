@@ -8,7 +8,7 @@ import allReligiousData from './data/all-religious.json'
 interface ReligiousFacility {
   id: string
   name: string
-  type: 'church' | 'catholic' | 'temple'
+  type: 'church' | 'catholic' | 'temple' | 'cult'
   address: string
   roadAddress: string
   phone: string | null
@@ -25,7 +25,7 @@ interface ReligiousFacility {
   pastor: string | null
 }
 
-type ReligionType = 'all' | 'church' | 'catholic' | 'temple'
+type ReligionType = 'all' | 'church' | 'catholic' | 'temple' | 'cult'
 
 const RELIGION_CONFIG = {
   church: {
@@ -45,6 +45,12 @@ const RELIGION_CONFIG = {
     label: '사찰',
     color: '#10B981',
     markerColor: '#059669',
+  },
+  cult: {
+    icon: '⚠️',
+    label: '이단/사이비',
+    color: '#EF4444',
+    markerColor: '#DC2626',
   }
 }
 
@@ -116,7 +122,7 @@ function App() {
   const totalPages = Math.ceil(filteredFacilities.length / ITEMS_PER_PAGE)
 
   const stats = useMemo(() => {
-    const counts = { church: 0, catholic: 0, temple: 0 }
+    const counts = { church: 0, catholic: 0, temple: 0, cult: 0 }
     filteredFacilities.forEach(f => counts[f.type]++)
     return counts
   }, [filteredFacilities])
