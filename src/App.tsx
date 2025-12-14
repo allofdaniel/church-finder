@@ -122,7 +122,11 @@ function App() {
 
   const handleMapClick = useCallback((e: any) => {
     const features = e.features
-    if (!features || features.length === 0) return
+    if (!features || features.length === 0) {
+      if (selectedType !== 'all') setSelectedType('all')
+      setPopupFacility(null)
+      return
+    }
     const feature = features[0]
     if (feature.properties.cluster) {
       const clusterId = feature.properties.cluster_id
@@ -135,7 +139,7 @@ function App() {
       const [lng, lat] = feature.geometry.coordinates
       setPopupFacility({ id: props.id, name: props.name, type: props.type, address: props.address, roadAddress: props.roadAddress, phone: props.phone, lat, lng, kakaoUrl: props.kakaoUrl, category: props.category, denomination: props.denomination, isCult: props.isCult === 'true' || props.isCult === true, cultType: props.cultType, region: props.region, website: props.website, serviceTime: null, pastor: null })
     }
-  }, [])
+  }, [selectedType])
 
   useEffect(() => setListPage(1), [selectedType, selectedRegion, searchQuery])
 
@@ -234,19 +238,29 @@ function App() {
                   </Popup>
                 )}
               </Map>
-              <div className="map-legend">
-                <div className="legend-title">클러스터 범례</div>
-                <div className="legend-items">
-                  <span className="legend-cluster" style={{ background: '#51bbd6' }}>~99</span>
-                  <span className="legend-cluster" style={{ background: '#f1f075', color: '#333' }}>100~</span>
-                  <span className="legend-cluster" style={{ background: '#f28cb1' }}>500~</span>
-                  <span className="legend-cluster" style={{ background: '#e74c3c' }}>1000+</span>
+              <div className="map-legend glass">
+                <div className="legend-header">
+                  <span className="legend-icon">📊</span>
+                  <span className="legend-title">시설 분포</span>
                 </div>
-                <div className="legend-types">
-                  <span className="legend-item church">⛪ 교회</span>
-                  <span className="legend-item catholic">✝️ 성당</span>
-                  <span className="legend-item temple">🛕 사찰</span>
-                  <span className="legend-item cult">⚠️ 이단</span>
+                <div className="legend-section">
+                  <div className="legend-section-title">밀집도</div>
+                  <div className="legend-clusters">
+                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #51bbd6, #3a9fbf)' }}></span><span>~99</span></div>
+                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #f1f075, #e0d960)' }}></span><span>100+</span></div>
+                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #f28cb1, #e07399)' }}></span><span>500+</span></div>
+                    <div className="cluster-item"><span className="cluster-dot" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}></span><span>1000+</span></div>
+                  </div>
+                </div>
+                <div className="legend-divider"></div>
+                <div className="legend-section">
+                  <div className="legend-section-title">유형</div>
+                  <div className="legend-types">
+                    <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>교회</span></div>
+                    <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>성당</span></div>
+                    <div className="type-item"><span className="type-dot" style={{ background: '#10B981' }}></span><span>사찰</span></div>
+                    <div className="type-item"><span className="type-dot" style={{ background: '#EF4444' }}></span><span>이단</span></div>
+                  </div>
                 </div>
               </div>
             </div>
