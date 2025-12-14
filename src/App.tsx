@@ -4,6 +4,18 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
 
 import allReligiousData from './data/all-religious.json'
+import sigunguBoundaries from './data/sigungu-boundaries.json'
+import facilitySigunguMap from './data/facility-sigungu-map.json'
+
+// 디바운스 훅
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay)
+    return () => clearTimeout(timer)
+  }, [value, delay])
+  return debouncedValue
+}
 
 interface ReligiousFacility {
   id: string
@@ -30,8 +42,85 @@ type ReligionType = 'all' | 'church' | 'catholic' | 'temple' | 'cult'
 const RELIGION_CONFIG = {
   church: { icon: '⛪', label: '교회', color: '#6366F1' },
   catholic: { icon: '✝️', label: '성당', color: '#EC4899' },
-  temple: { icon: '🛕', label: '사찰', color: '#10B981' },
-  cult: { icon: '⚠️', label: '이단/사이비', color: '#EF4444' }
+  temple: { icon: '☸️', label: '사찰', color: '#10B981' },
+  cult: { icon: '⚠️', label: '이단의심', color: '#F59E0B' }
+}
+
+// 지도 스타일 (일반/위성)
+const MAP_STYLES = {
+  light: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+  dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+  satellite: {
+    version: 8 as const,
+    sources: {
+      'satellite': {
+        type: 'raster' as const,
+        tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+        tileSize: 256,
+        attribution: '© Esri'
+      }
+    },
+    layers: [{ id: 'satellite-layer', type: 'raster' as const, source: 'satellite', minzoom: 0, maxzoom: 19 }]
+  }
+}
+
+// 초성 추출 함수
+const CHO_HANGUL = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
+const getChosung = (str: string): string => {
+  return str.split('').map(char => {
+    const code = char.charCodeAt(0) - 44032
+    if (code >= 0 && code <= 11171) {
+      return CHO_HANGUL[Math.floor(code / 588)]
+    }
+    return char
+  }).join('')
+}
+
+
+// 지역명 매핑 (검색어 -> 실제 지역명)
+const REGION_ALIASES: Record<string, string[]> = {
+  '서울': ['서울시', '서울특별시', 'seoul'],
+  '부산': ['부산시', '부산광역시', 'busan'],
+  '대구': ['대구시', '대구광역시', 'daegu'],
+  '인천': ['인천시', '인천광역시', 'incheon'],
+  '광주': ['광주시', '광주광역시', 'gwangju'],
+  '대전': ['대전시', '대전광역시', 'daejeon'],
+  '울산': ['울산시', '울산광역시', 'ulsan'],
+  '세종': ['세종시', '세종특별자치시', 'sejong'],
+  '경기': ['경기도', 'gyeonggi'],
+  '강원': ['강원도', '강원특별자치도', 'gangwon'],
+  '충북': ['충청북도', '충북', 'chungbuk'],
+  '충남': ['충청남도', '충남', 'chungnam'],
+  '전북': ['전라북도', '전북', '전북특별자치도', 'jeonbuk'],
+  '전남': ['전라남도', '전남', 'jeonnam'],
+  '경북': ['경상북도', '경북', 'gyeongbuk'],
+  '경남': ['경상남도', '경남', 'gyeongnam'],
+  '제주': ['제주도', '제주특별자치도', 'jeju'],
+}
+
+// 동네/구 이름 목록 (주소에서 추출하여 검색 매칭용)
+const extractDistrict = (address: string): string[] => {
+  const districts: string[] = []
+  // 시군구 추출 (예: 강남구, 수원시, 해운대구)
+  const sigunguMatch = address.match(/([가-힣]+[시군구])/g)
+  if (sigunguMatch) districts.push(...sigunguMatch)
+  // 읍면동 추출
+  const emdMatch = address.match(/([가-힣]+[읍면동])/g)
+  if (emdMatch) districts.push(...emdMatch)
+  return districts
+}
+
+// 이단 종파 정보 (출처: 이단대책협의회, 한국기독교이단상담소)
+const CULT_INFO: Record<string, { name: string, source: string }> = {
+  '하나님의교회': { name: '하나님의교회(안상홍증인회)', source: '한국기독교이단상담소' },
+  '통일교': { name: '통일교(세계평화통일가정연합)', source: '이단대책협의회' },
+  '신천지': { name: '신천지예수교증거장막성전', source: '이단대책협의회' },
+  '안식교': { name: '제칠일안식일예수재림교', source: '한국기독교이단상담소' },
+  'JMS': { name: 'JMS(기독교복음선교회)', source: '이단대책협의회' },
+  '몰몬교': { name: '예수그리스도후기성도교회', source: '이단대책협의회' },
+  '여호와의증인': { name: '여호와의증인(왕국회관)', source: '이단대책협의회' },
+  '구원파': { name: '구원파(기독교복음침례회)', source: '이단대책협의회' },
+  '만민중앙교회': { name: '만민중앙교회', source: '이단대책협의회' }
 }
 
 const REGIONS = ['전체', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
@@ -46,12 +135,104 @@ const isValidWebsite = (url: string | null): boolean => {
 
 const facilities: ReligiousFacility[] = allReligiousData as ReligiousFacility[]
 
+// 미리 계산된 매핑 데이터 사용
+const sigunguMapping = facilitySigunguMap as Record<string, string>
+
+// 검색 인덱스 미리 생성 (성능 최적화)
+interface SearchIndex {
+  id: string
+  name: string
+  nameLower: string
+  nameChosung: string
+  address: string
+  addressLower: string
+  denomination: string
+  denominationLower: string
+  type: string
+  region: string
+  districts: string[]
+  lat: number
+  lng: number
+}
+
+const searchIndex: SearchIndex[] = facilities.map(f => ({
+  id: f.id,
+  name: f.name,
+  nameLower: f.name.toLowerCase(),
+  nameChosung: getChosung(f.name),
+  address: f.roadAddress || f.address,
+  addressLower: (f.roadAddress || f.address).toLowerCase(),
+  denomination: f.denomination || '',
+  denominationLower: (f.denomination || '').toLowerCase(),
+  type: f.type,
+  region: f.region,
+  districts: extractDistrict(f.roadAddress || f.address),
+  lat: f.lat,
+  lng: f.lng
+}))
+
+// ID로 빠르게 찾기 위한 맵 (globalThis.Map 사용으로 react-map-gl의 Map과 구분)
+const facilityMap: globalThis.Map<string, ReligiousFacility> = new globalThis.Map(facilities.map(f => [f.id, f]))
+
+// 시군구별 시설 수 계산 (미리 계산된 매핑 사용)
+function computeSigunguCounts(facilitiesList: ReligiousFacility[]) {
+  const counts: Record<string, number> = {}
+
+  // 모든 시군구 초기화
+  for (const feature of (sigunguBoundaries as any).features) {
+    counts[feature.properties.code] = 0
+  }
+
+  // 미리 계산된 매핑으로 빠르게 카운트
+  for (const f of facilitiesList) {
+    const sigunguCode = sigunguMapping[f.id]
+    if (sigunguCode && counts[sigunguCode] !== undefined) {
+      counts[sigunguCode]++
+    }
+  }
+
+  return counts
+}
+
+// 간단한 중심점 계산
+function getPolygonCenter(coordinates: number[][][][]): [number, number] {
+  let sumLng = 0, sumLat = 0, count = 0
+  for (const polygon of coordinates) {
+    for (const ring of polygon) {
+      for (const coord of ring) {
+        sumLng += coord[0]
+        sumLat += coord[1]
+        count++
+      }
+    }
+  }
+  return count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
+}
+
+
+// 키워드 하이라이트 함수
+const highlightText = (text: string, query: string) => {
+  if (!query || query.length < 2) return text
+  const q = query.toLowerCase()
+  const lowerText = text.toLowerCase()
+  const idx = lowerText.indexOf(q)
+  if (idx === -1) return text
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="highlight">{text.slice(idx, idx + query.length)}</mark>
+      {text.slice(idx + query.length)}
+    </>
+  )
+}
+
 function App() {
   const [selectedType, setSelectedType] = useState<ReligionType>('all')
   const [selectedRegion, setSelectedRegion] = useState('전체')
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
   const [popupFacility, setPopupFacility] = useState<ReligiousFacility | null>(null)
+  const [hoveredSigungu, setHoveredSigungu] = useState<{ code: string, name: string, sido: string, count: number, lng: number, lat: number } | null>(null)
   const [listPage, setListPage] = useState(1)
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -66,27 +247,139 @@ function App() {
     zoom: 7
   })
   const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null)
+  // UI 토글 상태
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [legendVisible, setLegendVisible] = useState(true)
+  // 검색 결과 패널 상태
+  const [showSearchResults, setShowSearchResults] = useState(false)
+  const [searchResultsPage, setSearchResultsPage] = useState(1)
   const mapRef = useRef<any>(null)
+  const [satelliteMode, setSatelliteMode] = useState(false)
   const ITEMS_PER_PAGE = 20
+  const SEARCH_RESULTS_PER_PAGE = 50
+
+  // 디바운스된 검색어
+  const debouncedSearchQuery = useDebounce(searchQuery, 150)
 
   useEffect(() => {
     document.body.classList.toggle('dark', darkMode)
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
-  const filteredFacilities = useMemo(() => {
-    return facilities.filter(f => {
-      if (selectedType !== 'all' && f.type !== selectedType) return false
-      if (selectedRegion !== '전체' && f.region && !f.region.includes(selectedRegion)) return false
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase()
-        return f.name.toLowerCase().includes(q) ||
-          f.address.toLowerCase().includes(q) ||
-          (f.denomination && f.denomination.toLowerCase().includes(q))
+  // 맵 로드 핸들러
+  const handleMapLoad = useCallback(() => {
+    // 맵 로드 완료
+  }, [])
+
+  // 최적화된 검색 함수 (searchIndex 사용)
+  const fastSearch = useCallback((idx: SearchIndex, query: string): { match: boolean, score: number, isLocationMatch: boolean } => {
+    if (!query) return { match: true, score: 0, isLocationMatch: false }
+
+    const q = query.toLowerCase().trim()
+    const qChosung = getChosung(q)
+    let score = 0
+    let isLocationMatch = false
+
+    // 1. 이름 정확 매칭 (가장 빠름 - 미리 계산된 lowercase 사용)
+    if (idx.nameLower.includes(q)) score += 100
+
+    // 2. 초성 검색 (미리 계산된 chosung 사용)
+    if (qChosung.length >= 2 && idx.nameChosung.includes(qChosung)) score += 80
+
+    // 3. 주소 매칭
+    if (idx.addressLower.includes(q)) {
+      score += 70
+      isLocationMatch = true
+    }
+
+    // 4. 동네/구 매칭 (미리 추출된 districts 사용)
+    for (const district of idx.districts) {
+      if (district.includes(q) || q.includes(district.replace(/[시군구읍면동]$/, ''))) {
+        score += 90
+        isLocationMatch = true
+        break
       }
-      return true
-    })
-  }, [selectedType, selectedRegion, searchQuery])
+    }
+
+    // 5. 교단 매칭
+    if (idx.denominationLower.includes(q)) score += 60
+
+    // 6. 지역명 별칭 매칭 (빠른 검색용)
+    for (const [region, aliases] of Object.entries(REGION_ALIASES)) {
+      if (q === region.toLowerCase() || aliases.some(a => q === a.toLowerCase())) {
+        if (idx.region?.includes(region) || idx.addressLower.includes(region.toLowerCase())) {
+          score += 85
+          isLocationMatch = true
+          break
+        }
+      }
+    }
+
+    return { match: score > 0, score, isLocationMatch }
+  }, [])
+
+  const filteredFacilities = useMemo(() => {
+    const query = debouncedSearchQuery.trim()
+
+    // 검색어가 없고 필터도 기본값이면 전체 반환 (가장 빠름)
+    if (!query && selectedType === 'all' && selectedRegion === '전체') {
+      return facilities
+    }
+
+    // searchIndex를 사용한 빠른 필터링
+    let results: { idx: SearchIndex, score: number, isLocationMatch: boolean }[] = []
+
+    for (const idx of searchIndex) {
+      // 타입 필터
+      if (selectedType !== 'all' && idx.type !== selectedType) continue
+      // 지역 필터
+      if (selectedRegion !== '전체' && (!idx.region || !idx.region.includes(selectedRegion))) continue
+
+      // 검색어 필터
+      if (query) {
+        const searchResult = fastSearch(idx, query)
+        if (searchResult.match) {
+          results.push({ idx, score: searchResult.score, isLocationMatch: searchResult.isLocationMatch })
+        }
+      } else {
+        results.push({ idx, score: 0, isLocationMatch: false })
+      }
+    }
+
+    // 검색어가 있으면 점수순 정렬
+    if (query) {
+      results.sort((a, b) => {
+        if (a.isLocationMatch && !b.isLocationMatch) return -1
+        if (!a.isLocationMatch && b.isLocationMatch) return 1
+        return b.score - a.score
+      })
+    }
+
+    // ID로 실제 facility 객체 조회 (facilityMap 사용으로 O(1))
+    return results.map(r => facilityMap.get(r.idx.id)!).filter(Boolean)
+  }, [selectedType, selectedRegion, debouncedSearchQuery, fastSearch])
+
+  // 시군구별 시설 수 계산 (필터된 데이터 기준)
+  const sigunguCounts = useMemo(() => {
+    return computeSigunguCounts(filteredFacilities)
+  }, [filteredFacilities])
+
+  // choropleth geojson 데이터 생성
+  const choroplethData = useMemo(() => {
+    const maxCount = Math.max(...Object.values(sigunguCounts), 1)
+
+    return {
+      type: 'FeatureCollection' as const,
+      features: (sigunguBoundaries as any).features.map((feature: any) => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          count: sigunguCounts[feature.properties.code] || 0,
+          density: (sigunguCounts[feature.properties.code] || 0) / maxCount
+        }
+      }))
+    }
+  }, [sigunguCounts])
 
   const geojsonData = useMemo(() => ({
     type: 'FeatureCollection' as const,
@@ -127,6 +420,12 @@ function App() {
       return
     }
     const feature = features[0]
+
+    // 시군구 레이어 클릭
+    if (feature.layer.id === 'sigungu-fill') {
+      return // 시군구 클릭시에는 팝업 표시하지 않음
+    }
+
     if (feature.properties.cluster) {
       const clusterId = feature.properties.cluster_id
       const src = mapRef.current?.getSource('facilities')
@@ -140,87 +439,204 @@ function App() {
     }
   }, [])
 
-  useEffect(() => setListPage(1), [selectedType, selectedRegion, searchQuery])
+  const handleMouseMove = useCallback((e: any) => {
+    const features = e.features
+    if (features && features.length > 0) {
+      const feature = features.find((f: any) => f.layer.id === 'sigungu-fill')
+      if (feature) {
+        const { code, name, sido, count } = feature.properties
+        // 같은 시군구면 업데이트 안함 (깜빡임 방지)
+        setHoveredSigungu(prev => {
+          if (prev && prev.code === code) return prev
+          const center = getPolygonCenter(feature.geometry.coordinates)
+          return { code, name, sido, count, lng: center[0], lat: center[1] }
+        })
+        return
+      }
+    }
+    setHoveredSigungu(null)
+  }, [])
 
-  const mapStyle = darkMode ? 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json' : 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
+  useEffect(() => setListPage(1), [selectedType, selectedRegion, debouncedSearchQuery])
 
-  // 히트맵 스타일 클러스터 (숫자 없이 색상 농도로 표현)
-  const clusterLayer: any = {
-    id: 'clusters',
-    type: 'circle',
-    source: 'facilities',
-    filter: ['has', 'point_count'],
+  // 검색어 변경시 결과 패널 페이지 초기화
+  useEffect(() => setSearchResultsPage(1), [debouncedSearchQuery])
+
+  // Enter 키 핸들러 - 검색 결과 패널 표시 및 첫 번째 결과로 지도 이동
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      setShowSearchResults(true)
+      setSearchResultsPage(1)
+      // 첫 번째 결과로 지도 이동
+      if (filteredFacilities.length > 0) {
+        const first = filteredFacilities[0]
+        setViewState(prev => ({
+          ...prev,
+          longitude: first.lng,
+          latitude: first.lat,
+          zoom: 14
+        }))
+      }
+    }
+  }, [searchQuery, filteredFacilities])
+
+  // 검색 결과 패널 닫기
+  const closeSearchResults = useCallback(() => {
+    setShowSearchResults(false)
+  }, [])
+
+  // 검색 결과 클릭시 해당 위치로 이동
+  const handleSearchResultClick = useCallback((facility: ReligiousFacility) => {
+    setViewState(prev => ({
+      ...prev,
+      longitude: facility.lng,
+      latitude: facility.lat,
+      zoom: 16
+    }))
+    setPopupFacility(facility)
+  }, [])
+
+  // 검색 결과 패널용 페이지네이션
+  const paginatedSearchResults = useMemo(() => {
+    const start = (searchResultsPage - 1) * SEARCH_RESULTS_PER_PAGE
+    return filteredFacilities.slice(start, start + SEARCH_RESULTS_PER_PAGE)
+  }, [filteredFacilities, searchResultsPage])
+
+  const totalSearchPages = Math.ceil(filteredFacilities.length / SEARCH_RESULTS_PER_PAGE)
+
+  const mapStyle = satelliteMode
+    ? MAP_STYLES.satellite
+    : (darkMode ? MAP_STYLES.dark : MAP_STYLES.light)
+
+  // choropleth 레이어 (시군구별 색상 채우기) - 줌 12 이하에서만 표시
+  const sigunguFillLayer: any = {
+    id: 'sigungu-fill',
+    type: 'fill',
+    source: 'sigungu',
+    maxzoom: 12,
     paint: {
-      'circle-color': [
+      'fill-color': [
         'interpolate',
         ['linear'],
-        ['get', 'point_count'],
-        10, 'rgba(99, 102, 241, 0.4)',
-        50, 'rgba(139, 92, 246, 0.5)',
-        100, 'rgba(236, 72, 153, 0.55)',
-        300, 'rgba(244, 114, 182, 0.6)',
-        500, 'rgba(251, 146, 60, 0.65)',
-        1000, 'rgba(239, 68, 68, 0.7)',
-        3000, 'rgba(220, 38, 38, 0.8)'
+        ['get', 'count'],
+        0, 'rgba(240, 249, 255, 0.4)',
+        10, 'rgba(224, 242, 254, 0.5)',
+        50, 'rgba(186, 230, 253, 0.55)',
+        100, 'rgba(125, 211, 252, 0.6)',
+        200, 'rgba(56, 189, 248, 0.6)',
+        500, 'rgba(14, 165, 233, 0.65)',
+        1000, 'rgba(2, 132, 199, 0.7)',
+        2000, 'rgba(3, 105, 161, 0.75)'
       ],
-      'circle-radius': [
+      'fill-opacity': [
         'interpolate',
         ['linear'],
-        ['get', 'point_count'],
-        10, 18,
-        50, 24,
-        100, 32,
-        300, 42,
-        500, 52,
-        1000, 65,
-        3000, 85
-      ],
-      'circle-blur': 0.7,
-      'circle-opacity': 0.85
+        ['zoom'],
+        10, 0.6,
+        12, 0.2
+      ]
     }
   }
-  // 클러스터 내부 밝은 코어 (히트맵 효과)
-  const clusterCoreLayer: any = {
-    id: 'cluster-core',
-    type: 'circle',
-    source: 'facilities',
-    filter: ['has', 'point_count'],
+
+  // 경계선 레이어 - 줌 12 이하에서만 표시
+  const sigunguLineLayer: any = {
+    id: 'sigungu-line',
+    type: 'line',
+    source: 'sigungu',
+    maxzoom: 12,
     paint: {
-      'circle-color': [
+      'line-color': darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(100, 116, 139, 0.25)',
+      'line-width': [
         'interpolate',
         ['linear'],
-        ['get', 'point_count'],
-        10, 'rgba(165, 180, 252, 0.6)',
-        100, 'rgba(251, 207, 232, 0.7)',
-        500, 'rgba(254, 215, 170, 0.75)',
-        1000, 'rgba(254, 202, 202, 0.8)'
+        ['zoom'],
+        5, 0.2,
+        10, 0.5,
+        12, 0.3
       ],
-      'circle-radius': [
+      'line-opacity': [
         'interpolate',
         ['linear'],
-        ['get', 'point_count'],
-        10, 6,
-        50, 9,
-        100, 12,
-        300, 16,
-        500, 20,
-        1000, 26,
-        3000, 35
-      ],
-      'circle-blur': 0.4
+        ['zoom'],
+        10, 1,
+        12, 0.3
+      ]
     }
   }
+
+  // 3D 마커 그림자 레이어
+  const markerShadowLayer: any = {
+    id: 'marker-shadow',
+    type: 'circle',
+    source: 'facilities',
+    minzoom: 10,
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 6, 14, 10, 18, 16],
+      'circle-color': 'rgba(0, 0, 0, 0.3)',
+      'circle-blur': 0.5,
+      'circle-translate': [2, 2]
+    }
+  }
+
+  // 3D 마커 외곽 레이어
+  const markerOuterLayer: any = {
+    id: 'marker-outer',
+    type: 'circle',
+    source: 'facilities',
+    minzoom: 10,
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 14, 12, 18, 18],
+      'circle-color': ['match', ['get', 'type'],
+        'church', '#4F46E5',
+        'catholic', '#DB2777',
+        'temple', '#059669',
+        'cult', '#D97706',
+        '#4F46E5'
+      ],
+      'circle-opacity': 0.9
+    }
+  }
+
+  // 3D 마커 내부 레이어 (하이라이트)
   const unclusteredPointLayer: any = {
     id: 'unclustered-point',
     type: 'circle',
     source: 'facilities',
-    filter: ['!', ['has', 'point_count']],
+    minzoom: 10,
     paint: {
-      'circle-color': ['match', ['get', 'type'], 'church', '#6366F1', 'catholic', '#EC4899', 'temple', '#10B981', 'cult', '#EF4444', '#888'],
-      'circle-radius': 7,
-      'circle-stroke-width': 2,
-      'circle-stroke-color': 'rgba(255,255,255,0.9)',
-      'circle-opacity': 0.9
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 14, 8, 18, 13],
+      'circle-color': ['match', ['get', 'type'],
+        'church', '#818CF8',
+        'catholic', '#F472B6',
+        'temple', '#34D399',
+        'cult', '#FBBF24',
+        '#818CF8'
+      ],
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 10, 1.5, 14, 2, 18, 3],
+      'circle-stroke-color': '#ffffff',
+      'circle-opacity': 1
+    }
+  }
+
+  // 시설 이름 레이어 (줌 14 이상)
+  const facilityLabelLayer: any = {
+    id: 'facility-label',
+    type: 'symbol',
+    source: 'facilities',
+    minzoom: 14,
+    layout: {
+      'text-field': ['get', 'name'],
+      'text-font': ['Open Sans Regular'],
+      'text-size': 11,
+      'text-offset': [0, 1.5],
+      'text-anchor': 'top',
+      'text-optional': true,
+      'text-max-width': 10
+    },
+    paint: {
+      'text-color': darkMode ? '#e2e8f0' : '#334155',
+      'text-halo-color': darkMode ? '#1e293b' : '#ffffff',
+      'text-halo-width': 1.5
     }
   }
 
@@ -243,7 +659,40 @@ function App() {
       </header>
 
       <div className="main-container">
-        <aside className="sidebar">
+        {/* 사이드바 토글 버튼 (접힌 상태에서 표시) */}
+        {sidebarCollapsed && (
+          <button className="sidebar-toggle collapsed" onClick={() => setSidebarCollapsed(false)} title="검색 패널 열기">
+            <span>☰</span>
+          </button>
+        )}
+
+        <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+          <div className="sidebar-header">
+            <h2>🔍 검색</h2>
+            <button className="sidebar-collapse-btn" onClick={() => setSidebarCollapsed(true)} title="검색 패널 접기">
+              ✕
+            </button>
+          </div>
+
+          {/* 통합 검색창 */}
+          <div className="filter-section search-main">
+            <div className="search-box large">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="교회명, 동네, 주소, 교단 검색..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                className="search-input"
+              />
+              {searchQuery && <button className="clear-btn" onClick={() => { setSearchQuery(''); setShowSearchResults(false) }}>×</button>}
+            </div>
+            <div className="search-hints">
+              <span>예: 강남, ㅅㅊㅈ, 침례교, 해운대 (Enter로 검색)</span>
+            </div>
+          </div>
+
           <div className="filter-section">
             <h3>종교 유형</h3>
             <div className="type-filters">
@@ -256,45 +705,146 @@ function App() {
               ))}
             </div>
           </div>
+
           <div className="filter-section">
-            <h3>지역</h3>
-            <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)} className="region-select">
-              {REGIONS.map(region => <option key={region} value={region}>{region}</option>)}
-            </select>
-          </div>
-          <div className="filter-section">
-            <h3>검색</h3>
-            <div className="search-box">
-              <input type="text" placeholder="이름, 주소, 교단..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="search-input" />
-              {searchQuery && <button className="clear-btn" onClick={() => setSearchQuery('')}>×</button>}
+            <h3>지역 바로가기</h3>
+            <div className="region-chips">
+              {REGIONS.map(region => (
+                <button
+                  key={region}
+                  className={`region-chip ${selectedRegion === region ? 'active' : ''}`}
+                  onClick={() => setSelectedRegion(region)}
+                >
+                  {region}
+                </button>
+              ))}
             </div>
           </div>
+
           <div className="filter-section results">
             <div className="results-count">검색 결과: <strong>{filteredFacilities.length.toLocaleString()}</strong>개</div>
           </div>
+
           <div className="view-toggle">
             <button className={viewMode === 'map' ? 'active' : ''} onClick={() => setViewMode('map')}>🗺️ 지도</button>
             <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>📋 목록</button>
           </div>
         </aside>
 
+        {/* 검색 결과 패널 */}
+        {showSearchResults && viewMode === 'map' && (
+          <aside className="search-results-panel">
+            <div className="search-results-header">
+              <h3>검색 결과</h3>
+              <span className="search-results-count">{filteredFacilities.length.toLocaleString()}개</span>
+              <button className="search-results-close" onClick={closeSearchResults}>✕</button>
+            </div>
+            <div className="search-results-list">
+              {paginatedSearchResults.map(facility => (
+                <div
+                  key={facility.id}
+                  className="search-result-item"
+                  onClick={() => handleSearchResultClick(facility)}
+                >
+                  <div className="search-result-header">
+                    <span className="search-result-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color }}>
+                      {RELIGION_CONFIG[facility.type]?.icon}
+                    </span>
+                    <div className="search-result-title">
+                      <h4>{highlightText(facility.name, searchQuery)}</h4>
+                      <span className="search-result-type">{RELIGION_CONFIG[facility.type]?.label}</span>
+                    </div>
+                  </div>
+                  <p className="search-result-address">
+                    {highlightText(facility.roadAddress || facility.address, searchQuery)}
+                  </p>
+                  {facility.denomination && (
+                    <p className="search-result-denomination">
+                      {highlightText(facility.denomination, searchQuery)}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+            {totalSearchPages > 1 && (
+              <div className="search-results-pagination">
+                <button onClick={() => setSearchResultsPage(p => Math.max(1, p - 1))} disabled={searchResultsPage === 1}>◀</button>
+                <span>{searchResultsPage} / {totalSearchPages}</span>
+                <button onClick={() => setSearchResultsPage(p => Math.min(totalSearchPages, p + 1))} disabled={searchResultsPage === totalSearchPages}>▶</button>
+              </div>
+            )}
+          </aside>
+        )}
+
         <main className="content">
           {viewMode === 'map' ? (
             <div className="map-container" onClick={() => { if (selectedType !== 'all') setSelectedType('all') }}>
-              <Map ref={mapRef} {...viewState} onMove={evt => setViewState(evt.viewState)} style={{ width: '100%', height: '100%' }} mapStyle={mapStyle} interactiveLayerIds={['clusters', 'unclustered-point']} onClick={handleMapClick}>
+              <Map
+                ref={mapRef}
+                {...viewState}
+                onMove={evt => setViewState(evt.viewState)}
+                onLoad={handleMapLoad}
+                style={{ width: '100%', height: '100%' }}
+                mapStyle={mapStyle}
+                interactiveLayerIds={['sigungu-fill', 'marker-outer', 'unclustered-point']}
+                onClick={handleMapClick}
+                onMouseMove={handleMouseMove}
+              >
                 <NavigationControl position="top-right" />
+
+                {/* 위성 모드 토글 버튼 */}
+                <div className="satellite-toggle-container">
+                  <button
+                    className={`satellite-toggle ${satelliteMode ? 'active' : ''}`}
+                    onClick={() => setSatelliteMode(!satelliteMode)}
+                    title={satelliteMode ? '일반 지도' : '위성 사진'}
+                  >
+                    {satelliteMode ? '🗺️' : '🛰️'}
+                  </button>
+                </div>
                 <GeolocateControl position="top-right" onGeolocate={handleGeolocate} trackUserLocation />
-                <Source id="facilities" type="geojson" data={geojsonData} cluster={true} clusterMaxZoom={14} clusterRadius={50}>
-                  <Layer {...clusterLayer} />
-                  <Layer {...clusterCoreLayer} />
-                  <Layer {...unclusteredPointLayer} />
+
+                {/* 시군구 경계 choropleth */}
+                <Source id="sigungu" type="geojson" data={choroplethData}>
+                  <Layer {...sigunguFillLayer} />
+                  <Layer {...sigunguLineLayer} />
                 </Source>
+
+                {/* 개별 시설 포인트 */}
+                <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
+                  <Layer {...markerShadowLayer} />
+                  <Layer {...markerOuterLayer} />
+                  <Layer {...unclusteredPointLayer} />
+                  <Layer {...facilityLabelLayer} />
+                </Source>
+
+                {/* 시군구 hover 툴팁 */}
+                {hoveredSigungu && (
+                  <Popup
+                    longitude={hoveredSigungu.lng}
+                    latitude={hoveredSigungu.lat}
+                    anchor="bottom"
+                    closeButton={false}
+                    closeOnClick={false}
+                    className="sigungu-popup"
+                  >
+                    <div className="sigungu-tooltip">
+                      <div className="sigungu-name">{hoveredSigungu.sido} {hoveredSigungu.name}</div>
+                      <div className="sigungu-count">{hoveredSigungu.count.toLocaleString()}개 시설</div>
+                    </div>
+                  </Popup>
+                )}
+
                 {popupFacility && (
                   <Popup longitude={popupFacility.lng} latitude={popupFacility.lat} anchor="bottom" onClose={() => setPopupFacility(null)} closeButton closeOnClick={false} maxWidth="320px" className="full-popup">
                     <div className="popup-full">
                       <div className="popup-header">
                         <span className="popup-type-badge" style={{ background: RELIGION_CONFIG[popupFacility.type]?.color || '#888' }}>{RELIGION_CONFIG[popupFacility.type]?.icon} {RELIGION_CONFIG[popupFacility.type]?.label}</span>
-                        {popupFacility.isCult && <span className="popup-cult-badge">⚠️ 주의</span>}
+                        {popupFacility.isCult && popupFacility.cultType && (
+                          <span className="popup-cult-badge" title={CULT_INFO[popupFacility.cultType]?.source || '이단대책협의회'}>
+                            ⚠️ {CULT_INFO[popupFacility.cultType]?.name || popupFacility.cultType}
+                          </span>
+                        )}
                       </div>
                       <h3 className="popup-name">{popupFacility.name}</h3>
                       {popupFacility.denomination && <p className="popup-denomination">{popupFacility.denomination}</p>}
@@ -313,30 +863,37 @@ function App() {
                   </Popup>
                 )}
               </Map>
-              <div className="map-legend glass">
-                <div className="legend-header">
-                  <span className="legend-icon">🔥</span>
-                  <span className="legend-title">시설 밀집도</span>
+              <div className={`map-legend glass ${legendVisible ? '' : 'collapsed'}`}>
+                <div className="legend-header" onClick={() => setLegendVisible(!legendVisible)}>
+                  <span className="legend-icon">📊</span>
+                  <span className="legend-title">시설 분포</span>
+                  <span className="legend-toggle">{legendVisible ? '▼' : '▲'}</span>
                 </div>
-                <div className="legend-section">
-                  <div className="heatmap-gradient">
-                    <div className="gradient-bar"></div>
-                    <div className="gradient-labels">
-                      <span>적음</span>
-                      <span>많음</span>
+                {legendVisible && (
+                  <>
+                    <div className="legend-section">
+                      <div className="legend-section-title">시군구별 밀집도</div>
+                      <div className="choropleth-legend">
+                        <div className="choropleth-bar"></div>
+                        <div className="choropleth-labels">
+                          <span>0</span>
+                          <span>500</span>
+                          <span>1000+</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="legend-divider"></div>
-                <div className="legend-section">
-                  <div className="legend-section-title">시설 유형</div>
-                  <div className="legend-types">
-                    <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>교회</span></div>
-                    <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>성당</span></div>
-                    <div className="type-item"><span className="type-dot" style={{ background: '#10B981' }}></span><span>사찰</span></div>
-                    <div className="type-item"><span className="type-dot" style={{ background: '#EF4444' }}></span><span>이단</span></div>
-                  </div>
-                </div>
+                    <div className="legend-divider"></div>
+                    <div className="legend-section">
+                      <div className="legend-section-title">시설 유형</div>
+                      <div className="legend-types">
+                        <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>교회</span></div>
+                        <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>성당</span></div>
+                        <div className="type-item"><span className="type-dot" style={{ background: '#10B981' }}></span><span>사찰</span></div>
+                        <div className="type-item"><span className="type-dot" style={{ background: '#F59E0B' }}></span><span>이단의심</span></div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ) : (
@@ -377,7 +934,12 @@ function App() {
               <span className="modal-icon" style={{ background: RELIGION_CONFIG[popupFacility.type]?.color || '#888' }}>{RELIGION_CONFIG[popupFacility.type]?.icon}</span>
               <div className="modal-title"><h2>{popupFacility.name}</h2><span className="modal-type">{RELIGION_CONFIG[popupFacility.type]?.label}{popupFacility.denomination && ` · ${popupFacility.denomination}`}</span></div>
             </div>
-            {popupFacility.isCult && <div className="cult-warning">⚠️ 주의: 이단/사이비 의심 시설{popupFacility.cultType && ` (${popupFacility.cultType})`}</div>}
+            {popupFacility.isCult && popupFacility.cultType && (
+              <div className="cult-warning">
+                ⚠️ {CULT_INFO[popupFacility.cultType]?.name || popupFacility.cultType}
+                <span className="cult-source">(출처: {CULT_INFO[popupFacility.cultType]?.source || '이단대책협의회'})</span>
+              </div>
+            )}
             <div className="modal-body">
               <div className="info-row"><span className="info-icon">📍</span><div className="info-content"><span className="info-label">주소</span><span className="info-value">{popupFacility.roadAddress || popupFacility.address}</span>{userLocation && <span className="info-distance">현재 위치에서 {getDistance(userLocation.lat, userLocation.lng, popupFacility.lat, popupFacility.lng).toFixed(1)}km</span>}</div></div>
               {popupFacility.phone && <div className="info-row"><span className="info-icon">📞</span><div className="info-content"><span className="info-label">연락처</span><span className="info-value">{popupFacility.phone}</span></div></div>}
