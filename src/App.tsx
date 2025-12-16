@@ -492,10 +492,10 @@ function App() {
     type: 'FeatureCollection' as const,
     features: filteredFacilities.map(f => ({
       type: 'Feature' as const,
-      properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website },
+      properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
       geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
     }))
-  }), [filteredFacilities])
+  }), [filteredFacilities, favorites])
 
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
@@ -787,7 +787,14 @@ function App() {
         'cult', '#D97706',
         '#4F46E5'
       ],
-      'circle-opacity': 0.9
+      'circle-opacity': 0.9,
+      'circle-stroke-width': [
+        'case',
+        ['==', ['get', 'isFavorite'], 1],
+        4,
+        0
+      ],
+      'circle-stroke-color': '#FFD700'
     }
   }
 
@@ -834,24 +841,25 @@ function App() {
     }
   }
 
-  // 즐겨찾기 별 아이콘 레이어
+  // 즐겨찾기 별 아이콘 레이어 - 마커 위에 금색 별 표시
   const favoriteStarLayer: any = {
     id: 'favorite-star',
     type: 'symbol',
     source: 'facilities',
     filter: ['==', ['get', 'isFavorite'], 1],
-    minzoom: 8,
+    minzoom: 10,
     layout: {
       'text-field': '★',
-      'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 12, 18, 16, 24],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 10, 16, 14, 22, 18, 30],
       'text-allow-overlap': true,
       'text-ignore-placement': true,
-      'text-offset': [0, -0.3]
+      'text-anchor': 'bottom',
+      'text-offset': [0, -1.2]
     },
     paint: {
       'text-color': '#FFD700',
       'text-halo-color': '#000000',
-      'text-halo-width': 1.5
+      'text-halo-width': 2
     }
   }
 
