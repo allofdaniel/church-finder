@@ -834,6 +834,27 @@ function App() {
     }
   }
 
+  // 즐겨찾기 별 아이콘 레이어
+  const favoriteStarLayer: any = {
+    id: 'favorite-star',
+    type: 'symbol',
+    source: 'facilities',
+    filter: ['==', ['get', 'isFavorite'], 1],
+    minzoom: 8,
+    layout: {
+      'text-field': '★',
+      'text-size': ['interpolate', ['linear'], ['zoom'], 8, 14, 12, 18, 16, 24],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+      'text-offset': [0, -0.3]
+    },
+    paint: {
+      'text-color': '#FFD700',
+      'text-halo-color': '#000000',
+      'text-halo-width': 1.5
+    }
+  }
+
   return (
     <div className={`app ${darkMode ? 'dark' : ''}`}>
       <header className="header">
@@ -1084,6 +1105,7 @@ function App() {
                   <Layer {...markerOuterLayer} />
                   <Layer {...unclusteredPointLayer} />
                   <Layer {...facilityLabelLayer} />
+                  <Layer {...favoriteStarLayer} />
                 </Source>
 
                 {/* 시군구 hover 툴팁 */}

@@ -115,9 +115,8 @@ body {
 .main-container {
   display: flex;
   flex: 1;
-  max-width: 1400px;
-  margin: 0 auto;
   width: 100%;
+  overflow: hidden;
 }
 
 /* Sidebar */
@@ -1728,7 +1727,7 @@ body.dark .favorite-remove:hover {
 }
 
 .ad-banner.sidebar-ad {
-  min-height: 100px;
+  display: none; /* 임시 숨김 - 레이아웃 안정화 */
 }
 
 .ad-placeholder {
