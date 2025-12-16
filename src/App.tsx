@@ -520,37 +520,40 @@ function App() {
 
   
 
-  // 길찾기 열기
+  // 길찾기 열기 - 모바일 앱 직접 실행
   const openNavigation = useCallback((facility: ReligiousFacility, app: 'kakao' | 'naver' | 'tmap') => {
-    const dest = encodeURIComponent(facility.roadAddress || facility.address)
     const name = encodeURIComponent(facility.name)
-    
-    const urls = {
+    const address = encodeURIComponent(facility.roadAddress || facility.address)
+
+    // 모바일 앱 딥링크
+    const appUrls: Record<string, string> = {
       kakao: `kakaomap://route?ep=${facility.lat},${facility.lng}&by=CAR`,
-      naver: `nmap://route/car?dlat=${facility.lat}&dlng=${facility.lng}&dname=${name}`,
+      naver: `nmap://route/car?dlat=${facility.lat}&dlng=${facility.lng}&dname=${name}&appname=church-finder`,
       tmap: `tmap://route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
     }
-    
-    // 모바일 앱 열기 시도, 실패시 웹 버전
-    const webFallback = {
+
+    // 웹 fallback URL
+    const webUrls: Record<string, string> = {
       kakao: `https://map.kakao.com/link/to/${name},${facility.lat},${facility.lng}`,
-      naver: `https://map.naver.com/v5/directions/-/-/-/car?c=${facility.lng},${facility.lat},15,0,0,0,dh&destination=${dest}`,
+      naver: `https://map.naver.com/v5/directions/-/-/-/car?c=${facility.lng},${facility.lat},15,0,0,0,dh&destination=${address}`,
       tmap: `https://tmap.life/route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
     }
-    
-    // 먼저 앱 열기 시도
-    const appUrl = urls[app]
-    const webUrl = webFallback[app]
-    
-    const iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
-    iframe.src = appUrl
-    document.body.appendChild(iframe)
-    
-    setTimeout(() => {
-      document.body.removeChild(iframe)
+
+    const appUrl = appUrls[app]
+    const webUrl = webUrls[app]
+
+    // 모바일인지 확인
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+    if (isMobile) {
+      // 모바일: 앱 직접 실행
+      window.location.href = appUrl
+      // 앱이 안 열리면 웹으로 (타임아웃)
+      setTimeout(() => window.open(webUrl, '_blank'), 1500)
+    } else {
+      // PC: 웹 버전 직접 열기
       window.open(webUrl, '_blank')
-    }, 1500)
+    }
   }, [])
 
   // 공유하기
@@ -578,9 +581,43 @@ function App() {
     }
     const feature = features[0]
 
-    // 시군구 레이어 클릭
+    // 시군구 레이어 클릭 - 해당 구역으로 줌인 및 필터링
     if (feature.layer.id === 'sigungu-fill') {
-      return // 시군구 클릭시에는 팝업 표시하지 않음
+      const props = feature.properties
+      const sigunguName = props.SIG_KOR_NM || props.name
+
+      // 해당 시군구의 경계 박스 계산
+      const geometry = feature.geometry
+      if (geometry) {
+        let minLng = Infinity, maxLng = -Infinity
+        let minLat = Infinity, maxLat = -Infinity
+
+        const processCoords = (coords: number[][]) => {
+          coords.forEach(([lng, lat]) => {
+            minLng = Math.min(minLng, lng)
+            maxLng = Math.max(maxLng, lng)
+            minLat = Math.min(minLat, lat)
+            maxLat = Math.max(maxLat, lat)
+          })
+        }
+
+        if (geometry.type === 'Polygon') {
+          geometry.coordinates.forEach(processCoords)
+        } else if (geometry.type === 'MultiPolygon') {
+          geometry.coordinates.forEach((polygon: number[][][]) => polygon.forEach(processCoords))
+        }
+
+        // 경계 박스로 줌인
+        mapRef.current?.fitBounds(
+          [[minLng, minLat], [maxLng, maxLat]],
+          { padding: 50, duration: 1000 }
+        )
+
+        // 검색어를 시군구 이름으로 설정하여 해당 지역 시설만 표시
+        setSearchQuery(sigunguName)
+        setShowSearchResults(true)
+      }
+      return
     }
 
     if (feature.properties.cluster) {
