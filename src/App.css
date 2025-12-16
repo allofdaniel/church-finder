@@ -1457,3 +1457,330 @@ body.dark .satellite-toggle.active {
   background: #4F46E5;
   border-color: #4F46E5;
 }
+
+
+/* ==========================================
+   새로운 기능 스타일 - 즐겨찾기, 길찾기, 공유
+   ========================================== */
+
+/* 팝업 액션 상단 - 즐겨찾기, 공유 */
+.popup-actions-top {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.popup-actions-top .popup-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.popup-btn.favorite {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.popup-btn.favorite:hover {
+  background: #e2e8f0;
+}
+
+.popup-btn.favorite.active {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.popup-btn.share {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.popup-btn.share:hover {
+  background: #bae6fd;
+}
+
+/* 길찾기 버튼들 */
+.popup-nav-buttons {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.popup-btn.nav {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.popup-btn.nav.kakao {
+  background: #fee500;
+  color: #3c1e1e;
+}
+
+.popup-btn.nav.kakao:hover {
+  background: #fdd835;
+}
+
+.popup-btn.nav.naver {
+  background: #2db400;
+  color: white;
+}
+
+.popup-btn.nav.naver:hover {
+  background: #259100;
+}
+
+.popup-btn.nav.tmap {
+  background: #f45858;
+  color: white;
+}
+
+.popup-btn.nav.tmap:hover {
+  background: #e03c3c;
+}
+
+/* 즐겨찾기 섹션 */
+.favorites-section,
+.recent-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.favorites-section h3,
+.recent-section h3 {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.favorites-list,
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.favorite-item,
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.favorite-item:hover,
+.recent-item:hover {
+  background: var(--border-color);
+}
+
+.favorite-icon,
+.recent-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.favorite-info,
+.recent-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.favorite-name,
+.recent-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.favorite-address,
+.recent-type {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.favorite-remove {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.favorite-remove:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.favorites-more {
+  text-align: center;
+  padding: 8px;
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  cursor: pointer;
+}
+
+.favorites-more:hover {
+  text-decoration: underline;
+}
+
+/* 다크모드 지원 */
+body.dark .popup-btn.favorite {
+  background: #334155;
+  color: #94a3b8;
+}
+
+body.dark .popup-btn.favorite:hover {
+  background: #475569;
+}
+
+body.dark .popup-btn.favorite.active {
+  background: #78350f;
+  color: #fcd34d;
+}
+
+body.dark .popup-btn.share {
+  background: #0c4a6e;
+  color: #7dd3fc;
+}
+
+body.dark .popup-btn.share:hover {
+  background: #075985;
+}
+
+body.dark .favorite-remove:hover {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .popup-nav-buttons {
+    flex-wrap: wrap;
+  }
+
+  .popup-btn.nav {
+    min-width: calc(50% - 4px);
+    flex: none;
+  }
+
+  .popup-btn.nav:last-child {
+    flex: 1;
+  }
+
+  .favorites-section,
+  .recent-section {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}
+
+
+/* ==========================================
+   AdSense 광고 스타일
+   ========================================== */
+
+.ad-banner {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--bg-tertiary);
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+.ad-banner.sidebar-ad {
+  min-height: 100px;
+}
+
+.ad-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 80px;
+  color: var(--text-muted);
+}
+
+.ad-label {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.ad-text {
+  font-size: 0.8rem;
+}
+
+/* 실제 AdSense 광고 */
+.adsbygoogle {
+  display: block;
+  width: 100%;
+}
+
+/* 모바일 하단 고정 광고 */
+.ad-banner.bottom-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  margin: 0;
+  border-radius: 0;
+  background: var(--bg-secondary);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  padding: 8px;
+}
+
+@media (min-width: 769px) {
+  .ad-banner.bottom-fixed {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ad-banner.sidebar-ad {
+    display: none;
+  }
+}

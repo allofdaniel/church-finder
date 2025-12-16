@@ -7,6 +7,53 @@ import allReligiousData from './data/all-religious.json'
 import sigunguBoundaries from './data/sigungu-boundaries.json'
 import facilitySigunguMap from './data/facility-sigungu-map.json'
 
+
+// URL 파라미터 관리 훅
+function useUrlParams() {
+  const getParams = useCallback(() => {
+    const params = new URLSearchParams(window.location.search)
+    return {
+      type: params.get('type') as ReligionType || 'all',
+      region: params.get('region') || '전체',
+      q: params.get('q') || '',
+      lat: params.get('lat') ? parseFloat(params.get('lat')!) : null,
+      lng: params.get('lng') ? parseFloat(params.get('lng')!) : null,
+      zoom: params.get('zoom') ? parseFloat(params.get('zoom')!) : null
+    }
+  }, [])
+
+  const setParams = useCallback((params: Record<string, string | null>) => {
+    const url = new URL(window.location.href)
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) url.searchParams.set(key, value)
+      else url.searchParams.delete(key)
+    })
+    window.history.replaceState({}, '', url.toString())
+  }, [])
+
+  return { getParams, setParams }
+}
+
+// 로컬스토리지 훅
+function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key)
+      return item ? JSON.parse(item) : initialValue
+    } catch { return initialValue }
+  })
+
+  const setValue = useCallback((value: T | ((prev: T) => T)) => {
+    setStoredValue(prev => {
+      const newValue = value instanceof Function ? value(prev) : value
+      window.localStorage.setItem(key, JSON.stringify(newValue))
+      return newValue
+    })
+  }, [key])
+
+  return [storedValue, setValue]
+}
+
 // 디바운스 훅
 function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value)
@@ -256,6 +303,66 @@ function App() {
   const mapRef = useRef<any>(null)
   const [satelliteMode, setSatelliteMode] = useState(false)
   const ITEMS_PER_PAGE = 20
+  // 즐겨찾기 & 최근 본 시설
+  const [favorites, setFavorites] = useLocalStorage<string[]>('favorites', [])
+  const [recentViewed, setRecentViewed] = useLocalStorage<string[]>('recentViewed', [])
+  const { getParams, setParams } = useUrlParams()
+
+  // URL 파라미터 초기화
+  useEffect(() => {
+    const params = getParams()
+    if (params.type !== 'all') setSelectedType(params.type)
+    if (params.region !== '전체') setSelectedRegion(params.region)
+    if (params.q) setSearchQuery(params.q)
+    if (params.lat && params.lng) {
+      setViewState(prev => ({
+        ...prev,
+        longitude: params.lng!,
+        latitude: params.lat!,
+        zoom: params.zoom || 14
+      }))
+    }
+  }, [])
+
+  // URL 파라미터 동기화
+  useEffect(() => {
+    setParams({
+      type: selectedType !== 'all' ? selectedType : null,
+      region: selectedRegion !== '전체' ? selectedRegion : null,
+      q: searchQuery || null
+    })
+  }, [selectedType, selectedRegion, searchQuery, setParams])
+
+  // 즐겨찾기 토글
+  const toggleFavorite = useCallback((id: string) => {
+    setFavorites(prev => 
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
+    )
+  }, [setFavorites])
+
+  // 최근 본 시설 추가
+  const addToRecent = useCallback((id: string) => {
+    setRecentViewed(prev => {
+      const filtered = prev.filter(f => f !== id)
+      return [id, ...filtered].slice(0, 20)
+    })
+  }, [setRecentViewed])
+
+  // 팝업 열 때 최근 본 시설에 추가
+  useEffect(() => {
+    if (popupFacility) addToRecent(popupFacility.id)
+  }, [popupFacility, addToRecent])
+
+  // 즐겨찾기 시설 목록
+  const favoriteFacilities = useMemo(() => 
+    favorites.map(id => facilityMap.get(id)).filter(Boolean) as ReligiousFacility[]
+  , [favorites])
+
+  // 최근 본 시설 목록
+  const recentFacilities = useMemo(() => 
+    recentViewed.map(id => facilityMap.get(id)).filter(Boolean) as ReligiousFacility[]
+  , [recentViewed])
+
   const SEARCH_RESULTS_PER_PAGE = 50
 
   // 디바운스된 검색어
@@ -410,6 +517,56 @@ function App() {
     const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   }
+
+  
+
+  // 길찾기 열기
+  const openNavigation = useCallback((facility: ReligiousFacility, app: 'kakao' | 'naver' | 'tmap') => {
+    const dest = encodeURIComponent(facility.roadAddress || facility.address)
+    const name = encodeURIComponent(facility.name)
+    
+    const urls = {
+      kakao: `kakaomap://route?ep=${facility.lat},${facility.lng}&by=CAR`,
+      naver: `nmap://route/car?dlat=${facility.lat}&dlng=${facility.lng}&dname=${name}`,
+      tmap: `tmap://route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
+    }
+    
+    // 모바일 앱 열기 시도, 실패시 웹 버전
+    const webFallback = {
+      kakao: `https://map.kakao.com/link/to/${name},${facility.lat},${facility.lng}`,
+      naver: `https://map.naver.com/v5/directions/-/-/-/car?c=${facility.lng},${facility.lat},15,0,0,0,dh&destination=${dest}`,
+      tmap: `https://tmap.life/route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
+    }
+    
+    // 먼저 앱 열기 시도
+    const appUrl = urls[app]
+    const webUrl = webFallback[app]
+    
+    const iframe = document.createElement('iframe')
+    iframe.style.display = 'none'
+    iframe.src = appUrl
+    document.body.appendChild(iframe)
+    
+    setTimeout(() => {
+      document.body.removeChild(iframe)
+      window.open(webUrl, '_blank')
+    }, 1500)
+  }, [])
+
+  // 공유하기
+  const shareLocation = useCallback(async (facility: ReligiousFacility) => {
+    const url = `${window.location.origin}?lat=${facility.lat}&lng=${facility.lng}&zoom=16`
+    const text = `${facility.name} - ${facility.roadAddress || facility.address}`
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: facility.name, text, url })
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url)
+      alert('링크가 복사되었습니다!')
+    }
+  }, [])
 
   const handleGeolocate = useCallback((e: any) => setUserLocation({ lat: e.coords.latitude, lng: e.coords.longitude }), [])
 
@@ -729,6 +886,80 @@ function App() {
             <button className={viewMode === 'map' ? 'active' : ''} onClick={() => setViewMode('map')}>🗺️ 지도</button>
             <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>📋 목록</button>
           </div>
+
+          {/* 즐겨찾기 섹션 */}
+          {favoriteFacilities.length > 0 && (
+            <div className="filter-section favorites-section">
+              <h3>⭐ 즐겨찾기 ({favoriteFacilities.length})</h3>
+              <div className="favorites-list">
+                {favoriteFacilities.slice(0, 5).map(facility => (
+                  <div
+                    key={facility.id}
+                    className="favorite-item"
+                    onClick={() => handleSearchResultClick(facility)}
+                  >
+                    <span className="favorite-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color }}>
+                      {RELIGION_CONFIG[facility.type]?.icon}
+                    </span>
+                    <div className="favorite-info">
+                      <span className="favorite-name">{facility.name}</span>
+                      <span className="favorite-address">{facility.roadAddress || facility.address}</span>
+                    </div>
+                    <button
+                      className="favorite-remove"
+                      onClick={(e) => { e.stopPropagation(); toggleFavorite(facility.id); }}
+                      title="즐겨찾기 해제"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+                {favoriteFacilities.length > 5 && (
+                  <div className="favorites-more">+{favoriteFacilities.length - 5}개 더보기</div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 최근 본 시설 섹션 */}
+          {recentFacilities.length > 0 && (
+            <div className="filter-section recent-section">
+              <h3>🕐 최근 본 시설</h3>
+              <div className="recent-list">
+                {recentFacilities.slice(0, 5).map(facility => (
+                  <div
+                    key={facility.id}
+                    className="recent-item"
+                    onClick={() => handleSearchResultClick(facility)}
+                  >
+                    <span className="recent-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color }}>
+                      {RELIGION_CONFIG[facility.type]?.icon}
+                    </span>
+                    <div className="recent-info">
+                      <span className="recent-name">{facility.name}</span>
+                      <span className="recent-type">{RELIGION_CONFIG[facility.type]?.label}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* AdSense 광고 배너 */}
+          <div className="ad-banner sidebar-ad">
+            <div className="ad-placeholder">
+              <span className="ad-label">광고</span>
+              <span className="ad-text">AdSense 연동 후 표시됩니다</span>
+              {/* 실제 AdSense 코드는 아래와 같이 추가 */}
+              {/* <ins className="adsbygoogle"
+                style={{ display: 'block' }}
+                data-ad-client="ca-pub-YOUR_ID"
+                data-ad-slot="YOUR_SLOT"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
+              /> */}
+            </div>
+          </div>
         </aside>
 
         {/* 검색 결과 패널 */}
@@ -853,9 +1084,30 @@ function App() {
                         {popupFacility.phone && <div className="popup-info-row"><span className="popup-info-icon">📞</span><a href={`tel:${popupFacility.phone}`} className="popup-phone-link">{popupFacility.phone}</a></div>}
                         {userLocation && <div className="popup-info-row"><span className="popup-info-icon">🚗</span><span>{getDistance(userLocation.lat, userLocation.lng, popupFacility.lat, popupFacility.lng).toFixed(1)}km 거리</span></div>}
                       </div>
+                      <div className="popup-actions-top">
+                        <button
+                          className={`popup-btn favorite ${favorites.includes(popupFacility.id) ? 'active' : ''}`}
+                          onClick={() => toggleFavorite(popupFacility.id)}
+                          title={favorites.includes(popupFacility.id) ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+                        >
+                          {favorites.includes(popupFacility.id) ? '★' : '☆'} 즐겨찾기
+                        </button>
+                        <button className="popup-btn share" onClick={() => shareLocation(popupFacility)} title="공유하기">
+                          📤 공유
+                        </button>
+                      </div>
+                      <div className="popup-nav-buttons">
+                        <button className="popup-btn nav kakao" onClick={() => openNavigation(popupFacility, 'kakao')} title="카카오맵 길찾기">
+                          🚗 카카오
+                        </button>
+                        <button className="popup-btn nav naver" onClick={() => openNavigation(popupFacility, 'naver')} title="네이버 길찾기">
+                          🚗 네이버
+                        </button>
+                        <button className="popup-btn nav tmap" onClick={() => openNavigation(popupFacility, 'tmap')} title="티맵 길찾기">
+                          🚗 티맵
+                        </button>
+                      </div>
                       <div className="popup-actions">
-                        <a href={popupFacility.kakaoUrl || `https://map.kakao.com/link/search/${encodeURIComponent(popupFacility.name)}`} target="_blank" rel="noopener noreferrer" className="popup-btn kakao">🗺️ 카카오맵</a>
-                        <a href={`https://map.naver.com/v5/search/${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}`} target="_blank" rel="noopener noreferrer" className="popup-btn naver">🗺️ 네이버맵</a>
                         {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="popup-btn website">🌐 웹사이트</a>}
                         {popupFacility.phone && <a href={`tel:${popupFacility.phone}`} className="popup-btn call">📞 전화</a>}
                       </div>
