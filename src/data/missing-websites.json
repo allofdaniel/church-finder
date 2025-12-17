@@ -1,0 +1,4214 @@
+[
+  {
+    "id": "11648382",
+    "name": "양재온누리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11648382"
+  },
+  {
+    "id": "8238992",
+    "name": "금란교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8238992"
+  },
+  {
+    "id": "553818334",
+    "name": "새문안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/553818334"
+  },
+  {
+    "id": "17111880",
+    "name": "소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17111880"
+  },
+  {
+    "id": "9815987",
+    "name": "삼일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9815987"
+  },
+  {
+    "id": "8406782",
+    "name": "신길교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8406782"
+  },
+  {
+    "id": "8061146",
+    "name": "정동제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8061146"
+  },
+  {
+    "id": "18935959",
+    "name": "도림교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18935959"
+  },
+  {
+    "id": "2139404473",
+    "name": "향린교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2139404473"
+  },
+  {
+    "id": "9063836",
+    "name": "사랑제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9063836"
+  },
+  {
+    "id": "1578600646",
+    "name": "남서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1578600646"
+  },
+  {
+    "id": "11431879",
+    "name": "명성교회 베들레헴성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11431879"
+  },
+  {
+    "id": "11328618",
+    "name": "한성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11328618"
+  },
+  {
+    "id": "23736800",
+    "name": "베이직교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23736800"
+  },
+  {
+    "id": "7848125",
+    "name": "동안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7848125"
+  },
+  {
+    "id": "989564077",
+    "name": "서울성락교회 본당",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/989564077"
+  },
+  {
+    "id": "8833639",
+    "name": "국제루터교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8833639"
+  },
+  {
+    "id": "14852003",
+    "name": "맑은샘광천교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14852003"
+  },
+  {
+    "id": "11465199",
+    "name": "한국기독교100주년기념교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11465199"
+  },
+  {
+    "id": "18371326",
+    "name": "예원교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18371326"
+  },
+  {
+    "id": "11104591",
+    "name": "염광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11104591"
+  },
+  {
+    "id": "7998770",
+    "name": "순복음강남교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7998770"
+  },
+  {
+    "id": "9977633",
+    "name": "종교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9977633"
+  },
+  {
+    "id": "8883955",
+    "name": "내수동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8883955"
+  },
+  {
+    "id": "8283807",
+    "name": "동숭교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8283807"
+  },
+  {
+    "id": "8535144",
+    "name": "초동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8535144"
+  },
+  {
+    "id": "9876569",
+    "name": "서울중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9876569"
+  },
+  {
+    "id": "27182213",
+    "name": "중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27182213"
+  },
+  {
+    "id": "8879773",
+    "name": "남부교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8879773"
+  },
+  {
+    "id": "10549788",
+    "name": "숭인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10549788"
+  },
+  {
+    "id": "10617552",
+    "name": "옥인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10617552"
+  },
+  {
+    "id": "8297459",
+    "name": "동인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8297459"
+  },
+  {
+    "id": "9026201",
+    "name": "명륜중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9026201"
+  },
+  {
+    "id": "9589563",
+    "name": "초원교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9589563"
+  },
+  {
+    "id": "23881748",
+    "name": "동대문제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23881748"
+  },
+  {
+    "id": "8596510",
+    "name": "창신성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8596510"
+  },
+  {
+    "id": "10650154",
+    "name": "서울영천교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10650154"
+  },
+  {
+    "id": "12633425",
+    "name": "영락농인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12633425"
+  },
+  {
+    "id": "12447662",
+    "name": "궁정교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12447662"
+  },
+  {
+    "id": "8763154",
+    "name": "경복교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8763154"
+  },
+  {
+    "id": "23882481",
+    "name": "창현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23882481"
+  },
+  {
+    "id": "10438629",
+    "name": "사직동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10438629"
+  },
+  {
+    "id": "9426368",
+    "name": "창신제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9426368"
+  },
+  {
+    "id": "23882180",
+    "name": "서울복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23882180"
+  },
+  {
+    "id": "9298827",
+    "name": "옥인제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9298827"
+  },
+  {
+    "id": "21704086",
+    "name": "삼애교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21704086"
+  },
+  {
+    "id": "525521499",
+    "name": "예수뿐인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/525521499"
+  },
+  {
+    "id": "8234645",
+    "name": "광화문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8234645"
+  },
+  {
+    "id": "12443803",
+    "name": "창의문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12443803"
+  },
+  {
+    "id": "2068273821",
+    "name": "서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2068273821"
+  },
+  {
+    "id": "23881826",
+    "name": "숭동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23881826"
+  },
+  {
+    "id": "8710929",
+    "name": "세검정교회 목사관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8710929"
+  },
+  {
+    "id": "9157216",
+    "name": "수도교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9157216"
+  },
+  {
+    "id": "20710570",
+    "name": "서울홍성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20710570"
+  },
+  {
+    "id": "17217628",
+    "name": "독립문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17217628"
+  },
+  {
+    "id": "11653735",
+    "name": "서울동성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11653735"
+  },
+  {
+    "id": "14851519",
+    "name": "계동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14851519"
+  },
+  {
+    "id": "9121165",
+    "name": "삼덕교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9121165"
+  },
+  {
+    "id": "26517569",
+    "name": "구세군영천교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26517569"
+  },
+  {
+    "id": "27010178",
+    "name": "정동제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27010178"
+  },
+  {
+    "id": "1878470884",
+    "name": "소허당",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1878470884"
+  },
+  {
+    "id": "1504035988",
+    "name": "믿음으로사는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1504035988"
+  },
+  {
+    "id": "26966899",
+    "name": "제칠일안식일예수재림교서울중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26966899"
+  },
+  {
+    "id": "9428307",
+    "name": "창덕제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9428307"
+  },
+  {
+    "id": "63795678",
+    "name": "비커밍교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/63795678"
+  },
+  {
+    "id": "10491507",
+    "name": "석교감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10491507"
+  },
+  {
+    "id": "8531154",
+    "name": "이화교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8531154"
+  },
+  {
+    "id": "1657567823",
+    "name": "하나님의교회 세계복음선교협회 교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1657567823"
+  },
+  {
+    "id": "14854077",
+    "name": "서은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14854077"
+  },
+  {
+    "id": "840041502",
+    "name": "사랑하는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/840041502"
+  },
+  {
+    "id": "798375136",
+    "name": "주사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/798375136"
+  },
+  {
+    "id": "2044770605",
+    "name": "금광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2044770605"
+  },
+  {
+    "id": "23890250",
+    "name": "생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23890250"
+  },
+  {
+    "id": "12356485",
+    "name": "요나3일영성원",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12356485"
+  },
+  {
+    "id": "10718104",
+    "name": "정화교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10718104"
+  },
+  {
+    "id": "2027288132",
+    "name": "꿈꾸는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2027288132"
+  },
+  {
+    "id": "324845370",
+    "name": "수도교회 재윤교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/324845370"
+  },
+  {
+    "id": "17479381",
+    "name": "평안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17479381"
+  },
+  {
+    "id": "14546782",
+    "name": "새맘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14546782"
+  },
+  {
+    "id": "11274616",
+    "name": "영락교회 베다니홀",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11274616"
+  },
+  {
+    "id": "7941437",
+    "name": "성도교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7941437"
+  },
+  {
+    "id": "1818464213",
+    "name": "미와십자가교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1818464213"
+  },
+  {
+    "id": "9014513",
+    "name": "반석교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9014513"
+  },
+  {
+    "id": "1676447020",
+    "name": "광장순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1676447020"
+  },
+  {
+    "id": "13582020",
+    "name": "주사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/13582020"
+  },
+  {
+    "id": "9810960",
+    "name": "대한예수교장로회 총회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9810960"
+  },
+  {
+    "id": "439878162",
+    "name": "수유제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/439878162"
+  },
+  {
+    "id": "2120353034",
+    "name": "서울대학로교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2120353034"
+  },
+  {
+    "id": "9741433",
+    "name": "남선교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9741433"
+  },
+  {
+    "id": "2034359002",
+    "name": "서울대학교병원 병원교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2034359002"
+  },
+  {
+    "id": "833439000",
+    "name": "명광성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/833439000"
+  },
+  {
+    "id": "9790755",
+    "name": "명륜선교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9790755"
+  },
+  {
+    "id": "1905964044",
+    "name": "맑은물가온교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1905964044"
+  },
+  {
+    "id": "27350031",
+    "name": "아가페드림교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27350031"
+  },
+  {
+    "id": "411875329",
+    "name": "대한예수교장로회 예장한국총회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/411875329"
+  },
+  {
+    "id": "8285205",
+    "name": "대한예수교장로회 개혁총회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8285205"
+  },
+  {
+    "id": "311750518",
+    "name": "열방전파교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/311750518"
+  },
+  {
+    "id": "9102883",
+    "name": "서울침례교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9102883"
+  },
+  {
+    "id": "26333406",
+    "name": "계동교회 개방화장실",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26333406"
+  },
+  {
+    "id": "1824801354",
+    "name": "퍼펙터즈교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1824801354"
+  },
+  {
+    "id": "24038011",
+    "name": "성북중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24038011"
+  },
+  {
+    "id": "334340465",
+    "name": "우물교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/334340465"
+  },
+  {
+    "id": "10729090",
+    "name": "장충단교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10729090"
+  },
+  {
+    "id": "9180844",
+    "name": "신광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9180844"
+  },
+  {
+    "id": "975545900",
+    "name": "우리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/975545900"
+  },
+  {
+    "id": "491600319",
+    "name": "임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/491600319"
+  },
+  {
+    "id": "8906142",
+    "name": "장충교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8906142"
+  },
+  {
+    "id": "10478943",
+    "name": "성터교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10478943"
+  },
+  {
+    "id": "9774927",
+    "name": "동대문교회 사회교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9774927"
+  },
+  {
+    "id": "1648514603",
+    "name": "광은교회 동대문성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1648514603"
+  },
+  {
+    "id": "1198087163",
+    "name": "중앙선교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1198087163"
+  },
+  {
+    "id": "1140149751",
+    "name": "서울새생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1140149751"
+  },
+  {
+    "id": "720901952",
+    "name": "동대문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/720901952"
+  },
+  {
+    "id": "23886239",
+    "name": "청암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23886239"
+  },
+  {
+    "id": "20943858",
+    "name": "반석교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20943858"
+  },
+  {
+    "id": "1729211328",
+    "name": "미션교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1729211328"
+  },
+  {
+    "id": "14840226",
+    "name": "한마음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14840226"
+  },
+  {
+    "id": "11658338",
+    "name": "낙산교회부설 방과후교실",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11658338"
+  },
+  {
+    "id": "14851248",
+    "name": "자유교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14851248"
+  },
+  {
+    "id": "20192309",
+    "name": "들림교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20192309"
+  },
+  {
+    "id": "1385875104",
+    "name": "포이에마우리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1385875104"
+  },
+  {
+    "id": "1378928601",
+    "name": "맑은샘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1378928601"
+  },
+  {
+    "id": "2115720506",
+    "name": "예인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2115720506"
+  },
+  {
+    "id": "8298754",
+    "name": "다락방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8298754"
+  },
+  {
+    "id": "25654811",
+    "name": "평창교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/25654811"
+  },
+  {
+    "id": "14852377",
+    "name": "본사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14852377"
+  },
+  {
+    "id": "23882697",
+    "name": "주사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23882697"
+  },
+  {
+    "id": "1237539769",
+    "name": "성공회 희년교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1237539769"
+  },
+  {
+    "id": "21395009",
+    "name": "서문중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21395009"
+  },
+  {
+    "id": "784312602",
+    "name": "서울홍성교회 별관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/784312602"
+  },
+  {
+    "id": "8009999",
+    "name": "충만한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8009999"
+  },
+  {
+    "id": "546010133",
+    "name": "예강교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/546010133"
+  },
+  {
+    "id": "10458698",
+    "name": "북악교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10458698"
+  },
+  {
+    "id": "23882589",
+    "name": "충신제2교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23882589"
+  },
+  {
+    "id": "8346256",
+    "name": "산돌교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8346256"
+  },
+  {
+    "id": "1059205593",
+    "name": "성은세계선교교회 서울2성전 서울역성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1059205593"
+  },
+  {
+    "id": "20193890",
+    "name": "중앙루터교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20193890"
+  },
+  {
+    "id": "1611995947",
+    "name": "조은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1611995947"
+  },
+  {
+    "id": "8687595",
+    "name": "후암제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8687595"
+  },
+  {
+    "id": "1513846000",
+    "name": "새로운삶의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1513846000"
+  },
+  {
+    "id": "10085092",
+    "name": "청파중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10085092"
+  },
+  {
+    "id": "9672198",
+    "name": "남산중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9672198"
+  },
+  {
+    "id": "788028789",
+    "name": "LNCC 로고스새중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/788028789"
+  },
+  {
+    "id": "17165095",
+    "name": "등대교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17165095"
+  },
+  {
+    "id": "98371479",
+    "name": "주은혜교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/98371479"
+  },
+  {
+    "id": "23881508",
+    "name": "서대문성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23881508"
+  },
+  {
+    "id": "9259022",
+    "name": "아현감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9259022"
+  },
+  {
+    "id": "1986971625",
+    "name": "새생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1986971625"
+  },
+  {
+    "id": "14851429",
+    "name": "그루터기교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14851429"
+  },
+  {
+    "id": "14850891",
+    "name": "새날교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14850891"
+  },
+  {
+    "id": "8089483",
+    "name": "청암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8089483"
+  },
+  {
+    "id": "11137388",
+    "name": "서울제일침례교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11137388"
+  },
+  {
+    "id": "1638939421",
+    "name": "새일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1638939421"
+  },
+  {
+    "id": "9804278",
+    "name": "산정현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9804278"
+  },
+  {
+    "id": "19555817",
+    "name": "후암백합교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19555817"
+  },
+  {
+    "id": "8907662",
+    "name": "해방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8907662"
+  },
+  {
+    "id": "20943226",
+    "name": "영주교회교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20943226"
+  },
+  {
+    "id": "8473110",
+    "name": "신흥교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8473110"
+  },
+  {
+    "id": "24060145",
+    "name": "선민교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24060145"
+  },
+  {
+    "id": "699558768",
+    "name": "함께여는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/699558768"
+  },
+  {
+    "id": "1567632786",
+    "name": "나드림교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1567632786"
+  },
+  {
+    "id": "23882847",
+    "name": "서흥교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23882847"
+  },
+  {
+    "id": "8805580",
+    "name": "그리스도과학교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8805580"
+  },
+  {
+    "id": "27018049",
+    "name": "신당중앙교회 교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27018049"
+  },
+  {
+    "id": "9749594",
+    "name": "남산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9749594"
+  },
+  {
+    "id": "23888585",
+    "name": "한길교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23888585"
+  },
+  {
+    "id": "8064462",
+    "name": "재건동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8064462"
+  },
+  {
+    "id": "8798664",
+    "name": "금호중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8798664"
+  },
+  {
+    "id": "17707068",
+    "name": "예수소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17707068"
+  },
+  {
+    "id": "9219424",
+    "name": "신당소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9219424"
+  },
+  {
+    "id": "9142871",
+    "name": "나눔의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9142871"
+  },
+  {
+    "id": "1103928466",
+    "name": "풍성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1103928466"
+  },
+  {
+    "id": "19285989",
+    "name": "서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19285989"
+  },
+  {
+    "id": "200814727",
+    "name": "기독교대한감리회 신성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/200814727"
+  },
+  {
+    "id": "8881472",
+    "name": "아현장로교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8881472"
+  },
+  {
+    "id": "27244048",
+    "name": "여의도순복음교회 용산5교구기도처",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27244048"
+  },
+  {
+    "id": "9880799",
+    "name": "성동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9880799"
+  },
+  {
+    "id": "10215830",
+    "name": "금호성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10215830"
+  },
+  {
+    "id": "22118368",
+    "name": "아름다운충일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/22118368"
+  },
+  {
+    "id": "15056323",
+    "name": "금광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/15056323"
+  },
+  {
+    "id": "24060674",
+    "name": "에덴선교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24060674"
+  },
+  {
+    "id": "979059870",
+    "name": "사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/979059870"
+  },
+  {
+    "id": "8375094",
+    "name": "성동중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8375094"
+  },
+  {
+    "id": "7876128",
+    "name": "무학교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7876128"
+  },
+  {
+    "id": "10640063",
+    "name": "예본교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10640063"
+  },
+  {
+    "id": "1218111334",
+    "name": "주영광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1218111334"
+  },
+  {
+    "id": "11440484",
+    "name": "조이어스교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11440484"
+  },
+  {
+    "id": "8021445",
+    "name": "용산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8021445"
+  },
+  {
+    "id": "8644273",
+    "name": "한남중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8644273"
+  },
+  {
+    "id": "11093430",
+    "name": "한광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11093430"
+  },
+  {
+    "id": "10757249",
+    "name": "이촌동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10757249"
+  },
+  {
+    "id": "27367322",
+    "name": "우리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27367322"
+  },
+  {
+    "id": "8085218",
+    "name": "참사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8085218"
+  },
+  {
+    "id": "20521199",
+    "name": "산마루교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20521199"
+  },
+  {
+    "id": "20537167",
+    "name": "강성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20537167"
+  },
+  {
+    "id": "10028545",
+    "name": "효창그리스도의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10028545"
+  },
+  {
+    "id": "17157099",
+    "name": "산돌교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17157099"
+  },
+  {
+    "id": "1672161153",
+    "name": "여의도순복음교회 마포3교구신공덕기도처",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1672161153"
+  },
+  {
+    "id": "14852069",
+    "name": "새동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14852069"
+  },
+  {
+    "id": "773127671",
+    "name": "겨자나무교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/773127671"
+  },
+  {
+    "id": "1679826524",
+    "name": "빛나교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1679826524"
+  },
+  {
+    "id": "11971226",
+    "name": "서울비전교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11971226"
+  },
+  {
+    "id": "2052911249",
+    "name": "빛나는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2052911249"
+  },
+  {
+    "id": "402268260",
+    "name": "용산새생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/402268260"
+  },
+  {
+    "id": "626610594",
+    "name": "주소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/626610594"
+  },
+  {
+    "id": "697599562",
+    "name": "예수중심교회 용산기도처",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/697599562"
+  },
+  {
+    "id": "26998494",
+    "name": "예수촌교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26998494"
+  },
+  {
+    "id": "2094770351",
+    "name": "보내는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2094770351"
+  },
+  {
+    "id": "14852050",
+    "name": "빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14852050"
+  },
+  {
+    "id": "8695023",
+    "name": "신창제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8695023"
+  },
+  {
+    "id": "1658163582",
+    "name": "심원정교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1658163582"
+  },
+  {
+    "id": "18922080",
+    "name": "행복나무교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18922080"
+  },
+  {
+    "id": "18316699",
+    "name": "선인중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18316699"
+  },
+  {
+    "id": "17453768",
+    "name": "서울은천교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17453768"
+  },
+  {
+    "id": "10252934",
+    "name": "대교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10252934"
+  },
+  {
+    "id": "14853356",
+    "name": "임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14853356"
+  },
+  {
+    "id": "23907355",
+    "name": "동원교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23907355"
+  },
+  {
+    "id": "27271934",
+    "name": "쉴만한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27271934"
+  },
+  {
+    "id": "23891597",
+    "name": "접목교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23891597"
+  },
+  {
+    "id": "10313787",
+    "name": "회현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10313787"
+  },
+  {
+    "id": "20401313",
+    "name": "은혜마을교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20401313"
+  },
+  {
+    "id": "11368717",
+    "name": "노량진교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11368717"
+  },
+  {
+    "id": "1370251133",
+    "name": "시온성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1370251133"
+  },
+  {
+    "id": "8408521",
+    "name": "아멘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8408521"
+  },
+  {
+    "id": "24211588",
+    "name": "남촌교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24211588"
+  },
+  {
+    "id": "58980281",
+    "name": "여선교감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/58980281"
+  },
+  {
+    "id": "1180740998",
+    "name": "풍성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1180740998"
+  },
+  {
+    "id": "10528811",
+    "name": "신반포교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10528811"
+  },
+  {
+    "id": "8859746",
+    "name": "늘푸른교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8859746"
+  },
+  {
+    "id": "1293692137",
+    "name": "명수대교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1293692137"
+  },
+  {
+    "id": "10000849",
+    "name": "한남교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10000849"
+  },
+  {
+    "id": "10498842",
+    "name": "샘물교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10498842"
+  },
+  {
+    "id": "10483218",
+    "name": "성산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10483218"
+  },
+  {
+    "id": "27251007",
+    "name": "대한예수교침례회 서울잠실교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27251007"
+  },
+  {
+    "id": "27250999",
+    "name": "주님의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27250999"
+  },
+  {
+    "id": "19268580",
+    "name": "예수사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19268580"
+  },
+  {
+    "id": "11686896",
+    "name": "순수교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11686896"
+  },
+  {
+    "id": "8636069",
+    "name": "한빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8636069"
+  },
+  {
+    "id": "17789790",
+    "name": "강동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17789790"
+  },
+  {
+    "id": "27246079",
+    "name": "화음남포교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27246079"
+  },
+  {
+    "id": "1607262933",
+    "name": "화평교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1607262933"
+  },
+  {
+    "id": "27246082",
+    "name": "서울효문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27246082"
+  },
+  {
+    "id": "27301653",
+    "name": "새빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27301653"
+  },
+  {
+    "id": "302183048",
+    "name": "서울잠실교회 교육원",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/302183048"
+  },
+  {
+    "id": "1235727918",
+    "name": "창일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1235727918"
+  },
+  {
+    "id": "119424995",
+    "name": "화평교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/119424995"
+  },
+  {
+    "id": "11951216",
+    "name": "예향교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11951216"
+  },
+  {
+    "id": "1743076494",
+    "name": "한동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1743076494"
+  },
+  {
+    "id": "561299248",
+    "name": "말씀교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/561299248"
+  },
+  {
+    "id": "24063446",
+    "name": "성민교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24063446"
+  },
+  {
+    "id": "1747612554",
+    "name": "평안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1747612554"
+  },
+  {
+    "id": "654423032",
+    "name": "보배로운산돌교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/654423032"
+  },
+  {
+    "id": "1581615070",
+    "name": "서울그리스도의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1581615070"
+  },
+  {
+    "id": "8010608",
+    "name": "영동중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8010608"
+  },
+  {
+    "id": "22645323",
+    "name": "순복음강남교회 선교비전센터",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/22645323"
+  },
+  {
+    "id": "1385678338",
+    "name": "은혜교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1385678338"
+  },
+  {
+    "id": "11392569",
+    "name": "영동제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11392569"
+  },
+  {
+    "id": "10200327",
+    "name": "광복교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10200327"
+  },
+  {
+    "id": "10500440",
+    "name": "서울성도침례교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10500440"
+  },
+  {
+    "id": "719830854",
+    "name": "소망교회 사무동",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/719830854"
+  },
+  {
+    "id": "1900534158",
+    "name": "킹덤라이즈처치",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1900534158"
+  },
+  {
+    "id": "9232140",
+    "name": "압구정교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9232140"
+  },
+  {
+    "id": "544640778",
+    "name": "은혜교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/544640778"
+  },
+  {
+    "id": "10495212",
+    "name": "서울남부교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10495212"
+  },
+  {
+    "id": "936916147",
+    "name": "일문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/936916147"
+  },
+  {
+    "id": "1649950934",
+    "name": "밝은빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1649950934"
+  },
+  {
+    "id": "9116644",
+    "name": "서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9116644"
+  },
+  {
+    "id": "27288400",
+    "name": "강남등대교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27288400"
+  },
+  {
+    "id": "10328454",
+    "name": "묘동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10328454"
+  },
+  {
+    "id": "7897111",
+    "name": "서울베다니교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7897111"
+  },
+  {
+    "id": "1079883009",
+    "name": "총회군선교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1079883009"
+  },
+  {
+    "id": "635242502",
+    "name": "더사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/635242502"
+  },
+  {
+    "id": "18699446",
+    "name": "들꽃교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18699446"
+  },
+  {
+    "id": "1152182710",
+    "name": "대한예수교장로회총회 교회자립개발원",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1152182710"
+  },
+  {
+    "id": "409148636",
+    "name": "오디너리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/409148636"
+  },
+  {
+    "id": "27201011",
+    "name": "서울서머나교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27201011"
+  },
+  {
+    "id": "1742944035",
+    "name": "남서울교회 비전센터",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1742944035"
+  },
+  {
+    "id": "26533547",
+    "name": "용두동교회 선교관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26533547"
+  },
+  {
+    "id": "9717445",
+    "name": "애일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9717445"
+  },
+  {
+    "id": "23123393",
+    "name": "광명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23123393"
+  },
+  {
+    "id": "227770757",
+    "name": "천리교 청암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/227770757"
+  },
+  {
+    "id": "8423020",
+    "name": "에덴성회 서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8423020"
+  },
+  {
+    "id": "23291519",
+    "name": "동부교회교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23291519"
+  },
+  {
+    "id": "733547290",
+    "name": "광석교회 전기차충전소",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/733547290"
+  },
+  {
+    "id": "10519502",
+    "name": "신광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10519502"
+  },
+  {
+    "id": "27285253",
+    "name": "답십리감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27285253"
+  },
+  {
+    "id": "9449377",
+    "name": "신답교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9449377"
+  },
+  {
+    "id": "1686545401",
+    "name": "언약교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1686545401"
+  },
+  {
+    "id": "17753454",
+    "name": "전농교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17753454"
+  },
+  {
+    "id": "20945982",
+    "name": "은택교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20945982"
+  },
+  {
+    "id": "23898624",
+    "name": "임마뉴엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23898624"
+  },
+  {
+    "id": "1155148301",
+    "name": "삼성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1155148301"
+  },
+  {
+    "id": "2147120538",
+    "name": "참빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2147120538"
+  },
+  {
+    "id": "560632121",
+    "name": "라온교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/560632121"
+  },
+  {
+    "id": "10025202",
+    "name": "충일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10025202"
+  },
+  {
+    "id": "8062703",
+    "name": "장안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8062703"
+  },
+  {
+    "id": "23291965",
+    "name": "면목동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23291965"
+  },
+  {
+    "id": "9613636",
+    "name": "한마음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9613636"
+  },
+  {
+    "id": "27205474",
+    "name": "임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27205474"
+  },
+  {
+    "id": "23886238",
+    "name": "새희망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23886238"
+  },
+  {
+    "id": "9032012",
+    "name": "면목중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9032012"
+  },
+  {
+    "id": "20526690",
+    "name": "벧엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20526690"
+  },
+  {
+    "id": "1665503569",
+    "name": "믿음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1665503569"
+  },
+  {
+    "id": "9125870",
+    "name": "삼성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9125870"
+  },
+  {
+    "id": "1021935291",
+    "name": "꿈을이루는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1021935291"
+  },
+  {
+    "id": "1892656035",
+    "name": "예수중심교회 성동성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1892656035"
+  },
+  {
+    "id": "8078556",
+    "name": "진명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8078556"
+  },
+  {
+    "id": "23889280",
+    "name": "충실교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23889280"
+  },
+  {
+    "id": "20948399",
+    "name": "여의도순복음금옥교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20948399"
+  },
+  {
+    "id": "9676583",
+    "name": "금옥 제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9676583"
+  },
+  {
+    "id": "319830509",
+    "name": "샘물선교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/319830509"
+  },
+  {
+    "id": "83488329",
+    "name": "하예성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/83488329"
+  },
+  {
+    "id": "1653387679",
+    "name": "이너프처치",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1653387679"
+  },
+  {
+    "id": "1277012119",
+    "name": "자애문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1277012119"
+  },
+  {
+    "id": "8634398",
+    "name": "한빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8634398"
+  },
+  {
+    "id": "10644290",
+    "name": "영광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10644290"
+  },
+  {
+    "id": "1276363816",
+    "name": "에덴순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1276363816"
+  },
+  {
+    "id": "8903808",
+    "name": "신양교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8903808"
+  },
+  {
+    "id": "948780077",
+    "name": "다정한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/948780077"
+  },
+  {
+    "id": "23889273",
+    "name": "아름다운교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23889273"
+  },
+  {
+    "id": "14753625",
+    "name": "코리아교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14753625"
+  },
+  {
+    "id": "10502512",
+    "name": "서울성서교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10502512"
+  },
+  {
+    "id": "1743142274",
+    "name": "늘푸른교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1743142274"
+  },
+  {
+    "id": "9351432",
+    "name": "인정순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9351432"
+  },
+  {
+    "id": "24041022",
+    "name": "동문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24041022"
+  },
+  {
+    "id": "10794786",
+    "name": "중곡동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10794786"
+  },
+  {
+    "id": "609040242",
+    "name": "아침빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/609040242"
+  },
+  {
+    "id": "2095685930",
+    "name": "은혜와사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2095685930"
+  },
+  {
+    "id": "10057556",
+    "name": "혜원교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10057556"
+  },
+  {
+    "id": "24042647",
+    "name": "서울동부교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24042647"
+  },
+  {
+    "id": "1696523204",
+    "name": "성심교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1696523204"
+  },
+  {
+    "id": "1464869122",
+    "name": "세밀감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1464869122"
+  },
+  {
+    "id": "10463862",
+    "name": "부광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10463862"
+  },
+  {
+    "id": "126097309",
+    "name": "다산중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/126097309"
+  },
+  {
+    "id": "9916616",
+    "name": "은혜제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9916616"
+  },
+  {
+    "id": "1676556649",
+    "name": "은혜제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1676556649"
+  },
+  {
+    "id": "1559513024",
+    "name": "화평교회 반석성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1559513024"
+  },
+  {
+    "id": "8395535",
+    "name": "부활교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8395535"
+  },
+  {
+    "id": "10146676",
+    "name": "광명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10146676"
+  },
+  {
+    "id": "8073270",
+    "name": "좋은성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8073270"
+  },
+  {
+    "id": "21132122",
+    "name": "예배하는 교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21132122"
+  },
+  {
+    "id": "1784142048",
+    "name": "금문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1784142048"
+  },
+  {
+    "id": "8027622",
+    "name": "원일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8027622"
+  },
+  {
+    "id": "18071900",
+    "name": "목장교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18071900"
+  },
+  {
+    "id": "8464128",
+    "name": "오늘의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8464128"
+  },
+  {
+    "id": "11503306",
+    "name": "성광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11503306"
+  },
+  {
+    "id": "9764756",
+    "name": "모범교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9764756"
+  },
+  {
+    "id": "24044483",
+    "name": "광명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24044483"
+  },
+  {
+    "id": "10501123",
+    "name": "서울성산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10501123"
+  },
+  {
+    "id": "23288478",
+    "name": "세선교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23288478"
+  },
+  {
+    "id": "10802267",
+    "name": "제일평화교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10802267"
+  },
+  {
+    "id": "18315613",
+    "name": "강북명성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18315613"
+  },
+  {
+    "id": "12630919",
+    "name": "빛과소금의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12630919"
+  },
+  {
+    "id": "1080955720",
+    "name": "주기쁨교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1080955720"
+  },
+  {
+    "id": "27249682",
+    "name": "천성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27249682"
+  },
+  {
+    "id": "25621231",
+    "name": "대로순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/25621231"
+  },
+  {
+    "id": "24691576",
+    "name": "좋은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24691576"
+  },
+  {
+    "id": "2052897695",
+    "name": "백합한마음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2052897695"
+  },
+  {
+    "id": "2071671079",
+    "name": "샬롬교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2071671079"
+  },
+  {
+    "id": "325790529",
+    "name": "호산나교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/325790529"
+  },
+  {
+    "id": "342641027",
+    "name": "늘푸른교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/342641027"
+  },
+  {
+    "id": "1968733194",
+    "name": "새벽이슬교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1968733194"
+  },
+  {
+    "id": "1475079090",
+    "name": "중곡교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1475079090"
+  },
+  {
+    "id": "1828949724",
+    "name": "샘물교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1828949724"
+  },
+  {
+    "id": "2003369664",
+    "name": "실로암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2003369664"
+  },
+  {
+    "id": "16021607",
+    "name": "성은감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/16021607"
+  },
+  {
+    "id": "1368146321",
+    "name": "수정교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1368146321"
+  },
+  {
+    "id": "343231105",
+    "name": "늘사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/343231105"
+  },
+  {
+    "id": "2078632392",
+    "name": "예임교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2078632392"
+  },
+  {
+    "id": "1544334541",
+    "name": "한국중앙교회 전기차충전소",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1544334541"
+  },
+  {
+    "id": "8907538",
+    "name": "진성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8907538"
+  },
+  {
+    "id": "8231213",
+    "name": "광진교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8231213"
+  },
+  {
+    "id": "21625708",
+    "name": "해오름장로교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21625708"
+  },
+  {
+    "id": "24051230",
+    "name": "목양교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24051230"
+  },
+  {
+    "id": "24003330",
+    "name": "동성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24003330"
+  },
+  {
+    "id": "323580565",
+    "name": "하늘씨앗교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/323580565"
+  },
+  {
+    "id": "886376759",
+    "name": "참좋은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/886376759"
+  },
+  {
+    "id": "88655962",
+    "name": "화평교회 밀알 성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/88655962"
+  },
+  {
+    "id": "1621542523",
+    "name": "시온교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1621542523"
+  },
+  {
+    "id": "2033934832",
+    "name": "예수인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2033934832"
+  },
+  {
+    "id": "237419641",
+    "name": "중곡교회 교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/237419641"
+  },
+  {
+    "id": "2043175740",
+    "name": "우리임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2043175740"
+  },
+  {
+    "id": "8146484",
+    "name": "하나교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8146484"
+  },
+  {
+    "id": "43328702",
+    "name": "성민교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/43328702"
+  },
+  {
+    "id": "23897903",
+    "name": "평안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23897903"
+  },
+  {
+    "id": "538533227",
+    "name": "가나안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/538533227"
+  },
+  {
+    "id": "2057867958",
+    "name": "포도나무교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2057867958"
+  },
+  {
+    "id": "49994199",
+    "name": "물댄동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/49994199"
+  },
+  {
+    "id": "23888229",
+    "name": "사명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23888229"
+  },
+  {
+    "id": "23889072",
+    "name": "샬롬교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23889072"
+  },
+  {
+    "id": "27249793",
+    "name": "감사교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27249793"
+  },
+  {
+    "id": "638007753",
+    "name": "예일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/638007753"
+  },
+  {
+    "id": "1696924592",
+    "name": "영은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1696924592"
+  },
+  {
+    "id": "698652747",
+    "name": "이룸교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/698652747"
+  },
+  {
+    "id": "863182171",
+    "name": "창대교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/863182171"
+  },
+  {
+    "id": "11630838",
+    "name": "상봉교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11630838"
+  },
+  {
+    "id": "1292359005",
+    "name": "구세군광음영문(교회)",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1292359005"
+  },
+  {
+    "id": "1610092461",
+    "name": "상봉임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1610092461"
+  },
+  {
+    "id": "105812482",
+    "name": "예수소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/105812482"
+  },
+  {
+    "id": "654292494",
+    "name": "온전한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/654292494"
+  },
+  {
+    "id": "3018269",
+    "name": "주향교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/3018269"
+  },
+  {
+    "id": "1360191415",
+    "name": "광야교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1360191415"
+  },
+  {
+    "id": "817975265",
+    "name": "임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/817975265"
+  },
+  {
+    "id": "8825281",
+    "name": "꿈이있는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8825281"
+  },
+  {
+    "id": "9760289",
+    "name": "망우중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9760289"
+  },
+  {
+    "id": "10344055",
+    "name": "성복제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10344055"
+  },
+  {
+    "id": "1397415038",
+    "name": "주찬양복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1397415038"
+  },
+  {
+    "id": "471772682",
+    "name": "기쁨의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/471772682"
+  },
+  {
+    "id": "27249755",
+    "name": "은혜교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27249755"
+  },
+  {
+    "id": "1756430540",
+    "name": "신내감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1756430540"
+  },
+  {
+    "id": "738410891",
+    "name": "은진교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/738410891"
+  },
+  {
+    "id": "2145072934",
+    "name": "하나님의교회 세계복음선교협회 교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2145072934"
+  },
+  {
+    "id": "13086217",
+    "name": "성일감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/13086217"
+  },
+  {
+    "id": "1753570419",
+    "name": "영안교회 비전센터",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1753570419"
+  },
+  {
+    "id": "18333319",
+    "name": "진주교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18333319"
+  },
+  {
+    "id": "12721254",
+    "name": "나눔N누림교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12721254"
+  },
+  {
+    "id": "1331644750",
+    "name": "샬롬교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1331644750"
+  },
+  {
+    "id": "9581242",
+    "name": "한세교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9581242"
+  },
+  {
+    "id": "629718879",
+    "name": "서울광명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/629718879"
+  },
+  {
+    "id": "1621192669",
+    "name": "섬김의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1621192669"
+  },
+  {
+    "id": "1433175680",
+    "name": "세빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1433175680"
+  },
+  {
+    "id": "17040595",
+    "name": "사랑이풍성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17040595"
+  },
+  {
+    "id": "12444145",
+    "name": "동서울열방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12444145"
+  },
+  {
+    "id": "825137433",
+    "name": "주님의길교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/825137433"
+  },
+  {
+    "id": "1419610728",
+    "name": "동선함께하는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1419610728"
+  },
+  {
+    "id": "1162141430",
+    "name": "대한예수교장로회예수열방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1162141430"
+  },
+  {
+    "id": "9138433",
+    "name": "성복중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9138433"
+  },
+  {
+    "id": "9424005",
+    "name": "종암성서침례교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9424005"
+  },
+  {
+    "id": "14851746",
+    "name": "종암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14851746"
+  },
+  {
+    "id": "1106027363",
+    "name": "신생중앙교회 교육관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1106027363"
+  },
+  {
+    "id": "1919962109",
+    "name": "동도교회 주차장",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1919962109"
+  },
+  {
+    "id": "470166251",
+    "name": "새빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/470166251"
+  },
+  {
+    "id": "546695135",
+    "name": "복있는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/546695135"
+  },
+  {
+    "id": "9692209",
+    "name": "고은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9692209"
+  },
+  {
+    "id": "997463543",
+    "name": "예수능력교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/997463543"
+  },
+  {
+    "id": "27325884",
+    "name": "기쁨충만한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27325884"
+  },
+  {
+    "id": "8378856",
+    "name": "믿음침례교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8378856"
+  },
+  {
+    "id": "12657884",
+    "name": "행복나눔교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12657884"
+  },
+  {
+    "id": "987582344",
+    "name": "사랑의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/987582344"
+  },
+  {
+    "id": "1207691714",
+    "name": "주마음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1207691714"
+  },
+  {
+    "id": "1643056474",
+    "name": "복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1643056474"
+  },
+  {
+    "id": "500370792",
+    "name": "동순교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/500370792"
+  },
+  {
+    "id": "278927676",
+    "name": "사랑을심는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/278927676"
+  },
+  {
+    "id": "276346925",
+    "name": "예수사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/276346925"
+  },
+  {
+    "id": "112080929",
+    "name": "예수생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/112080929"
+  },
+  {
+    "id": "23885183",
+    "name": "열방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23885183"
+  },
+  {
+    "id": "1878402890",
+    "name": "주님의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1878402890"
+  },
+  {
+    "id": "19294164",
+    "name": "응답선교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19294164"
+  },
+  {
+    "id": "1159699492",
+    "name": "예수중심교회 중랑성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1159699492"
+  },
+  {
+    "id": "1395987672",
+    "name": "영원한생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1395987672"
+  },
+  {
+    "id": "15289977",
+    "name": "다울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/15289977"
+  },
+  {
+    "id": "23883788",
+    "name": "성령순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23883788"
+  },
+  {
+    "id": "9364603",
+    "name": "정릉교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9364603"
+  },
+  {
+    "id": "9933013",
+    "name": "장위중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9933013"
+  },
+  {
+    "id": "9816802",
+    "name": "벧엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9816802"
+  },
+  {
+    "id": "8439745",
+    "name": "여의도순복음성북교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8439745"
+  },
+  {
+    "id": "21225835",
+    "name": "꿈의숲교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21225835"
+  },
+  {
+    "id": "19608335",
+    "name": "순복음돈암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19608335"
+  },
+  {
+    "id": "9146342",
+    "name": "성일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9146342"
+  },
+  {
+    "id": "14852454",
+    "name": "안암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14852454"
+  },
+  {
+    "id": "8418503",
+    "name": "성북교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8418503"
+  },
+  {
+    "id": "8017850",
+    "name": "예수비전교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8017850"
+  },
+  {
+    "id": "12700515",
+    "name": "성암중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12700515"
+  },
+  {
+    "id": "9364606",
+    "name": "정릉제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9364606"
+  },
+  {
+    "id": "8897622",
+    "name": "돈암제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8897622"
+  },
+  {
+    "id": "11965654",
+    "name": "영광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11965654"
+  },
+  {
+    "id": "11163307",
+    "name": "장위제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11163307"
+  },
+  {
+    "id": "11092194",
+    "name": "동암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11092194"
+  },
+  {
+    "id": "9448701",
+    "name": "미아동 교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9448701"
+  },
+  {
+    "id": "10510912",
+    "name": "여의도순복음교회 새성북지성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10510912"
+  },
+  {
+    "id": "24310398",
+    "name": "주하늘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24310398"
+  },
+  {
+    "id": "23896893",
+    "name": "반석중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23896893"
+  },
+  {
+    "id": "27223733",
+    "name": "비전교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27223733"
+  },
+  {
+    "id": "26360303",
+    "name": "성문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26360303"
+  },
+  {
+    "id": "9703364",
+    "name": "대동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9703364"
+  },
+  {
+    "id": "757774548",
+    "name": "풍성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/757774548"
+  },
+  {
+    "id": "834463894",
+    "name": "오현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/834463894"
+  },
+  {
+    "id": "968210322",
+    "name": "예수그리스도후기성도교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/968210322"
+  },
+  {
+    "id": "10714794",
+    "name": "천리교 정릉교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10714794"
+  },
+  {
+    "id": "24001992",
+    "name": "소명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24001992"
+  },
+  {
+    "id": "1922153242",
+    "name": "예수님이주인되신생명샘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1922153242"
+  },
+  {
+    "id": "1903558739",
+    "name": "거룩한빛불꽃교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1903558739"
+  },
+  {
+    "id": "9856728",
+    "name": "아름다운성산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9856728"
+  },
+  {
+    "id": "23885753",
+    "name": "성민교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23885753"
+  },
+  {
+    "id": "23886151",
+    "name": "탄포리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23886151"
+  },
+  {
+    "id": "23887343",
+    "name": "목자교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23887343"
+  },
+  {
+    "id": "27103582",
+    "name": "누구나교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27103582"
+  },
+  {
+    "id": "27326858",
+    "name": "한마음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27326858"
+  },
+  {
+    "id": "398856748",
+    "name": "성령이불타는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/398856748"
+  },
+  {
+    "id": "11134322",
+    "name": "성동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11134322"
+  },
+  {
+    "id": "11301225",
+    "name": "송천교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11301225"
+  },
+  {
+    "id": "11142455",
+    "name": "생명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11142455"
+  },
+  {
+    "id": "9290682",
+    "name": "온누리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9290682"
+  },
+  {
+    "id": "13147652",
+    "name": "은혜교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/13147652"
+  },
+  {
+    "id": "865104301",
+    "name": "순복음 영안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/865104301"
+  },
+  {
+    "id": "12450403",
+    "name": "월광성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12450403"
+  },
+  {
+    "id": "11337835",
+    "name": "반석교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11337835"
+  },
+  {
+    "id": "10131212",
+    "name": "강림교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10131212"
+  },
+  {
+    "id": "8790851",
+    "name": "성흔교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8790851"
+  },
+  {
+    "id": "19724913",
+    "name": "예수마을교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19724913"
+  },
+  {
+    "id": "9789248",
+    "name": "동성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9789248"
+  },
+  {
+    "id": "1116777063",
+    "name": "생명사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1116777063"
+  },
+  {
+    "id": "20561917",
+    "name": "빛된교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20561917"
+  },
+  {
+    "id": "20529676",
+    "name": "순복음조명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20529676"
+  },
+  {
+    "id": "1760453425",
+    "name": "소풍교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1760453425"
+  },
+  {
+    "id": "902329049",
+    "name": "맑은샘은혜교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/902329049"
+  },
+  {
+    "id": "316369155",
+    "name": "서울성도교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/316369155"
+  },
+  {
+    "id": "9899626",
+    "name": "온서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9899626"
+  },
+  {
+    "id": "1904216211",
+    "name": "복있는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1904216211"
+  },
+  {
+    "id": "10147626",
+    "name": "광장교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10147626"
+  },
+  {
+    "id": "1940550797",
+    "name": "예수사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1940550797"
+  },
+  {
+    "id": "10533442",
+    "name": "승리명성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10533442"
+  },
+  {
+    "id": "1308155352",
+    "name": "황금종교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1308155352"
+  },
+  {
+    "id": "21957138",
+    "name": "신영교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21957138"
+  },
+  {
+    "id": "1824819777",
+    "name": "무지개교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1824819777"
+  },
+  {
+    "id": "27496048",
+    "name": "예뜸교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27496048"
+  },
+  {
+    "id": "10309094",
+    "name": "도봉산교회기도원",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10309094"
+  },
+  {
+    "id": "1909586341",
+    "name": "친한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1909586341"
+  },
+  {
+    "id": "1445612553",
+    "name": "승리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1445612553"
+  },
+  {
+    "id": "1036235235",
+    "name": "열린교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1036235235"
+  },
+  {
+    "id": "26255707",
+    "name": "빛과소금교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26255707"
+  },
+  {
+    "id": "27496286",
+    "name": "서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27496286"
+  },
+  {
+    "id": "20537384",
+    "name": "상계한빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20537384"
+  },
+  {
+    "id": "27496515",
+    "name": "한빛선교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27496515"
+  },
+  {
+    "id": "25991967",
+    "name": "빌라델비아교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/25991967"
+  },
+  {
+    "id": "1726883913",
+    "name": "꿈이있는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1726883913"
+  },
+  {
+    "id": "10471880",
+    "name": "성은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10471880"
+  },
+  {
+    "id": "824383260",
+    "name": "은평벧엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/824383260"
+  },
+  {
+    "id": "13049654",
+    "name": "세계중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/13049654"
+  },
+  {
+    "id": "9792323",
+    "name": "동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9792323"
+  },
+  {
+    "id": "11043236",
+    "name": "경성그리스도의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11043236"
+  },
+  {
+    "id": "8593291",
+    "name": "참빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8593291"
+  },
+  {
+    "id": "2131164195",
+    "name": "벧엘교회기도원",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2131164195"
+  },
+  {
+    "id": "23287093",
+    "name": "부활교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23287093"
+  },
+  {
+    "id": "23291411",
+    "name": "대은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23291411"
+  },
+  {
+    "id": "14853693",
+    "name": "하람교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14853693"
+  },
+  {
+    "id": "11678633",
+    "name": "아름다운교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11678633"
+  },
+  {
+    "id": "11521122",
+    "name": "선교중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11521122"
+  },
+  {
+    "id": "262797932",
+    "name": "평안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/262797932"
+  },
+  {
+    "id": "23897447",
+    "name": "사랑의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23897447"
+  },
+  {
+    "id": "1391757090",
+    "name": "응암제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1391757090"
+  },
+  {
+    "id": "1594470511",
+    "name": "주사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1594470511"
+  },
+  {
+    "id": "742070761",
+    "name": "광은교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/742070761"
+  },
+  {
+    "id": "26051568",
+    "name": "서울열방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26051568"
+  },
+  {
+    "id": "23284262",
+    "name": "동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23284262"
+  },
+  {
+    "id": "624183041",
+    "name": "새하늘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/624183041"
+  },
+  {
+    "id": "1965050816",
+    "name": "순복음행복한우리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1965050816"
+  },
+  {
+    "id": "1234301619",
+    "name": "축복교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1234301619"
+  },
+  {
+    "id": "20948945",
+    "name": "현대교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20948945"
+  },
+  {
+    "id": "20533109",
+    "name": "광야교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20533109"
+  },
+  {
+    "id": "20534976",
+    "name": "예중교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20534976"
+  },
+  {
+    "id": "24874369",
+    "name": "평안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24874369"
+  },
+  {
+    "id": "8702322",
+    "name": "광현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8702322"
+  },
+  {
+    "id": "17039709",
+    "name": "열방교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17039709"
+  },
+  {
+    "id": "7950124",
+    "name": "성문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7950124"
+  },
+  {
+    "id": "9721522",
+    "name": "대한예수교장로회성도교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9721522"
+  },
+  {
+    "id": "1039759001",
+    "name": "목동양화교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1039759001"
+  },
+  {
+    "id": "26233776",
+    "name": "소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26233776"
+  },
+  {
+    "id": "9198708",
+    "name": "신목교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9198708"
+  },
+  {
+    "id": "20942839",
+    "name": "새서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20942839"
+  },
+  {
+    "id": "20554897",
+    "name": "주광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20554897"
+  },
+  {
+    "id": "12958368",
+    "name": "로뎀교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12958368"
+  },
+  {
+    "id": "9083915",
+    "name": "샤론교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9083915"
+  },
+  {
+    "id": "1117246571",
+    "name": "이룸교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1117246571"
+  },
+  {
+    "id": "11796900",
+    "name": "푸른초장교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11796900"
+  },
+  {
+    "id": "697332041",
+    "name": "은혜성산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/697332041"
+  },
+  {
+    "id": "27534965",
+    "name": "경향교회 선교관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27534965"
+  },
+  {
+    "id": "20533746",
+    "name": "새싹교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20533746"
+  },
+  {
+    "id": "618454991",
+    "name": "늘푸른교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/618454991"
+  },
+  {
+    "id": "648174840",
+    "name": "조이플교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/648174840"
+  },
+  {
+    "id": "1585510013",
+    "name": "함께꿈꾸는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1585510013"
+  },
+  {
+    "id": "27512552",
+    "name": "예사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27512552"
+  },
+  {
+    "id": "201983713",
+    "name": "순복음서울교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/201983713"
+  },
+  {
+    "id": "676320990",
+    "name": "소금나루교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/676320990"
+  },
+  {
+    "id": "831652641",
+    "name": "예수중심교회 가양성전",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/831652641"
+  },
+  {
+    "id": "1865495804",
+    "name": "예찬교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1865495804"
+  },
+  {
+    "id": "79035833",
+    "name": "더가까운교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/79035833"
+  },
+  {
+    "id": "25923322",
+    "name": "방주교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/25923322"
+  },
+  {
+    "id": "10383150",
+    "name": "벧엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10383150"
+  },
+  {
+    "id": "7814700",
+    "name": "아름다운당미교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7814700"
+  },
+  {
+    "id": "27114051",
+    "name": "서울대명교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27114051"
+  },
+  {
+    "id": "17592334",
+    "name": "한마음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17592334"
+  },
+  {
+    "id": "646754854",
+    "name": "구로교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/646754854"
+  },
+  {
+    "id": "456472543",
+    "name": "백민교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/456472543"
+  },
+  {
+    "id": "40833837",
+    "name": "한중소망선교교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/40833837"
+  },
+  {
+    "id": "21325978",
+    "name": "남성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21325978"
+  },
+  {
+    "id": "1842942872",
+    "name": "주사랑공동체교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1842942872"
+  },
+  {
+    "id": "9936778",
+    "name": "제일성도교회 교회학교",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9936778"
+  },
+  {
+    "id": "14507456",
+    "name": "하종교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14507456"
+  },
+  {
+    "id": "913010139",
+    "name": "강남연동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/913010139"
+  },
+  {
+    "id": "1566088387",
+    "name": "삶으로말하는교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1566088387"
+  },
+  {
+    "id": "2043543030",
+    "name": "Saving Grace (세이빙 그레이스)",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2043543030"
+  },
+  {
+    "id": "10643483",
+    "name": "영광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10643483"
+  },
+  {
+    "id": "17358228",
+    "name": "생수의강교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17358228"
+  },
+  {
+    "id": "792429210",
+    "name": "생명의길교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/792429210"
+  },
+  {
+    "id": "210122966",
+    "name": "푸른서현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/210122966"
+  },
+  {
+    "id": "8603284",
+    "name": "천호제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8603284"
+  },
+  {
+    "id": "23639609",
+    "name": "새소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23639609"
+  },
+  {
+    "id": "23867221",
+    "name": "봉산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23867221"
+  },
+  {
+    "id": "10161007",
+    "name": "경운교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10161007"
+  },
+  {
+    "id": "9013561",
+    "name": "만민교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9013561"
+  },
+  {
+    "id": "8243892",
+    "name": "기쁜소식대구교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8243892"
+  },
+  {
+    "id": "7817001",
+    "name": "태평교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7817001"
+  },
+  {
+    "id": "9354866",
+    "name": "이현교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9354866"
+  },
+  {
+    "id": "1791500253",
+    "name": "구세군북대구영문(교회)",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1791500253"
+  },
+  {
+    "id": "8897609",
+    "name": "대구서남교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8897609"
+  },
+  {
+    "id": "1522715223",
+    "name": "금호순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1522715223"
+  },
+  {
+    "id": "1496707435",
+    "name": "풍성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1496707435"
+  },
+  {
+    "id": "7830383",
+    "name": "대율교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/7830383"
+  },
+  {
+    "id": "9822764",
+    "name": "봉산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9822764"
+  },
+  {
+    "id": "10485001",
+    "name": "석산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10485001"
+  },
+  {
+    "id": "1352721116",
+    "name": "임마누엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1352721116"
+  },
+  {
+    "id": "11183378",
+    "name": "은석교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11183378"
+  },
+  {
+    "id": "1254270244",
+    "name": "평안교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1254270244"
+  },
+  {
+    "id": "23921417",
+    "name": "성지교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23921417"
+  },
+  {
+    "id": "17264446",
+    "name": "비전교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17264446"
+  },
+  {
+    "id": "9415191",
+    "name": "작전동천주교회 사제관",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9415191"
+  },
+  {
+    "id": "2071101550",
+    "name": "초대교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2071101550"
+  },
+  {
+    "id": "23916777",
+    "name": "해병대강화교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23916777"
+  },
+  {
+    "id": "685398768",
+    "name": "광주새순교회 교회 맞은편 비젼센터 앞 전기차충전소",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/685398768"
+  },
+  {
+    "id": "27607306",
+    "name": "소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27607306"
+  },
+  {
+    "id": "1036596281",
+    "name": "좋은샘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1036596281"
+  },
+  {
+    "id": "1219307995",
+    "name": "헤르몬교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1219307995"
+  },
+  {
+    "id": "14852818",
+    "name": "갑동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/14852818"
+  },
+  {
+    "id": "27220356",
+    "name": "말씀사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27220356"
+  },
+  {
+    "id": "232851800",
+    "name": "새소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/232851800"
+  },
+  {
+    "id": "10093533",
+    "name": "풍성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10093533"
+  },
+  {
+    "id": "9083378",
+    "name": "울산영광교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9083378"
+  },
+  {
+    "id": "18137654",
+    "name": "울산동부교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/18137654"
+  },
+  {
+    "id": "8469798",
+    "name": "문현제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8469798"
+  },
+  {
+    "id": "10610976",
+    "name": "실로암교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10610976"
+  },
+  {
+    "id": "9090150",
+    "name": "상북제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9090150"
+  },
+  {
+    "id": "245925213",
+    "name": "세종꿈의교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/245925213"
+  },
+  {
+    "id": "21827950",
+    "name": "세종장로교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21827950"
+  },
+  {
+    "id": "1942042239",
+    "name": "하늘빛교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1942042239"
+  },
+  {
+    "id": "1969215640",
+    "name": "소망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1969215640"
+  },
+  {
+    "id": "11137003",
+    "name": "새희망교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11137003"
+  },
+  {
+    "id": "1419651802",
+    "name": "주사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1419651802"
+  },
+  {
+    "id": "10481543",
+    "name": "옥토성결교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10481543"
+  },
+  {
+    "id": "1863528487",
+    "name": "생기감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1863528487"
+  },
+  {
+    "id": "1659006448",
+    "name": "위례비전교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1659006448"
+  },
+  {
+    "id": "1528099751",
+    "name": "더처치교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1528099751"
+  },
+  {
+    "id": "1342125937",
+    "name": "주는사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1342125937"
+  },
+  {
+    "id": "142903276",
+    "name": "헵시바샘물교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/142903276"
+  },
+  {
+    "id": "445945915",
+    "name": "은혜반석교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/445945915"
+  },
+  {
+    "id": "471377695",
+    "name": "세움비전교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/471377695"
+  },
+  {
+    "id": "21747870",
+    "name": "한마음개혁교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/21747870"
+  },
+  {
+    "id": "1210503157",
+    "name": "대한예수교장로회 한사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1210503157"
+  },
+  {
+    "id": "1606512521",
+    "name": "순복음중동교회 역곡기도처",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1606512521"
+  },
+  {
+    "id": "1444843972",
+    "name": "사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1444843972"
+  },
+  {
+    "id": "1207927761",
+    "name": "순복음제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1207927761"
+  },
+  {
+    "id": "10775717",
+    "name": "지산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10775717"
+  },
+  {
+    "id": "1474108950",
+    "name": "정인교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1474108950"
+  },
+  {
+    "id": "928570595",
+    "name": "마하나임교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/928570595"
+  },
+  {
+    "id": "1167358664",
+    "name": "숯불교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1167358664"
+  },
+  {
+    "id": "669427210",
+    "name": "동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/669427210"
+  },
+  {
+    "id": "1389885048",
+    "name": "푸른숲동산교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1389885048"
+  },
+  {
+    "id": "9645872",
+    "name": "혜광 감리교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9645872"
+  },
+  {
+    "id": "1033491714",
+    "name": "화목교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1033491714"
+  },
+  {
+    "id": "991334306",
+    "name": "늘푸른초장교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/991334306"
+  },
+  {
+    "id": "983194456",
+    "name": "한사랑순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/983194456"
+  },
+  {
+    "id": "1521455780",
+    "name": "제자교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1521455780"
+  },
+  {
+    "id": "23821081",
+    "name": "왕성한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/23821081"
+  },
+  {
+    "id": "19156971",
+    "name": "광림동교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/19156971"
+  },
+  {
+    "id": "17571771",
+    "name": "수동교회기도원 운동장2",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/17571771"
+  },
+  {
+    "id": "9232451",
+    "name": "양문교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9232451"
+  },
+  {
+    "id": "10499673",
+    "name": "생명샘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10499673"
+  },
+  {
+    "id": "11491758",
+    "name": "샘물교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11491758"
+  },
+  {
+    "id": "796659528",
+    "name": "용인말씀교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/796659528"
+  },
+  {
+    "id": "10706482",
+    "name": "용인벧엘교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10706482"
+  },
+  {
+    "id": "26357256",
+    "name": "연결고리패밀리처치",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/26357256"
+  },
+  {
+    "id": "587149582",
+    "name": "행복한교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/587149582"
+  },
+  {
+    "id": "9012423",
+    "name": "반석순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/9012423"
+  },
+  {
+    "id": "24049803",
+    "name": "새사랑교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/24049803"
+  },
+  {
+    "id": "27242170",
+    "name": "춘천효성교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/27242170"
+  },
+  {
+    "id": "2122928204",
+    "name": "방주교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2122928204"
+  },
+  {
+    "id": "1660128233",
+    "name": "전주동부교회부활동산",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/1660128233"
+  },
+  {
+    "id": "8701268",
+    "name": "광동 중앙교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8701268"
+  },
+  {
+    "id": "12487020",
+    "name": "경주제일교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/12487020"
+  },
+  {
+    "id": "11030348",
+    "name": "구미교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/11030348"
+  },
+  {
+    "id": "2022465586",
+    "name": "믿음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/2022465586"
+  },
+  {
+    "id": "8983040",
+    "name": "물금교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/8983040"
+  },
+  {
+    "id": "20471277",
+    "name": "성소교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/20471277"
+  },
+  {
+    "id": "10473402",
+    "name": "성산포순복음교회",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/10473402"
+  },
+  {
+    "id": "36640665",
+    "name": "제일교회부근공영주차장",
+    "type": "church",
+    "kakaoUrl": "http://place.map.kakao.com/36640665"
+  },
+  {
+    "id": "8602453",
+    "name": "괴정성당",
+    "type": "catholic",
+    "kakaoUrl": "http://place.map.kakao.com/8602453"
+  },
+  {
+    "id": "12106605",
+    "name": "못골성당",
+    "type": "catholic",
+    "kakaoUrl": "http://place.map.kakao.com/12106605"
+  },
+  {
+    "id": "7865385",
+    "name": "만수1동성당",
+    "type": "catholic",
+    "kakaoUrl": "http://place.map.kakao.com/7865385"
+  },
+  {
+    "id": "12898200",
+    "name": "관음사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/12898200"
+  },
+  {
+    "id": "122747961",
+    "name": "용하사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/122747961"
+  },
+  {
+    "id": "12728971",
+    "name": "달마사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/12728971"
+  },
+  {
+    "id": "9993026",
+    "name": "천금사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/9993026"
+  },
+  {
+    "id": "8844097",
+    "name": "영수암",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/8844097"
+  },
+  {
+    "id": "1559290629",
+    "name": "행운암",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/1559290629"
+  },
+  {
+    "id": "12822252",
+    "name": "관음사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/12822252"
+  },
+  {
+    "id": "12822454",
+    "name": "문수암",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/12822454"
+  },
+  {
+    "id": "12822426",
+    "name": "황룡암",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/12822426"
+  },
+  {
+    "id": "10407739",
+    "name": "무진암",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/10407739"
+  },
+  {
+    "id": "628261520",
+    "name": "대한불교 송덕사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/628261520"
+  },
+  {
+    "id": "8420705",
+    "name": "성불사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/8420705"
+  },
+  {
+    "id": "11418252",
+    "name": "대은사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/11418252"
+  },
+  {
+    "id": "19703027",
+    "name": "정암사",
+    "type": "temple",
+    "kakaoUrl": "http://place.map.kakao.com/19703027"
+  }
+]
