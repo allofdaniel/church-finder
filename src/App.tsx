@@ -545,11 +545,8 @@ function App() {
     }
     const feature = features[0]
 
-    // 시군구 레이어 클릭 - 해당 구역으로 줌인 및 필터링
+    // 시군구 레이어 클릭 - 해당 구역으로 줌인
     if (feature.layer.id === 'sigungu-fill') {
-      const props = feature.properties
-      const sigunguName = props.SIG_KOR_NM || props.name
-
       // 해당 시군구의 경계 박스 계산
       const geometry = feature.geometry
       if (geometry) {
@@ -571,15 +568,11 @@ function App() {
           geometry.coordinates.forEach((polygon: number[][][]) => polygon.forEach(processCoords))
         }
 
-        // 경계 박스로 줌인
+        // 경계 박스로 줌인만 수행 (검색 필터 적용 안함)
         mapRef.current?.fitBounds(
           [[minLng, minLat], [maxLng, maxLat]],
           { padding: 50, duration: 1000 }
         )
-
-        // 검색어를 시군구 이름으로 설정하여 해당 지역 시설만 표시
-        setSearchQuery(sigunguName)
-        setShowSearchResults(true)
       }
       return
     }
@@ -722,37 +715,87 @@ function App() {
     }
   }
 
-  // 마커 심볼 레이어 - 종류별 다른 모양 사용
-  // 교회: ● (동그라미), 성당: ✚ (십자가), 사찰: ◆ (다이아몬드), 이단: ▲ (세모)
-  const markerSymbolLayer: any = {
-    id: 'marker-symbol',
-    type: 'symbol',
+  // 호버된 시군구 강조 레이어
+  const sigunguHoverLayer: any = {
+    id: 'sigungu-hover',
+    type: 'fill',
+    source: 'sigungu',
+    maxzoom: 12,
+    paint: {
+      'fill-color': '#3B82F6',
+      'fill-opacity': [
+        'case',
+        ['==', ['get', 'code'], hoveredSigungu?.code || ''],
+        0.4,
+        0
+      ]
+    }
+  }
+
+  // 호버된 시군구 경계선 강조
+  const sigunguHoverLineLayer: any = {
+    id: 'sigungu-hover-line',
+    type: 'line',
+    source: 'sigungu',
+    maxzoom: 12,
+    paint: {
+      'line-color': '#2563EB',
+      'line-width': [
+        'case',
+        ['==', ['get', 'code'], hoveredSigungu?.code || ''],
+        3,
+        0
+      ]
+    }
+  }
+
+  // 마커 레이어 - 종류별 다른 색상과 모양
+  const markerLayer: any = {
+    id: 'marker-point',
+    type: 'circle',
     source: 'facilities',
     minzoom: 10,
-    layout: {
-      'text-field': ['match', ['get', 'type'],
-        'church', '●',
-        'catholic', '✚',
-        'temple', '◆',
-        'cult', '▲',
-        '●'
-      ],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 10, 16, 14, 24, 18, 36],
-      'text-allow-overlap': true,
-      'text-ignore-placement': true,
-      'text-anchor': 'center'
-    },
     paint: {
-      'text-color': ['match', ['get', 'type'],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 6, 14, 10, 18, 16],
+      'circle-color': ['match', ['get', 'type'],
         'church', '#4F46E5',
         'catholic', '#DB2777',
         'temple', '#059669',
         'cult', '#D97706',
         '#4F46E5'
       ],
-      'text-halo-color': '#ffffff',
-      'text-halo-width': 2,
-      'text-opacity': 0.95
+      'circle-stroke-width': ['match', ['get', 'type'],
+        'cult', 3,
+        2
+      ],
+      'circle-stroke-color': ['match', ['get', 'type'],
+        'church', '#ffffff',
+        'catholic', '#ffffff',
+        'temple', '#ffffff',
+        'cult', '#FEF3C7',
+        '#ffffff'
+      ],
+      'circle-opacity': 0.9
+    }
+  }
+
+  // 이단 경고 표시 (세모 모양처럼 보이도록 추가 레이어)
+  const cultWarningLayer: any = {
+    id: 'cult-warning',
+    type: 'symbol',
+    source: 'facilities',
+    filter: ['==', ['get', 'type'], 'cult'],
+    minzoom: 10,
+    layout: {
+      'text-field': '!',
+      'text-size': ['interpolate', ['linear'], ['zoom'], 10, 10, 14, 14, 18, 20],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+      'text-anchor': 'center',
+      'text-font': ['Open Sans Bold']
+    },
+    paint: {
+      'text-color': '#92400E'
     }
   }
 
@@ -764,7 +807,7 @@ function App() {
     filter: ['==', ['get', 'isFavorite'], 1],
     minzoom: 10,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 12, 14, 18, 18, 28],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 10, 14, 14, 18, 22],
       'circle-color': 'transparent',
       'circle-stroke-width': 3,
       'circle-stroke-color': '#FFD700'
@@ -1013,7 +1056,7 @@ function App() {
                 onLoad={handleMapLoad}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
-                interactiveLayerIds={['sigungu-fill', 'marker-symbol']}
+                interactiveLayerIds={['sigungu-fill', 'marker-point']}
                 onClick={handleMapClick}
                 onMouseMove={handleMouseMove}
               >
@@ -1035,12 +1078,15 @@ function App() {
                 <Source id="sigungu" type="geojson" data={choroplethData}>
                   <Layer {...sigunguFillLayer} />
                   <Layer {...sigunguLineLayer} />
+                  <Layer {...sigunguHoverLayer} />
+                  <Layer {...sigunguHoverLineLayer} />
                 </Source>
 
                 {/* 개별 시설 포인트 */}
                 <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
                   <Layer {...favoriteRingLayer} />
-                  <Layer {...markerSymbolLayer} />
+                  <Layer {...markerLayer} />
+                  <Layer {...cultWarningLayer} />
                   <Layer {...facilityLabelLayer} />
                 </Source>
 
