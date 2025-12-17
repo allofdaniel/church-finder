@@ -523,7 +523,6 @@ function App() {
   // 길찾기 열기 - 모바일 앱 직접 실행
   const openNavigation = useCallback((facility: ReligiousFacility, app: 'kakao' | 'naver' | 'tmap') => {
     const name = encodeURIComponent(facility.name)
-    const address = encodeURIComponent(facility.roadAddress || facility.address)
 
     // 모바일 앱 딥링크
     const appUrls: Record<string, string> = {
