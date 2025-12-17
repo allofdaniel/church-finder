@@ -722,64 +722,52 @@ function App() {
     }
   }
 
-  // 3D 마커 그림자 레이어
-  const markerShadowLayer: any = {
-    id: 'marker-shadow',
-    type: 'circle',
+  // 마커 심볼 레이어 - 종류별 다른 모양 사용
+  // 교회: ● (동그라미), 성당: ✚ (십자가), 사찰: ◆ (다이아몬드), 이단: ▲ (세모)
+  const markerSymbolLayer: any = {
+    id: 'marker-symbol',
+    type: 'symbol',
     source: 'facilities',
     minzoom: 10,
+    layout: {
+      'text-field': ['match', ['get', 'type'],
+        'church', '●',
+        'catholic', '✚',
+        'temple', '◆',
+        'cult', '▲',
+        '●'
+      ],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 10, 16, 14, 24, 18, 36],
+      'text-allow-overlap': true,
+      'text-ignore-placement': true,
+      'text-anchor': 'center'
+    },
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 6, 14, 10, 18, 16],
-      'circle-color': 'rgba(0, 0, 0, 0.3)',
-      'circle-blur': 0.5,
-      'circle-translate': [2, 2]
-    }
-  }
-
-  // 3D 마커 외곽 레이어
-  const markerOuterLayer: any = {
-    id: 'marker-outer',
-    type: 'circle',
-    source: 'facilities',
-    minzoom: 10,
-    paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 14, 12, 18, 18],
-      'circle-color': ['match', ['get', 'type'],
+      'text-color': ['match', ['get', 'type'],
         'church', '#4F46E5',
         'catholic', '#DB2777',
         'temple', '#059669',
         'cult', '#D97706',
         '#4F46E5'
       ],
-      'circle-opacity': 0.9,
-      'circle-stroke-width': [
-        'case',
-        ['==', ['get', 'isFavorite'], 1],
-        4,
-        0
-      ],
-      'circle-stroke-color': '#FFD700'
+      'text-halo-color': '#ffffff',
+      'text-halo-width': 2,
+      'text-opacity': 0.95
     }
   }
 
-  // 3D 마커 내부 레이어 (하이라이트)
-  const unclusteredPointLayer: any = {
-    id: 'unclustered-point',
+  // 즐겨찾기 테두리 레이어 (금색 원)
+  const favoriteRingLayer: any = {
+    id: 'favorite-ring',
     type: 'circle',
     source: 'facilities',
+    filter: ['==', ['get', 'isFavorite'], 1],
     minzoom: 10,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 14, 8, 18, 13],
-      'circle-color': ['match', ['get', 'type'],
-        'church', '#818CF8',
-        'catholic', '#F472B6',
-        'temple', '#34D399',
-        'cult', '#FBBF24',
-        '#818CF8'
-      ],
-      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 10, 1.5, 14, 2, 18, 3],
-      'circle-stroke-color': '#ffffff',
-      'circle-opacity': 1
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 12, 14, 18, 18, 28],
+      'circle-color': 'transparent',
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#FFD700'
     }
   }
 
@@ -802,28 +790,6 @@ function App() {
       'text-color': darkMode ? '#e2e8f0' : '#334155',
       'text-halo-color': darkMode ? '#1e293b' : '#ffffff',
       'text-halo-width': 1.5
-    }
-  }
-
-  // 즐겨찾기 별 아이콘 레이어 - 마커 위에 금색 별 표시
-  const favoriteStarLayer: any = {
-    id: 'favorite-star',
-    type: 'symbol',
-    source: 'facilities',
-    filter: ['==', ['get', 'isFavorite'], 1],
-    minzoom: 10,
-    layout: {
-      'text-field': '★',
-      'text-size': ['interpolate', ['linear'], ['zoom'], 10, 16, 14, 22, 18, 30],
-      'text-allow-overlap': true,
-      'text-ignore-placement': true,
-      'text-anchor': 'bottom',
-      'text-offset': [0, -1.2]
-    },
-    paint: {
-      'text-color': '#FFD700',
-      'text-halo-color': '#000000',
-      'text-halo-width': 2
     }
   }
 
@@ -1047,7 +1013,7 @@ function App() {
                 onLoad={handleMapLoad}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
-                interactiveLayerIds={['sigungu-fill', 'marker-outer', 'unclustered-point']}
+                interactiveLayerIds={['sigungu-fill', 'marker-symbol']}
                 onClick={handleMapClick}
                 onMouseMove={handleMouseMove}
               >
@@ -1073,11 +1039,9 @@ function App() {
 
                 {/* 개별 시설 포인트 */}
                 <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
-                  <Layer {...markerShadowLayer} />
-                  <Layer {...markerOuterLayer} />
-                  <Layer {...unclusteredPointLayer} />
+                  <Layer {...favoriteRingLayer} />
+                  <Layer {...markerSymbolLayer} />
                   <Layer {...facilityLabelLayer} />
-                  <Layer {...favoriteStarLayer} />
                 </Source>
 
                 {/* 시군구 hover 툴팁 */}
