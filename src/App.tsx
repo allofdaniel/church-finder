@@ -535,7 +535,7 @@ function App() {
     // 웹 fallback URL
     const webUrls: Record<string, string> = {
       kakao: `https://map.kakao.com/link/to/${name},${facility.lat},${facility.lng}`,
-      naver: `https://map.naver.com/v5/directions/-/-/-/car?c=${facility.lng},${facility.lat},15,0,0,0,dh&destination=${address}`,
+      naver: `https://map.naver.com/p/directions/-/-/-/car?dlat=${facility.lat}&dlng=${facility.lng}&dname=${name}`,
       tmap: `https://tmap.life/route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
     }
 
