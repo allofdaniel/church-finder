@@ -702,7 +702,14 @@ function App() {
     }
   }, [])
 
+  // 마우스 이동 쓰로틀링을 위한 ref
+  const lastMouseMoveTime = useRef(0)
   const handleMouseMove = useCallback((e: any) => {
+    // 50ms 쓰로틀링으로 성능 개선
+    const now = Date.now()
+    if (now - lastMouseMoveTime.current < 50) return
+    lastMouseMoveTime.current = now
+
     const features = e.features
     if (features && features.length > 0) {
       const feature = features.find((f: any) => f.layer.id === 'sigungu-fill')

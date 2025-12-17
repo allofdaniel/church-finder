@@ -13,18 +13,10 @@
     "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
-    "@react-leaflet/core": "^3.0.0",
-    "@types/leaflet": "^1.9.21",
-    "leaflet": "^1.9.4",
     "maplibre-gl": "^5.14.0",
-    "puppeteer": "^24.33.0",
-    "puppeteer-cluster": "^0.25.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-leaflet": "^5.0.0",
-    "react-leaflet-cluster": "^4.0.0",
-    "react-map-gl": "^8.1.0",
-    "supercluster": "^8.0.1"
+    "react-map-gl": "^8.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -38,6 +30,7 @@
     "globals": "^16.5.0",
     "proj4": "^2.20.2",
     "shapefile": "^0.6.6",
+    "terser": "^5.44.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"
