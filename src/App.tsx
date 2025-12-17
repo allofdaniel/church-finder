@@ -520,41 +520,6 @@ function App() {
 
   
 
-  // 길찾기 열기 - 모바일 앱 직접 실행
-  const openNavigation = useCallback((facility: ReligiousFacility, app: 'kakao' | 'naver' | 'tmap') => {
-    const name = encodeURIComponent(facility.name)
-
-    // 모바일 앱 딥링크
-    const appUrls: Record<string, string> = {
-      kakao: `kakaomap://route?ep=${facility.lat},${facility.lng}&by=CAR`,
-      naver: `nmap://route/car?dlat=${facility.lat}&dlng=${facility.lng}&dname=${name}&appname=church-finder`,
-      tmap: `tmap://route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
-    }
-
-    // 웹 fallback URL
-    const webUrls: Record<string, string> = {
-      kakao: `https://map.kakao.com/link/to/${name},${facility.lat},${facility.lng}`,
-      naver: `https://map.naver.com/p/directions/-/-/-/car?dlat=${facility.lat}&dlng=${facility.lng}&dname=${name}`,
-      tmap: `https://tmap.life/route?goalname=${name}&goaly=${facility.lat}&goalx=${facility.lng}`
-    }
-
-    const appUrl = appUrls[app]
-    const webUrl = webUrls[app]
-
-    // 모바일인지 확인
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-
-    if (isMobile) {
-      // 모바일: 앱 직접 실행
-      window.location.href = appUrl
-      // 앱이 안 열리면 웹으로 (타임아웃)
-      setTimeout(() => window.open(webUrl, '_blank'), 1500)
-    } else {
-      // PC: 웹 버전 직접 열기
-      window.open(webUrl, '_blank')
-    }
-  }, [])
-
   // 공유하기
   const shareLocation = useCallback(async (facility: ReligiousFacility) => {
     const url = `${window.location.origin}?lat=${facility.lat}&lng=${facility.lng}&zoom=16`
@@ -1163,15 +1128,15 @@ function App() {
                         </button>
                       </div>
                       <div className="popup-nav-buttons">
-                        <button className="popup-btn nav kakao" onClick={() => openNavigation(popupFacility, 'kakao')} title="카카오맵 길찾기">
-                          🚗 카카오
-                        </button>
-                        <button className="popup-btn nav naver" onClick={() => openNavigation(popupFacility, 'naver')} title="네이버 길찾기">
-                          🚗 네이버
-                        </button>
-                        <button className="popup-btn nav tmap" onClick={() => openNavigation(popupFacility, 'tmap')} title="티맵 길찾기">
-                          🚗 티맵
-                        </button>
+                        <a href={popupFacility.kakaoUrl || `https://place.map.kakao.com/${popupFacility.id}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav kakao" title="카카오맵에서 보기">
+                          🗺️ 카카오
+                        </a>
+                        <a href={`https://map.naver.com/p/search/${encodeURIComponent(popupFacility.name + ' ' + (popupFacility.roadAddress || popupFacility.address))}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav naver" title="네이버지도에서 보기">
+                          🗺️ 네이버
+                        </a>
+                        <a href={`https://map.kakao.com/link/roadview/${popupFacility.lat},${popupFacility.lng}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav roadview" title="로드뷰 보기">
+                          👁️ 로드뷰
+                        </a>
                       </div>
                       <div className="popup-actions">
                         {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="popup-btn website">🌐 웹사이트</a>}
