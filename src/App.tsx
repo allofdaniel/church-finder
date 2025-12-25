@@ -1,11 +1,12 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import Map, { Source, Layer, Popup, NavigationControl, GeolocateControl } from 'react-map-gl/maplibre'
+import Map, { Source, Layer, Popup, NavigationControl } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
 
 import allReligiousData from './data/all-religious.json'
 import sigunguBoundaries from './data/sigungu-boundaries.json'
 import facilitySigunguMap from './data/facility-sigungu-map.json'
+import youtubeChannels from './data/youtube-channels.json'
 
 
 // URL 파라미터 관리 훅
@@ -293,7 +294,6 @@ function App() {
     latitude: 36.5,
     zoom: 7
   })
-  const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null)
   // UI 토글 상태
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [legendVisible, setLegendVisible] = useState(true)
@@ -622,13 +622,6 @@ function App() {
     return counts
   }, [filteredFacilities])
 
-  const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
-    const R = 6371
-    const dLat = (lat2 - lat1) * Math.PI / 180
-    const dLng = (lng2 - lng1) * Math.PI / 180
-    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  }
 
   
 
@@ -647,7 +640,6 @@ function App() {
     }
   }, [])
 
-  const handleGeolocate = useCallback((e: any) => setUserLocation({ lat: e.coords.latitude, lng: e.coords.longitude }), [])
 
   const handleMapClick = useCallback((e: any) => {
     const features = e.features
@@ -1153,7 +1145,6 @@ function App() {
                     {satelliteMode ? '🗺️' : '🛰️'}
                   </button>
                 </div>
-                <GeolocateControl position="top-right" onGeolocate={handleGeolocate} trackUserLocation />
 
                 {/* 시군구 경계 choropleth */}
                 <Source id="sigungu" type="geojson" data={choroplethData}>
@@ -1203,7 +1194,6 @@ function App() {
                       <div className="popup-info">
                         <div className="popup-info-row"><span className="popup-info-icon">📍</span><span>{popupFacility.roadAddress || popupFacility.address}</span></div>
                         {popupFacility.phone && <div className="popup-info-row"><span className="popup-info-icon">📞</span><a href={`tel:${popupFacility.phone}`} className="popup-phone-link">{popupFacility.phone}</a></div>}
-                        {userLocation && <div className="popup-info-row"><span className="popup-info-icon">🚗</span><span>{getDistance(userLocation.lat, userLocation.lng, popupFacility.lat, popupFacility.lng).toFixed(1)}km 거리</span></div>}
                       </div>
                       <div className="popup-actions-top">
                         <button
@@ -1227,6 +1217,11 @@ function App() {
                         <a href={`https://map.kakao.com/link/roadview/${popupFacility.lat},${popupFacility.lng}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav roadview" title="로드뷰 보기">
                           👁️ 로드뷰
                         </a>
+                        {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
+                          <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="popup-btn nav youtube" title="YouTube 채널">
+                            ▶️ YouTube
+                          </a>
+                        )}
                       </div>
                       <div className="popup-actions">
                         {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="popup-btn website">🌐 웹사이트</a>}
@@ -1281,7 +1276,6 @@ function App() {
                     </div>
                     <p className="card-address">{facility.roadAddress || facility.address}</p>
                     {facility.phone && <p className="card-phone">📞 {facility.phone}</p>}
-                    {userLocation && <p className="card-distance">📍 {getDistance(userLocation.lat, userLocation.lng, facility.lat, facility.lng).toFixed(1)}km</p>}
                   </div>
                 ))}
               </div>
@@ -1314,7 +1308,7 @@ function App() {
               </div>
             )}
             <div className="modal-body">
-              <div className="info-row"><span className="info-icon">📍</span><div className="info-content"><span className="info-label">주소</span><span className="info-value">{popupFacility.roadAddress || popupFacility.address}</span>{userLocation && <span className="info-distance">현재 위치에서 {getDistance(userLocation.lat, userLocation.lng, popupFacility.lat, popupFacility.lng).toFixed(1)}km</span>}</div></div>
+              <div className="info-row"><span className="info-icon">📍</span><div className="info-content"><span className="info-label">주소</span><span className="info-value">{popupFacility.roadAddress || popupFacility.address}</span></div></div>
               {popupFacility.phone && <div className="info-row"><span className="info-icon">📞</span><div className="info-content"><span className="info-label">연락처</span><span className="info-value">{popupFacility.phone}</span></div></div>}
               {popupFacility.category && <div className="info-row"><span className="info-icon">📂</span><div className="info-content"><span className="info-label">분류</span><span className="info-value">{popupFacility.category}</span></div></div>}
             </div>
@@ -1323,6 +1317,9 @@ function App() {
               {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="action-btn website">🌐 웹사이트</a>}
               {popupFacility.phone && <a href={`tel:${popupFacility.phone}`} className="action-btn call">📞 전화</a>}
               <a href={`https://map.naver.com/v5/search/${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}`} target="_blank" rel="noopener noreferrer" className="action-btn naver">🗺️ 네이버맵</a>
+              {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
+                <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="action-btn youtube">▶️ YouTube</a>
+              )}
             </div>
             <div className="modal-footer"><span className="data-source">출처: 카카오맵 · 업데이트: {DATA_UPDATE_DATE}</span></div>
           </div>

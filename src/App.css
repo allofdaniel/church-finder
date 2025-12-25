@@ -1290,6 +1290,11 @@ body {
   color: white;
 }
 
+.action-btn.youtube {
+  background: #FF0000;
+  color: white;
+}
+
 .action-btn:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
@@ -1550,6 +1555,24 @@ body.dark .satellite-toggle.active {
 
 .popup-btn.nav.tmap:hover {
   background: #e03c3c;
+}
+
+.popup-btn.nav.youtube {
+  background: #FF0000;
+  color: white;
+}
+
+.popup-btn.nav.youtube:hover {
+  background: #CC0000;
+}
+
+.popup-btn.nav.roadview {
+  background: #3b82f6;
+  color: white;
+}
+
+.popup-btn.nav.roadview:hover {
+  background: #2563eb;
 }
 
 /* 즐겨찾기 섹션 */
