@@ -1132,7 +1132,7 @@ function App() {
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
                 onLoad={handleMapLoad}
-                style={{ width: '100%', height: '100%' }}
+                style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
                 mapStyle={mapStyle}
                 interactiveLayerIds={['sigungu-fill', 'marker-point']}
                 onClick={handleMapClick}
