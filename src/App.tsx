@@ -491,7 +491,14 @@ function App() {
 
     const icons = createMarkerIcons()
     Object.entries(icons).forEach(([name, imageData]) => {
-      map.addImage(name, imageData)
+      // MapLibre expects { width, height, data } format
+      if (!map.hasImage(name)) {
+        map.addImage(name, {
+          width: imageData.width,
+          height: imageData.height,
+          data: new Uint8Array(imageData.data.buffer)
+        })
+      }
     })
   }, [createMarkerIcons])
 
@@ -1126,13 +1133,13 @@ function App() {
 
         <main className="content">
           {viewMode === 'map' ? (
-            <div className="map-container" onClick={() => { if (selectedType !== 'all') setSelectedType('all') }}>
+            <div className="map-container">
               <Map
                 ref={mapRef}
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
                 onLoad={handleMapLoad}
-                style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+                style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
                 interactiveLayerIds={['sigungu-fill', 'marker-point']}
                 onClick={handleMapClick}

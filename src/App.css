@@ -591,7 +591,8 @@ body {
 .map-container {
   flex: 1;
   position: relative;
-  min-height: 500px;
+  min-height: 400px;
+  width: 100%;
 }
 
 
@@ -1350,21 +1351,19 @@ body {
   border-radius: 50%;
 }
 
-/* Responsive */
+/* Responsive - Mobile */
 @media (max-width: 768px) {
+  /* Use 100dvh for dynamic viewport height on mobile */
   html, body {
-    height: 100%;
+    height: 100dvh;
+    height: 100vh; /* Fallback */
     overflow: hidden;
-    position: fixed;
-    width: 100%;
+    overscroll-behavior: none;
   }
 
   .app {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100dvh;
+    height: 100vh; /* Fallback */
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1372,6 +1371,7 @@ body {
 
   .header {
     flex-shrink: 0;
+    padding: 0.75rem 1rem;
   }
 
   .main-container {
@@ -1383,11 +1383,12 @@ body {
 
   .sidebar {
     width: 100%;
-    max-height: 50vh;
+    max-height: 45vh;
     overflow-y: auto;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
     flex-shrink: 0;
+    -webkit-overflow-scrolling: touch;
   }
 
   .sidebar.collapsed {
@@ -1407,15 +1408,37 @@ body {
     min-height: 0;
     position: relative;
     overflow: hidden;
+    /* Ensure map interactions work properly */
+    touch-action: none;
+  }
+
+  /* Ensure MapLibre map fills the container */
+  .map-container .maplibregl-map {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .map-container .maplibregl-canvas-container,
+  .map-container .maplibregl-canvas {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .footer {
     flex-shrink: 0;
+    padding: 0.5rem;
+  }
+
+  .footer p {
+    font-size: 0.75rem;
   }
 
   .sidebar-toggle {
     top: auto;
-    bottom: 1rem;
+    bottom: 5rem;
     left: 1rem;
     z-index: 100;
   }
@@ -1427,13 +1450,14 @@ body {
     right: 0;
     bottom: 0;
     width: 100%;
-    max-height: 100vh;
+    max-height: 100dvh;
     z-index: 200;
   }
 
   .type-filters {
     flex-direction: row;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .type-btn {
@@ -1463,9 +1487,21 @@ body {
   }
 
   .map-legend.glass {
-    bottom: 4rem;
-    right: 0.5rem;
-    max-width: calc(100vw - 1rem);
+    bottom: 5rem;
+    left: 0.5rem;
+    right: auto;
+    max-width: calc(100vw - 4rem);
+    padding: 0.75rem;
+  }
+
+  /* Popup styling for mobile */
+  .maplibregl-popup {
+    max-width: 90vw !important;
+  }
+
+  .popup-full {
+    max-width: 100%;
+    padding: 0.875rem;
   }
 }
 
