@@ -242,18 +242,23 @@ function computeSigunguCounts(facilitiesList: ReligiousFacility[]) {
   return counts
 }
 
-// 간단한 중심점 계산
-function getPolygonCenter(coordinates: number[][][][]): [number, number] {
+// 간단한 중심점 계산 - Polygon과 MultiPolygon 모두 처리
+function getPolygonCenter(coordinates: any): [number, number] {
+  if (!coordinates || !Array.isArray(coordinates)) return [127.5, 36.5]
+
   let sumLng = 0, sumLat = 0, count = 0
-  for (const polygon of coordinates) {
-    for (const ring of polygon) {
-      for (const coord of ring) {
-        sumLng += coord[0]
-        sumLat += coord[1]
-        count++
-      }
+
+  const processCoord = (coord: any) => {
+    if (Array.isArray(coord) && coord.length >= 2 && typeof coord[0] === 'number') {
+      sumLng += coord[0]
+      sumLat += coord[1]
+      count++
+    } else if (Array.isArray(coord)) {
+      coord.forEach(processCoord)
     }
   }
+
+  processCoord(coordinates)
   return count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
 }
 
@@ -709,37 +714,49 @@ function App() {
   // 모바일 감지
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
+  // 드래그 상태 추적
+  const isDragging = useRef(false)
+
   // 마우스 이동 쓰로틀링을 위한 ref
   const lastMouseMoveTime = useRef(0)
   const handleMouseMove = useCallback((e: any) => {
-    // 모바일에서는 hover 기능 비활성화 (터치 이벤트 충돌 방지)
-    if (isMobile) return
+    // 모바일 또는 드래그 중에는 hover 기능 비활성화
+    if (isMobile || isDragging.current) return
 
-    // 50ms 쓰로틀링으로 성능 개선
+    // 100ms 쓰로틀링으로 성능 개선
     const now = Date.now()
-    if (now - lastMouseMoveTime.current < 50) return
+    if (now - lastMouseMoveTime.current < 100) return
     lastMouseMoveTime.current = now
 
-    const features = e.features
-    if (features && features.length > 0) {
-      const feature = features.find((f: any) => f.layer.id === 'sigungu-fill')
-      if (feature && feature.geometry && feature.geometry.coordinates) {
-        const { code, name, sido, count } = feature.properties
-        // 같은 시군구면 업데이트 안함 (깜빡임 방지)
-        setHoveredSigungu(prev => {
-          if (prev && prev.code === code) return prev
-          try {
+    try {
+      const features = e.features
+      if (features && features.length > 0) {
+        const feature = features.find((f: any) => f.layer?.id === 'sigungu-fill')
+        if (feature?.geometry?.coordinates && feature?.properties) {
+          const { code, name, sido, count } = feature.properties
+          setHoveredSigungu(prev => {
+            if (prev && prev.code === code) return prev
             const center = getPolygonCenter(feature.geometry.coordinates)
             return { code, name, sido, count, lng: center[0], lat: center[1] }
-          } catch {
-            return null
-          }
-        })
-        return
+          })
+          return
+        }
       }
+      setHoveredSigungu(null)
+    } catch {
+      // 에러 발생시 무시
     }
-    setHoveredSigungu(null)
   }, [isMobile])
+
+  // 드래그 시작/종료 핸들러
+  const handleDragStart = useCallback(() => {
+    isDragging.current = true
+    setHoveredSigungu(null)
+  }, [])
+
+  const handleDragEnd = useCallback(() => {
+    isDragging.current = false
+  }, [])
 
   useEffect(() => setListPage(1), [selectedType, selectedRegion, debouncedSearchQuery])
 
@@ -854,7 +871,7 @@ function App() {
     type: 'fill',
     source: 'sigungu',
     maxzoom: 12,
-    filter: hoveredSigungu ? ['==', ['get', 'code'], hoveredSigungu.code] : ['==', 1, 0],
+    filter: hoveredSigungu ? ['==', ['get', 'code'], String(hoveredSigungu.code)] : ['==', ['get', 'code'], ''],
     paint: {
       'fill-color': '#3B82F6',
       'fill-opacity': 0.4
@@ -867,7 +884,7 @@ function App() {
     type: 'line',
     source: 'sigungu',
     maxzoom: 12,
-    filter: hoveredSigungu ? ['==', ['get', 'code'], hoveredSigungu.code] : ['==', 1, 0],
+    filter: hoveredSigungu ? ['==', ['get', 'code'], String(hoveredSigungu.code)] : ['==', ['get', 'code'], ''],
     paint: {
       'line-color': '#2563EB',
       'line-width': 3
@@ -1149,6 +1166,10 @@ function App() {
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
                 onLoad={handleMapLoad}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onTouchStart={handleDragStart}
+                onTouchEnd={handleDragEnd}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
                 interactiveLayerIds={['sigungu-fill', 'marker-point']}
