@@ -1414,6 +1414,7 @@ body {
 
   .map-container {
     min-height: 400px;
+    height: calc(100vh - 180px);
   }
 
   .facility-grid {
