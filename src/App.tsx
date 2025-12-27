@@ -1189,7 +1189,6 @@ function App() {
                 <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
                   <Layer {...favoriteRingLayer} />
                   <Layer {...markerLayer} />
-                  <Layer {...facilityLabelLayer} />
                 </Source>
 
                 {/* 시군구 hover 툴팁 */}
