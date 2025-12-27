@@ -496,13 +496,17 @@ function App() {
 
     const icons = createMarkerIcons()
     Object.entries(icons).forEach(([name, imageData]) => {
-      // MapLibre expects { width, height, data } format
       if (!map.hasImage(name)) {
-        map.addImage(name, {
-          width: imageData.width,
-          height: imageData.height,
-          data: new Uint8Array(imageData.data.buffer)
-        })
+        try {
+          // ImageData를 직접 사용 (MapLibre 4.x 호환)
+          const data = new Uint8Array(imageData.data.length)
+          for (let i = 0; i < imageData.data.length; i++) {
+            data[i] = imageData.data[i]
+          }
+          map.addImage(name, { width: imageData.width, height: imageData.height, data })
+        } catch (e) {
+          console.warn(`Failed to add image ${name}:`, e)
+        }
       }
     })
   }, [createMarkerIcons])
