@@ -489,27 +489,11 @@ function App() {
     return icons
   }, [])
 
-  // 맵 로드 핸들러 - 커스텀 아이콘 등록
+  // 맵 로드 핸들러 - 원형 마커 사용으로 커스텀 아이콘 불필요
   const handleMapLoad = useCallback(() => {
-    const map = mapRef.current?.getMap()
-    if (!map) return
-
-    const icons = createMarkerIcons()
-    Object.entries(icons).forEach(([name, imageData]) => {
-      if (!map.hasImage(name)) {
-        try {
-          // ImageData를 직접 사용 (MapLibre 4.x 호환)
-          const data = new Uint8Array(imageData.data.length)
-          for (let i = 0; i < imageData.data.length; i++) {
-            data[i] = imageData.data[i]
-          }
-          map.addImage(name, { width: imageData.width, height: imageData.height, data })
-        } catch (e) {
-          console.warn(`Failed to add image ${name}:`, e)
-        }
-      }
-    })
-  }, [createMarkerIcons])
+    // 원형 마커로 변경하여 addImage 호출 제거
+    // 이제 마커는 circle 레이어로 렌더링됨
+  }, [])
 
   // 최적화된 검색 함수 (searchIndex 사용)
   const fastSearch = useCallback((idx: SearchIndex, query: string): { match: boolean, score: number, isLocationMatch: boolean } => {
@@ -895,23 +879,23 @@ function App() {
     }
   }), [hoveredSigungu?.code])
 
-  // 마커 레이어 - 종류별 다른 아이콘 사용
+  // 마커 레이어 - 종류별 다른 색상의 원형 마커
   const markerLayer: any = {
     id: 'marker-point',
-    type: 'symbol',
+    type: 'circle',
     source: 'facilities',
     minzoom: 10,
-    layout: {
-      'icon-image': ['match', ['get', 'type'],
-        'church', 'marker-church',
-        'catholic', 'marker-catholic',
-        'temple', 'marker-temple',
-        'cult', 'marker-cult',
-        'marker-church'
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 14, 8, 18, 12],
+      'circle-color': ['match', ['get', 'type'],
+        'church', '#3B82F6',    // 파란색 - 교회
+        'catholic', '#8B5CF6',  // 보라색 - 성당
+        'temple', '#10B981',    // 초록색 - 사찰
+        'cult', '#EF4444',      // 빨간색 - 이단
+        '#3B82F6'
       ],
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.6, 14, 0.9, 18, 1.2],
-      'icon-allow-overlap': true,
-      'icon-ignore-placement': true
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#FFFFFF'
     }
   }
 
