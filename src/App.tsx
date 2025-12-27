@@ -706,9 +706,15 @@ function App() {
     }
   }, [])
 
+  // 모바일 감지
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
   // 마우스 이동 쓰로틀링을 위한 ref
   const lastMouseMoveTime = useRef(0)
   const handleMouseMove = useCallback((e: any) => {
+    // 모바일에서는 hover 기능 비활성화 (터치 이벤트 충돌 방지)
+    if (isMobile) return
+
     // 50ms 쓰로틀링으로 성능 개선
     const now = Date.now()
     if (now - lastMouseMoveTime.current < 50) return
@@ -717,19 +723,23 @@ function App() {
     const features = e.features
     if (features && features.length > 0) {
       const feature = features.find((f: any) => f.layer.id === 'sigungu-fill')
-      if (feature) {
+      if (feature && feature.geometry && feature.geometry.coordinates) {
         const { code, name, sido, count } = feature.properties
         // 같은 시군구면 업데이트 안함 (깜빡임 방지)
         setHoveredSigungu(prev => {
           if (prev && prev.code === code) return prev
-          const center = getPolygonCenter(feature.geometry.coordinates)
-          return { code, name, sido, count, lng: center[0], lat: center[1] }
+          try {
+            const center = getPolygonCenter(feature.geometry.coordinates)
+            return { code, name, sido, count, lng: center[0], lat: center[1] }
+          } catch {
+            return null
+          }
         })
         return
       }
     }
     setHoveredSigungu(null)
-  }, [])
+  }, [isMobile])
 
   useEffect(() => setListPage(1), [selectedType, selectedRegion, debouncedSearchQuery])
 
