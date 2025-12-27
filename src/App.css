@@ -594,6 +594,17 @@ body {
   min-height: 500px;
 }
 
+.map-container .maplibregl-map {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.map-container .maplibregl-canvas-container,
+.map-container .maplibregl-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .custom-marker {
   width: 36px;
   height: 36px;
