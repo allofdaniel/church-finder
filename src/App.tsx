@@ -294,8 +294,13 @@ function App() {
     latitude: 36.5,
     zoom: 7
   })
-  // UI 토글 상태
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  // UI 토글 상태 - 모바일에서는 기본으로 사이드바 닫기
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768
+    }
+    return false
+  })
   const [legendVisible, setLegendVisible] = useState(true)
   // 검색 결과 패널 상태
   const [showSearchResults, setShowSearchResults] = useState(false)
