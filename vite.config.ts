@@ -17,10 +17,7 @@ export default defineConfig({
         pure_funcs: ['console.log', 'console.info', 'console.debug'],
       },
       mangle: {
-        toplevel: true, // 최상위 변수명 난독화
-        properties: {
-          regex: /^_/ // _로 시작하는 속성 난독화
-        }
+        toplevel: false, // MapLibre GL 호환성을 위해 비활성화
       },
       format: {
         comments: false // 주석 제거
