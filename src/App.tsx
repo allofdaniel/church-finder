@@ -383,116 +383,9 @@ function App() {
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
-  // 마커 아이콘 생성 함수
-  const createMarkerIcons = useCallback(() => {
-    const icons: Record<string, ImageData> = {}
-    const size = 32
-
-    // 교회 - 집 모양 (세모 지붕 + 네모 몸체)
-    const churchCanvas = document.createElement('canvas')
-    churchCanvas.width = size
-    churchCanvas.height = size
-    const churchCtx = churchCanvas.getContext('2d')!
-    churchCtx.fillStyle = '#4F46E5'
-    churchCtx.strokeStyle = '#ffffff'
-    churchCtx.lineWidth = 2
-    // 지붕 (삼각형)
-    churchCtx.beginPath()
-    churchCtx.moveTo(size/2, 3)
-    churchCtx.lineTo(size - 4, 14)
-    churchCtx.lineTo(4, 14)
-    churchCtx.closePath()
-    churchCtx.fill()
-    churchCtx.stroke()
-    // 몸체 (사각형)
-    churchCtx.fillRect(7, 13, size - 14, size - 17)
-    churchCtx.strokeRect(7, 13, size - 14, size - 17)
-    icons['marker-church'] = churchCtx.getImageData(0, 0, size, size)
-
-    // 성당 - 두꺼운 십자가 (세로4칸 가로3칸 느낌)
-    const catholicCanvas = document.createElement('canvas')
-    catholicCanvas.width = size
-    catholicCanvas.height = size
-    const catholicCtx = catholicCanvas.getContext('2d')!
-    catholicCtx.fillStyle = '#DB2777'
-    catholicCtx.strokeStyle = '#ffffff'
-    catholicCtx.lineWidth = 2
-    const u = size / 7 // unit
-    // 세로 막대 (4칸 높이)
-    catholicCtx.fillRect(size/2 - u, 2, u * 2, u * 5.5)
-    // 가로 막대 (3칸 너비)
-    catholicCtx.fillRect(size/2 - u * 1.8, u * 1.5, u * 3.6, u * 2)
-    // 테두리
-    catholicCtx.beginPath()
-    catholicCtx.moveTo(size/2 - u, 2)
-    catholicCtx.lineTo(size/2 + u, 2)
-    catholicCtx.lineTo(size/2 + u, u * 1.5)
-    catholicCtx.lineTo(size/2 + u * 1.8, u * 1.5)
-    catholicCtx.lineTo(size/2 + u * 1.8, u * 3.5)
-    catholicCtx.lineTo(size/2 + u, u * 3.5)
-    catholicCtx.lineTo(size/2 + u, 2 + u * 5.5)
-    catholicCtx.lineTo(size/2 - u, 2 + u * 5.5)
-    catholicCtx.lineTo(size/2 - u, u * 3.5)
-    catholicCtx.lineTo(size/2 - u * 1.8, u * 3.5)
-    catholicCtx.lineTo(size/2 - u * 1.8, u * 1.5)
-    catholicCtx.lineTo(size/2 - u, u * 1.5)
-    catholicCtx.closePath()
-    catholicCtx.stroke()
-    icons['marker-catholic'] = catholicCtx.getImageData(0, 0, size, size)
-
-    // 사찰 - 卍 기호
-    const templeCanvas = document.createElement('canvas')
-    templeCanvas.width = size
-    templeCanvas.height = size
-    const templeCtx = templeCanvas.getContext('2d')!
-    templeCtx.fillStyle = '#059669'
-    templeCtx.strokeStyle = '#ffffff'
-    templeCtx.lineWidth = 2
-    const t = 4 // 선 두께
-    const m = 5 // 마진
-    // 卍 그리기
-    templeCtx.fillRect(m, size/2 - t/2, size - m*2, t) // 가로
-    templeCtx.fillRect(size/2 - t/2, m, t, size - m*2) // 세로
-    // 꺾임 (시계방향 卍)
-    templeCtx.fillRect(m, m, t, size/2 - m - t/2) // 좌상 세로
-    templeCtx.fillRect(size/2 + t/2, m, size/2 - m - t/2, t) // 우상 가로
-    templeCtx.fillRect(size - m - t, size/2 + t/2, t, size/2 - m - t/2) // 우하 세로
-    templeCtx.fillRect(m, size - m - t, size/2 - m - t/2, t) // 좌하 가로
-    // 테두리
-    templeCtx.strokeRect(m - 1, m - 1, size - m*2 + 2, size - m*2 + 2)
-    icons['marker-temple'] = templeCtx.getImageData(0, 0, size, size)
-
-    // 이단 - 삼각형 + 느낌표
-    const cultCanvas = document.createElement('canvas')
-    cultCanvas.width = size
-    cultCanvas.height = size
-    const cultCtx = cultCanvas.getContext('2d')!
-    cultCtx.fillStyle = '#D97706'
-    cultCtx.strokeStyle = '#ffffff'
-    cultCtx.lineWidth = 2
-    // 삼각형
-    cultCtx.beginPath()
-    cultCtx.moveTo(size/2, 3)
-    cultCtx.lineTo(size - 4, size - 4)
-    cultCtx.lineTo(4, size - 4)
-    cultCtx.closePath()
-    cultCtx.fill()
-    cultCtx.stroke()
-    // 느낌표
-    cultCtx.fillStyle = '#ffffff'
-    cultCtx.fillRect(size/2 - 2, 10, 4, 10)
-    cultCtx.beginPath()
-    cultCtx.arc(size/2, 24, 2.5, 0, Math.PI * 2)
-    cultCtx.fill()
-    icons['marker-cult'] = cultCtx.getImageData(0, 0, size, size)
-
-    return icons
-  }, [])
-
   // 맵 로드 핸들러 - 원형 마커 사용으로 커스텀 아이콘 불필요
   const handleMapLoad = useCallback(() => {
     // 원형 마커로 변경하여 addImage 호출 제거
-    // 이제 마커는 circle 레이어로 렌더링됨
   }, [])
 
   // 최적화된 검색 함수 (searchIndex 사용)
@@ -911,28 +804,6 @@ function App() {
       'circle-color': 'transparent',
       'circle-stroke-width': 3,
       'circle-stroke-color': '#FFD700'
-    }
-  }
-
-  // 시설 이름 레이어 (줌 14 이상)
-  const facilityLabelLayer: any = {
-    id: 'facility-label',
-    type: 'symbol',
-    source: 'facilities',
-    minzoom: 14,
-    layout: {
-      'text-field': ['get', 'name'],
-      'text-font': ['Open Sans Regular'],
-      'text-size': 11,
-      'text-offset': [0, 1.5],
-      'text-anchor': 'top',
-      'text-optional': true,
-      'text-max-width': 10
-    },
-    paint: {
-      'text-color': darkMode ? '#e2e8f0' : '#334155',
-      'text-halo-color': darkMode ? '#1e293b' : '#ffffff',
-      'text-halo-width': 1.5
     }
   }
 
