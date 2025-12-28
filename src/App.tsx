@@ -1033,18 +1033,7 @@ function App() {
                   </button>
                 </div>
 
-                {/* 시군구 경계 choropleth */}
-                <Source id="sigungu" type="geojson" data={choroplethData}>
-                  <Layer {...sigunguFillLayer} />
-                  <Layer {...sigunguLineLayer} />
-                  <Layer {...sigunguHoverLayer} />
-                  <Layer {...sigunguHoverLineLayer} />
-                </Source>
-
-                {/* 개별 시설 포인트 */}
-                <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
-                  <Layer {...markerLayer} />
-                </Source>
+                {/* 모든 레이어 임시 비활성화 - 디버깅용 */}
 
                 {/* 시군구 hover 툴팁 */}
                 {hoveredSigungu && (
