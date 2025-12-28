@@ -777,9 +777,9 @@ function App() {
     id: 'marker-point',
     type: 'circle',
     source: 'facilities',
-    minzoom: 10,
+    minzoom: 6,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 14, 8, 18, 12],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 2, 10, 5, 14, 8, 18, 12],
       'circle-color': ['match', ['get', 'type'],
         'church', '#3B82F6',    // 파란색 - 교회
         'catholic', '#8B5CF6',  // 보라색 - 성당
@@ -787,7 +787,7 @@ function App() {
         'cult', '#EF4444',      // 빨간색 - 이단
         '#3B82F6'
       ],
-      'circle-stroke-width': 2,
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 10, 1, 14, 2],
       'circle-stroke-color': '#FFFFFF'
     }
   }
