@@ -519,14 +519,45 @@ function App() {
     }
   }, [sigunguCounts])
 
+  // 시군구 중심점에 숫자 표시를 위한 데이터
+  const sigunguLabelData = useMemo(() => {
+    return {
+      type: 'FeatureCollection' as const,
+      features: (sigunguBoundaries as any).features.map((feature: any) => {
+        const center = getPolygonCenter(feature.geometry.coordinates)
+        const count = sigunguCounts[feature.properties.code] || 0
+        return {
+          type: 'Feature' as const,
+          properties: {
+            code: feature.properties.code,
+            name: feature.properties.name,
+            count: count,
+            countLabel: count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count)
+          },
+          geometry: {
+            type: 'Point' as const,
+            coordinates: center
+          }
+        }
+      }).filter((f: any) => f.properties.count > 0)  // 0개인 지역은 숨김
+    }
+  }, [sigunguCounts])
+
+  // 시군구 시설 수가 20개 이하인 시설만 표시
   const geojsonData = useMemo(() => ({
     type: 'FeatureCollection' as const,
-    features: filteredFacilities.map(f => ({
-      type: 'Feature' as const,
-      properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
-      geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
-    }))
-  }), [filteredFacilities, favorites])
+    features: filteredFacilities
+      .filter(f => {
+        const sigunguCode = sigunguMapping[f.id]
+        const count = sigunguCode ? sigunguCounts[sigunguCode] || 0 : 0
+        return count <= 20  // 20개 이하인 시군구의 시설만 표시
+      })
+      .map(f => ({
+        type: 'Feature' as const,
+        properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
+        geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
+      }))
+  }), [filteredFacilities, favorites, sigunguCounts])
 
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
@@ -596,21 +627,6 @@ function App() {
           [[minLng, minLat], [maxLng, maxLat]],
           { padding: 50, duration: 1000 }
         )
-      }
-      return
-    }
-
-    // 클러스터 클릭 - 줌인
-    if (feature.layer.id === 'clusters' || feature.properties.cluster) {
-      const clusterId = feature.properties.cluster_id
-      const map = mapRef.current?.getMap()
-      const src = map?.getSource('facilities') as any
-      if (src && src.getClusterExpansionZoom) {
-        src.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
-          if (!err) {
-            map?.easeTo({ center: feature.geometry.coordinates, zoom: Math.min(zoom, 16) })
-          }
-        })
       }
       return
     }
@@ -751,28 +767,29 @@ function App() {
     }
   }
 
-  // 경계선 레이어 - 줌 12 이하에서만 표시
+  // 경계선 레이어 - 줌 12 이하에서만 표시 (굵은 테두리)
   const sigunguLineLayer: any = {
     id: 'sigungu-line',
     type: 'line',
     source: 'sigungu',
     maxzoom: 12,
     paint: {
-      'line-color': darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(100, 116, 139, 0.25)',
+      'line-color': darkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(59, 130, 246, 0.7)',
       'line-width': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 0.2,
-        10, 0.5,
-        12, 0.3
+        5, 1.5,
+        8, 2.5,
+        10, 3,
+        12, 2
       ],
       'line-opacity': [
         'interpolate',
         ['linear'],
         ['zoom'],
         10, 1,
-        12, 0.3
+        12, 0.5
       ]
     }
   }
@@ -803,64 +820,39 @@ function App() {
     }
   }), [hoveredSigungu?.code])
 
-  // 클러스터 레이어 - 원형 배경에 숫자 표시
-  const clusterLayer: any = {
-    id: 'clusters',
-    type: 'circle',
-    source: 'facilities',
-    filter: ['has', 'point_count'],
-    paint: {
-      'circle-color': [
-        'step',
-        ['get', 'point_count'],
-        '#60A5FA',   // 100개 미만: 파란색
-        100, '#3B82F6',   // 100-500: 진한 파란색
-        500, '#1D4ED8',   // 500-1000: 더 진한 파란색
-        1000, '#1E40AF'   // 1000개 이상: 가장 진한 파란색
-      ],
-      'circle-radius': [
-        'step',
-        ['get', 'point_count'],
-        20,    // 100개 미만
-        100, 25,   // 100-500
-        500, 30,   // 500-1000
-        1000, 40   // 1000개 이상
-      ],
-      'circle-stroke-width': 3,
-      'circle-stroke-color': '#FFFFFF'
-    }
-  }
-
-  // 클러스터 숫자 레이어
-  const clusterCountLayer: any = {
-    id: 'cluster-count',
+  // 시군구 라벨 레이어 - 시군구 중심에 시설 개수 숫자 표시
+  const sigunguLabelLayer: any = {
+    id: 'sigungu-labels',
     type: 'symbol',
-    source: 'facilities',
-    filter: ['has', 'point_count'],
+    source: 'sigungu-labels',
+    maxzoom: 12,
     layout: {
-      'text-field': '{point_count_abbreviated}',
+      'text-field': ['get', 'countLabel'],
       'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
       'text-size': [
-        'step',
-        ['get', 'point_count'],
-        12,    // 기본
-        100, 14,   // 100개 이상
-        500, 16,   // 500개 이상
-        1000, 18   // 1000개 이상
-      ]
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        5, 10,
+        8, 12,
+        10, 14,
+        12, 16
+      ],
+      'text-allow-overlap': true
     },
     paint: {
-      'text-color': '#FFFFFF'
+      'text-color': darkMode ? '#FFFFFF' : '#1E40AF',
+      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+      'text-halo-width': 2
     }
   }
 
-  // 개별 마커 아이콘 레이어 (클러스터되지 않은 포인트)
+  // 개별 마커 아이콘 레이어 (20개 이하 시군구에서만 표시)
   const unclusteredIconLayer: any = {
     id: 'unclustered-point-icon',
     type: 'symbol',
     source: 'facilities',
-    filter: ['!', ['has', 'point_count']],
-    minzoom: 12,
+    minzoom: 10,
     layout: {
       'icon-image': ['match', ['get', 'type'],
         'church', 'church-icon',
@@ -869,20 +861,19 @@ function App() {
         'cult', 'cult-icon',
         'church-icon'
       ],
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.5, 16, 0.8, 20, 1],
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.4, 14, 0.6, 18, 0.9],
       'icon-allow-overlap': true
     }
   }
 
-  // 줌이 낮을 때는 원형 마커로 표시 (아이콘 로드 전이나 줌 낮을 때)
+  // 원형 마커 레이어 (줌이 낮을 때, 20개 이하 시군구에서만 표시)
   const unclusteredCircleLayer: any = {
     id: 'unclustered-point-circle',
     type: 'circle',
     source: 'facilities',
-    filter: ['!', ['has', 'point_count']],
-    maxzoom: 12,
+    maxzoom: 10,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 3, 10, 5, 12, 7],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 3, 8, 5, 10, 6],
       'circle-color': ['match', ['get', 'type'],
         'church', '#3B82F6',
         'catholic', '#8B5CF6',
@@ -1119,7 +1110,7 @@ function App() {
                 onTouchEnd={handleDragEnd}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
-                interactiveLayerIds={['sigungu-fill', 'clusters', 'unclustered-point-circle', 'unclustered-point-icon']}
+                interactiveLayerIds={['sigungu-fill', 'unclustered-point-circle', 'unclustered-point-icon']}
                 onClick={handleMapClick}
                 onMouseMove={handleMouseMove}
               >
@@ -1144,17 +1135,17 @@ function App() {
                   <Layer {...sigunguHoverLineLayer} />
                 </Source>
 
-                {/* 개별 시설 포인트 - 클러스터링 활성화 */}
+                {/* 시군구 라벨 - 시설 개수 숫자 표시 */}
+                <Source id="sigungu-labels" type="geojson" data={sigunguLabelData}>
+                  <Layer {...sigunguLabelLayer} />
+                </Source>
+
+                {/* 개별 시설 포인트 - 클러스터링 비활성화 */}
                 <Source
                   id="facilities"
                   type="geojson"
                   data={geojsonData}
-                  cluster={true}
-                  clusterMaxZoom={14}
-                  clusterRadius={60}
                 >
-                  <Layer {...clusterLayer} />
-                  <Layer {...clusterCountLayer} />
                   <Layer {...unclusteredCircleLayer} />
                   <Layer {...unclusteredIconLayer} />
                 </Source>
