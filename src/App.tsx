@@ -242,6 +242,19 @@ function computeSigunguCounts(facilitiesList: ReligiousFacility[]) {
   return counts
 }
 
+// 시도별 시설 수 합산 계산
+function computeSidoCounts(sigunguCounts: Record<string, number>) {
+  const sidoCounts: Record<string, number> = {}
+
+  for (const feature of (sigunguBoundaries as any).features) {
+    const sido = feature.properties.sido
+    const count = sigunguCounts[feature.properties.code] || 0
+    sidoCounts[sido] = (sidoCounts[sido] || 0) + count
+  }
+
+  return sidoCounts
+}
+
 // 간단한 중심점 계산 - Polygon과 MultiPolygon 모두 처리
 function getPolygonCenter(coordinates: any): [number, number] {
   if (!coordinates || !Array.isArray(coordinates)) return [127.5, 36.5]
@@ -260,6 +273,27 @@ function getPolygonCenter(coordinates: any): [number, number] {
 
   processCoord(coordinates)
   return count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
+}
+
+// 시도별 중심점 계산 (미리 계산)
+const sidoCenters: Record<string, [number, number]> = {}
+const sidoFeatures: Record<string, any[]> = {}
+
+for (const feature of (sigunguBoundaries as any).features) {
+  const sido = feature.properties.sido
+  if (!sidoFeatures[sido]) sidoFeatures[sido] = []
+  sidoFeatures[sido].push(feature)
+}
+
+for (const [sido, features] of Object.entries(sidoFeatures)) {
+  let sumLng = 0, sumLat = 0, count = 0
+  for (const f of features) {
+    const center = getPolygonCenter(f.geometry.coordinates)
+    sumLng += center[0]
+    sumLat += center[1]
+    count++
+  }
+  sidoCenters[sido] = count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
 }
 
 
@@ -502,6 +536,51 @@ function App() {
     return computeSigunguCounts(filteredFacilities)
   }, [filteredFacilities])
 
+  // 시도별 시설 수 합산 계산
+  const sidoCounts = useMemo(() => {
+    return computeSidoCounts(sigunguCounts)
+  }, [sigunguCounts])
+
+  // 시도별 라벨 데이터 (줌 레벨 8 이하)
+  const sidoLabelData = useMemo(() => {
+    return {
+      type: 'FeatureCollection' as const,
+      features: Object.entries(sidoCounts)
+        .filter(([_, count]) => count > 0)
+        .map(([sido, count]) => ({
+          type: 'Feature' as const,
+          properties: {
+            sido,
+            count,
+            countLabel: count >= 1000 ? `${(count / 1000).toFixed(1)}k` : String(count)
+          },
+          geometry: {
+            type: 'Point' as const,
+            coordinates: sidoCenters[sido] || [127.5, 36.5]
+          }
+        }))
+    }
+  }, [sidoCounts])
+
+  // 뷰포트 내 시설 수 계산
+  const viewportFacilityCount = useMemo(() => {
+    if (viewState.zoom < 10) return Infinity  // 줌 10 미만에서는 마커 표시 안함
+
+    // 뷰포트 경계 계산 (근사값)
+    const latRange = 180 / Math.pow(2, viewState.zoom)
+    const lngRange = 360 / Math.pow(2, viewState.zoom)
+
+    const minLat = viewState.latitude - latRange
+    const maxLat = viewState.latitude + latRange
+    const minLng = viewState.longitude - lngRange
+    const maxLng = viewState.longitude + lngRange
+
+    return filteredFacilities.filter(f =>
+      f.lat >= minLat && f.lat <= maxLat &&
+      f.lng >= minLng && f.lng <= maxLng
+    ).length
+  }, [filteredFacilities, viewState.latitude, viewState.longitude, viewState.zoom])
+
   // choropleth geojson 데이터 생성
   const choroplethData = useMemo(() => {
     const maxCount = Math.max(...Object.values(sigunguCounts), 1)
@@ -543,21 +622,32 @@ function App() {
     }
   }, [sigunguCounts])
 
-  // 시군구 시설 수가 20개 이하인 시설만 표시
-  const geojsonData = useMemo(() => ({
-    type: 'FeatureCollection' as const,
-    features: filteredFacilities
-      .filter(f => {
-        const sigunguCode = sigunguMapping[f.id]
-        const count = sigunguCode ? sigunguCounts[sigunguCode] || 0 : 0
-        return count <= 20  // 20개 이하인 시군구의 시설만 표시
-      })
-      .map(f => ({
-        type: 'Feature' as const,
-        properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
-        geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
-      }))
-  }), [filteredFacilities, favorites, sigunguCounts])
+  // 뷰포트 내 시설 수가 20개 이하일 때만 개별 마커 표시
+  const geojsonData = useMemo(() => {
+    // 뷰포트 내 20개 초과면 빈 데이터 반환
+    if (viewportFacilityCount > 20) {
+      return { type: 'FeatureCollection' as const, features: [] }
+    }
+
+    // 뷰포트 경계 계산 (근사값)
+    const latRange = 180 / Math.pow(2, viewState.zoom)
+    const lngRange = 360 / Math.pow(2, viewState.zoom)
+    const minLat = viewState.latitude - latRange
+    const maxLat = viewState.latitude + latRange
+    const minLng = viewState.longitude - lngRange
+    const maxLng = viewState.longitude + lngRange
+
+    return {
+      type: 'FeatureCollection' as const,
+      features: filteredFacilities
+        .filter(f => f.lat >= minLat && f.lat <= maxLat && f.lng >= minLng && f.lng <= maxLng)
+        .map(f => ({
+          type: 'Feature' as const,
+          properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
+          geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
+        }))
+    }
+  }, [filteredFacilities, favorites, viewportFacilityCount, viewState.zoom, viewState.latitude, viewState.longitude])
 
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
@@ -820,11 +910,38 @@ function App() {
     }
   }), [hoveredSigungu?.code])
 
-  // 시군구 라벨 레이어 - 시군구 중심에 시설 개수 숫자 표시
+  // 시도 라벨 레이어 - 줌 8 이하에서만 표시
+  const sidoLabelLayer: any = {
+    id: 'sido-labels',
+    type: 'symbol',
+    source: 'sido-labels',
+    maxzoom: 8,
+    layout: {
+      'text-field': ['get', 'countLabel'],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        5, 14,
+        7, 18,
+        8, 20
+      ],
+      'text-allow-overlap': true
+    },
+    paint: {
+      'text-color': darkMode ? '#FFFFFF' : '#1E40AF',
+      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+      'text-halo-width': 2.5
+    }
+  }
+
+  // 시군구 라벨 레이어 - 줌 8~12에서만 표시
   const sigunguLabelLayer: any = {
     id: 'sigungu-labels',
     type: 'symbol',
     source: 'sigungu-labels',
+    minzoom: 8,
     maxzoom: 12,
     layout: {
       'text-field': ['get', 'countLabel'],
@@ -833,12 +950,11 @@ function App() {
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 10,
-        8, 12,
-        10, 14,
-        12, 16
+        8, 10,
+        10, 13,
+        12, 15
       ],
-      'text-allow-overlap': true
+      'text-allow-overlap': false
     },
     paint: {
       'text-color': darkMode ? '#FFFFFF' : '#1E40AF',
@@ -847,12 +963,12 @@ function App() {
     }
   }
 
-  // 개별 마커 아이콘 레이어 (20개 이하 시군구에서만 표시)
+  // 개별 마커 아이콘 레이어 (뷰포트 내 20개 이하일 때만 표시)
   const unclusteredIconLayer: any = {
     id: 'unclustered-point-icon',
     type: 'symbol',
     source: 'facilities',
-    minzoom: 10,
+    minzoom: 12,
     layout: {
       'icon-image': ['match', ['get', 'type'],
         'church', 'church-icon',
@@ -861,19 +977,19 @@ function App() {
         'cult', 'cult-icon',
         'church-icon'
       ],
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.4, 14, 0.6, 18, 0.9],
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.5, 16, 0.7, 20, 1],
       'icon-allow-overlap': true
     }
   }
 
-  // 원형 마커 레이어 (줌이 낮을 때, 20개 이하 시군구에서만 표시)
+  // 원형 마커 레이어 (뷰포트 내 20개 이하일 때만 표시)
   const unclusteredCircleLayer: any = {
     id: 'unclustered-point-circle',
     type: 'circle',
     source: 'facilities',
-    maxzoom: 10,
+    maxzoom: 12,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 3, 8, 5, 10, 6],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 12, 8],
       'circle-color': ['match', ['get', 'type'],
         'church', '#3B82F6',
         'catholic', '#8B5CF6',
@@ -881,7 +997,7 @@ function App() {
         'cult', '#EF4444',
         '#3B82F6'
       ],
-      'circle-stroke-width': 1.5,
+      'circle-stroke-width': 2,
       'circle-stroke-color': '#FFFFFF'
     }
   }
@@ -1135,7 +1251,12 @@ function App() {
                   <Layer {...sigunguHoverLineLayer} />
                 </Source>
 
-                {/* 시군구 라벨 - 시설 개수 숫자 표시 */}
+                {/* 시도 라벨 - 줌 8 이하에서 표시 */}
+                <Source id="sido-labels" type="geojson" data={sidoLabelData}>
+                  <Layer {...sidoLabelLayer} />
+                </Source>
+
+                {/* 시군구 라벨 - 줌 8~12에서 표시 */}
                 <Source id="sigungu-labels" type="geojson" data={sigunguLabelData}>
                   <Layer {...sigunguLabelLayer} />
                 </Source>
