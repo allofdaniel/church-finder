@@ -622,32 +622,17 @@ function App() {
     }
   }, [sigunguCounts])
 
-  // 뷰포트 내 시설 수가 20개 이하일 때만 개별 마커 표시
+  // 모든 필터된 시설을 GeoJSON으로 변환 (클러스터링 없이 직접 표시)
   const geojsonData = useMemo(() => {
-    // 뷰포트 내 20개 초과면 빈 데이터 반환
-    if (viewportFacilityCount > 20) {
-      return { type: 'FeatureCollection' as const, features: [] }
-    }
-
-    // 뷰포트 경계 계산 (근사값)
-    const latRange = 180 / Math.pow(2, viewState.zoom)
-    const lngRange = 360 / Math.pow(2, viewState.zoom)
-    const minLat = viewState.latitude - latRange
-    const maxLat = viewState.latitude + latRange
-    const minLng = viewState.longitude - lngRange
-    const maxLng = viewState.longitude + lngRange
-
     return {
       type: 'FeatureCollection' as const,
-      features: filteredFacilities
-        .filter(f => f.lat >= minLat && f.lat <= maxLat && f.lng >= minLng && f.lng <= maxLng)
-        .map(f => ({
-          type: 'Feature' as const,
-          properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
-          geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
-        }))
+      features: filteredFacilities.map(f => ({
+        type: 'Feature' as const,
+        properties: { id: f.id, name: f.name, type: f.type, address: f.address, roadAddress: f.roadAddress, phone: f.phone, kakaoUrl: f.kakaoUrl, category: f.category, denomination: f.denomination, isCult: f.isCult, cultType: f.cultType, region: f.region, website: f.website, isFavorite: favorites.includes(f.id) ? 1 : 0 },
+        geometry: { type: 'Point' as const, coordinates: [f.lng, f.lat] }
+      }))
     }
-  }, [filteredFacilities, favorites, viewportFacilityCount, viewState.zoom, viewState.latitude, viewState.longitude])
+  }, [filteredFacilities, favorites])
 
   const paginatedList = useMemo(() => {
     const start = (listPage - 1) * ITEMS_PER_PAGE
@@ -827,190 +812,113 @@ function App() {
     ? MAP_STYLES.satellite
     : (darkMode ? MAP_STYLES.dark : MAP_STYLES.light)
 
-  // choropleth 레이어 (시군구별 색상 채우기) - 더 진한 색상
-  const sigunguFillLayer: any = {
-    id: 'sigungu-fill',
-    type: 'fill',
-    source: 'sigungu',
-    paint: {
-      'fill-color': [
-        'interpolate',
-        ['linear'],
-        ['get', 'count'],
-        0, 'rgba(219, 234, 254, 0.6)',
-        10, 'rgba(147, 197, 253, 0.7)',
-        50, 'rgba(96, 165, 250, 0.75)',
-        100, 'rgba(59, 130, 246, 0.8)',
-        300, 'rgba(37, 99, 235, 0.8)',
-        500, 'rgba(29, 78, 216, 0.85)',
-        1000, 'rgba(30, 64, 175, 0.85)',
-        2000, 'rgba(30, 58, 138, 0.9)'
-      ],
-      'fill-opacity': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        5, 0.8,
-        10, 0.7,
-        14, 0.3,
-        16, 0.1
-      ]
-    }
-  }
-
-  // 경계선 레이어 - 항상 표시 (줌에 따라 두께 조절)
+  // 경계선 레이어 - 줌 레벨에 따라 시도/시군구 구분
   const sigunguLineLayer: any = {
     id: 'sigungu-line',
     type: 'line',
     source: 'sigungu',
     paint: {
-      'line-color': darkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(30, 64, 175, 0.9)',
+      'line-color': darkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(100, 116, 139, 0.8)',
       'line-width': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 1,
-        8, 2,
-        10, 2.5,
-        12, 2,
-        14, 1.5,
-        16, 1
+        5, 0.5,
+        8, 1,
+        10, 1.5,
+        12, 1.5,
+        14, 1,
+        16, 0.5
       ],
       'line-opacity': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 1,
-        14, 0.6,
+        5, 0.6,
+        10, 0.8,
+        14, 0.5,
         16, 0.3
       ]
     }
   }
 
-  // 호버된 시군구 강조 레이어 - filter로 최적화
-  const sigunguHoverLayer: any = useMemo(() => ({
-    id: 'sigungu-hover',
-    type: 'fill',
-    source: 'sigungu',
-    maxzoom: 12,
-    filter: hoveredSigungu ? ['==', ['get', 'code'], String(hoveredSigungu.code)] : ['==', ['get', 'code'], ''],
-    paint: {
-      'fill-color': '#3B82F6',
-      'fill-opacity': 0.4
-    }
-  }), [hoveredSigungu?.code])
-
-  // 호버된 시군구 경계선 강조
-  const sigunguHoverLineLayer: any = useMemo(() => ({
-    id: 'sigungu-hover-line',
+  // 시도 경계선 레이어 (더 굵게)
+  const sidoLineLayer: any = {
+    id: 'sido-line',
     type: 'line',
     source: 'sigungu',
-    maxzoom: 12,
-    filter: hoveredSigungu ? ['==', ['get', 'code'], String(hoveredSigungu.code)] : ['==', ['get', 'code'], ''],
+    filter: ['any',
+      ['==', ['get', 'name'], '강남구'],  // 서울시 대표
+      ['==', ['get', 'name'], '중구'],
+      ['==', ['get', 'name'], '해운대구'],  // 부산시 대표
+      ['==', ['get', 'name'], '수성구'],  // 대구시 대표
+      ['==', ['get', 'name'], '남동구'],  // 인천시 대표
+      ['==', ['get', 'name'], '수원시'],  // 경기도 대표
+    ],
     paint: {
-      'line-color': '#2563EB',
-      'line-width': 3
-    }
-  }), [hoveredSigungu?.code])
-
-  // 시도 라벨 레이어 - 줌 8 이하에서만 표시
-  const sidoLabelLayer: any = {
-    id: 'sido-labels',
-    type: 'symbol',
-    source: 'sido-labels',
-    maxzoom: 8,
-    layout: {
-      'text-field': ['get', 'countLabel'],
-      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-      'text-size': [
+      'line-color': darkMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(30, 64, 175, 0.9)',
+      'line-width': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 14,
-        7, 18,
-        8, 20
-      ],
-      'text-allow-overlap': true
-    },
-    paint: {
-      'text-color': darkMode ? '#FFFFFF' : '#1E40AF',
-      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
-      'text-halo-width': 2.5
-    }
-  }
-
-  // 시군구 라벨 레이어 - 줌 8 이상에서 표시 (마커가 20개 이하일 때까지 계속)
-  const sigunguLabelLayer: any = {
-    id: 'sigungu-labels',
-    type: 'symbol',
-    source: 'sigungu-labels',
-    minzoom: 8,
-    layout: {
-      'text-field': ['get', 'countLabel'],
-      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-      'text-size': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        8, 10,
-        10, 13,
-        12, 15,
-        14, 16
-      ],
-      'text-allow-overlap': false
-    },
-    paint: {
-      'text-color': darkMode ? '#FFFFFF' : '#1E40AF',
-      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-      'text-halo-width': 2,
-      'text-opacity': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        8, 1,
-        14, 0.9,
-        16, 0.6
+        5, 2,
+        8, 3,
+        10, 2,
+        14, 1.5
       ]
     }
   }
 
-  // 개별 마커 아이콘 레이어 (뷰포트 내 20개 이하일 때만 표시)
-  const unclusteredIconLayer: any = {
-    id: 'unclustered-point-icon',
-    type: 'symbol',
-    source: 'facilities',
-    minzoom: 13,
-    layout: {
-      'icon-image': ['match', ['get', 'type'],
-        'church', 'church-icon',
-        'catholic', 'catholic-icon',
-        'temple', 'temple-icon',
-        'cult', 'cult-icon',
-        'church-icon'
-      ],
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 13, 0.5, 16, 0.7, 20, 1],
-      'icon-allow-overlap': true
-    }
-  }
-
-  // 원형 마커 레이어 (뷰포트 내 20개 이하일 때만 표시)
+  // 개별 마커 원형 레이어 - RELIGION_CONFIG 색상 일치
   const unclusteredCircleLayer: any = {
     id: 'unclustered-point-circle',
     type: 'circle',
     source: 'facilities',
-    minzoom: 10,
-    maxzoom: 13,
+    minzoom: 8,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 4, 13, 8],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 3, 12, 6, 14, 8, 16, 10],
       'circle-color': ['match', ['get', 'type'],
-        'church', '#3B82F6',
-        'catholic', '#8B5CF6',
-        'temple', '#10B981',
-        'cult', '#EF4444',
-        '#3B82F6'
+        'church', '#6366F1',    // RELIGION_CONFIG와 일치
+        'catholic', '#EC4899',  // RELIGION_CONFIG와 일치
+        'temple', '#10B981',    // RELIGION_CONFIG와 일치
+        'cult', '#F59E0B',      // RELIGION_CONFIG와 일치
+        '#6366F1'
       ],
-      'circle-stroke-width': 2,
+      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 8, 1, 12, 2, 16, 2.5],
       'circle-stroke-color': '#FFFFFF'
+    }
+  }
+
+  // 시설 라벨 레이어 - 확대 시 이름 + 유형 표시
+  const facilityLabelLayer: any = {
+    id: 'facility-labels',
+    type: 'symbol',
+    source: 'facilities',
+    minzoom: 14,
+    layout: {
+      'text-field': ['concat',
+        ['get', 'name'],
+        '\n',
+        ['match', ['get', 'type'],
+          'church', '⛪ 교회',
+          'catholic', '✝️ 성당',
+          'temple', '☸️ 사찰',
+          'cult', '⚠️ 이단의심',
+          ''
+        ]
+      ],
+      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 14, 10, 16, 12, 18, 14],
+      'text-offset': [1.2, 0],
+      'text-anchor': 'left',
+      'text-max-width': 10,
+      'text-allow-overlap': false,
+      'icon-allow-overlap': true
+    },
+    paint: {
+      'text-color': darkMode ? '#FFFFFF' : '#1F2937',
+      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+      'text-halo-width': 1.5
     }
   }
 
@@ -1238,9 +1146,8 @@ function App() {
                 onTouchEnd={handleDragEnd}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
-                interactiveLayerIds={['sigungu-fill', 'unclustered-point-circle', 'unclustered-point-icon']}
+                interactiveLayerIds={['unclustered-point-circle']}
                 onClick={handleMapClick}
-                onMouseMove={handleMouseMove}
               >
                 <NavigationControl position="top-right" />
 
@@ -1255,50 +1162,20 @@ function App() {
                   </button>
                 </div>
 
-                {/* 시군구 경계 choropleth */}
+                {/* 시군구 경계선만 표시 (밀집도 색상 제거) */}
                 <Source id="sigungu" type="geojson" data={choroplethData}>
-                  <Layer {...sigunguFillLayer} />
                   <Layer {...sigunguLineLayer} />
-                  <Layer {...sigunguHoverLayer} />
-                  <Layer {...sigunguHoverLineLayer} />
                 </Source>
 
-                {/* 시도 라벨 - 줌 8 이하에서 표시 */}
-                <Source id="sido-labels" type="geojson" data={sidoLabelData}>
-                  <Layer {...sidoLabelLayer} />
-                </Source>
-
-                {/* 시군구 라벨 - 줌 8~12에서 표시 */}
-                <Source id="sigungu-labels" type="geojson" data={sigunguLabelData}>
-                  <Layer {...sigunguLabelLayer} />
-                </Source>
-
-                {/* 개별 시설 포인트 - 클러스터링 비활성화 */}
+                {/* 개별 시설 포인트 + 라벨 */}
                 <Source
                   id="facilities"
                   type="geojson"
                   data={geojsonData}
                 >
                   <Layer {...unclusteredCircleLayer} />
-                  <Layer {...unclusteredIconLayer} />
+                  <Layer {...facilityLabelLayer} />
                 </Source>
-
-                {/* 시군구 hover 툴팁 */}
-                {hoveredSigungu && (
-                  <Popup
-                    longitude={hoveredSigungu.lng}
-                    latitude={hoveredSigungu.lat}
-                    anchor="bottom"
-                    closeButton={false}
-                    closeOnClick={false}
-                    className="sigungu-popup"
-                  >
-                    <div className="sigungu-tooltip">
-                      <div className="sigungu-name">{hoveredSigungu.sido} {hoveredSigungu.name}</div>
-                      <div className="sigungu-count">{hoveredSigungu.count.toLocaleString()}개 시설</div>
-                    </div>
-                  </Popup>
-                )}
 
                 {popupFacility && (
                   <Popup longitude={popupFacility.lng} latitude={popupFacility.lat} anchor="bottom" onClose={() => setPopupFacility(null)} closeButton closeOnClick={false} maxWidth="320px" className="full-popup">
@@ -1355,34 +1232,19 @@ function App() {
               </Map>
               <div className={`map-legend glass ${legendVisible ? '' : 'collapsed'}`}>
                 <div className="legend-header" onClick={() => setLegendVisible(!legendVisible)}>
-                  <span className="legend-icon">📊</span>
-                  <span className="legend-title">시설 분포</span>
+                  <span className="legend-icon">📍</span>
+                  <span className="legend-title">시설 유형</span>
                   <span className="legend-toggle">{legendVisible ? '▼' : '▲'}</span>
                 </div>
                 {legendVisible && (
-                  <>
-                    <div className="legend-section">
-                      <div className="legend-section-title">시군구별 밀집도</div>
-                      <div className="choropleth-legend">
-                        <div className="choropleth-bar"></div>
-                        <div className="choropleth-labels">
-                          <span>0</span>
-                          <span>500</span>
-                          <span>1000+</span>
-                        </div>
-                      </div>
+                  <div className="legend-section">
+                    <div className="legend-types">
+                      <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>⛪ 교회</span></div>
+                      <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>✝️ 성당</span></div>
+                      <div className="type-item"><span className="type-dot" style={{ background: '#10B981' }}></span><span>☸️ 사찰</span></div>
+                      <div className="type-item"><span className="type-dot" style={{ background: '#F59E0B' }}></span><span>⚠️ 이단의심</span></div>
                     </div>
-                    <div className="legend-divider"></div>
-                    <div className="legend-section">
-                      <div className="legend-section-title">시설 유형</div>
-                      <div className="legend-types">
-                        <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>교회</span></div>
-                        <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>성당</span></div>
-                        <div className="type-item"><span className="type-dot" style={{ background: '#10B981' }}></span><span>사찰</span></div>
-                        <div className="type-item"><span className="type-dot" style={{ background: '#F59E0B' }}></span><span>이단의심</span></div>
-                      </div>
-                    </div>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
