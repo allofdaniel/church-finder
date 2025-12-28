@@ -792,21 +792,6 @@ function App() {
     }
   }
 
-  // 즐겨찾기 테두리 레이어 (금색 원)
-  const favoriteRingLayer: any = {
-    id: 'favorite-ring',
-    type: 'circle',
-    source: 'facilities',
-    filter: ['==', ['get', 'isFavorite'], 1],
-    minzoom: 10,
-    paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 10, 14, 14, 18, 20],
-      'circle-color': 'transparent',
-      'circle-stroke-width': 3,
-      'circle-stroke-color': '#FFD700'
-    }
-  }
-
   return (
     <div className={`app ${darkMode ? 'dark' : ''}`}>
       <header className="header">
@@ -1058,7 +1043,6 @@ function App() {
 
                 {/* 개별 시설 포인트 */}
                 <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
-                  <Layer {...favoriteRingLayer} />
                   <Layer {...markerLayer} />
                 </Source>
 
