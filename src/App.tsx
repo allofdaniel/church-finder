@@ -383,9 +383,30 @@ function App() {
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
-  // 맵 로드 핸들러 - 원형 마커 사용으로 커스텀 아이콘 불필요
+  // 맵 로드 핸들러 - 커스텀 아이콘 로드
   const handleMapLoad = useCallback(() => {
-    // 원형 마커로 변경하여 addImage 호출 제거
+    const map = mapRef.current?.getMap()
+    if (!map) return
+
+    // 아이콘 이미지 로드
+    const icons = [
+      { id: 'church-icon', url: '/icons/church.svg' },
+      { id: 'catholic-icon', url: '/icons/catholic.svg' },
+      { id: 'temple-icon', url: '/icons/temple.svg' },
+      { id: 'cult-icon', url: '/icons/cult.svg' }
+    ]
+
+    icons.forEach(({ id, url }) => {
+      if (!map.hasImage(id)) {
+        const img = new Image(48, 48)
+        img.onload = () => {
+          if (!map.hasImage(id)) {
+            map.addImage(id, img, { sdf: false })
+          }
+        }
+        img.src = url
+      }
+    })
   }, [])
 
   // 최적화된 검색 함수 (searchIndex 사용)
@@ -579,13 +600,23 @@ function App() {
       return
     }
 
-    if (feature.properties.cluster) {
+    // 클러스터 클릭 - 줌인
+    if (feature.layer.id === 'clusters' || feature.properties.cluster) {
       const clusterId = feature.properties.cluster_id
-      const src = mapRef.current?.getSource('facilities')
-      src?.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
-        if (!err) mapRef.current?.easeTo({ center: feature.geometry.coordinates, zoom })
-      })
-    } else {
+      const map = mapRef.current?.getMap()
+      const src = map?.getSource('facilities') as any
+      if (src && src.getClusterExpansionZoom) {
+        src.getClusterExpansionZoom(clusterId, (err: any, zoom: number) => {
+          if (!err) {
+            map?.easeTo({ center: feature.geometry.coordinates, zoom: Math.min(zoom, 16) })
+          }
+        })
+      }
+      return
+    }
+
+    // 개별 마커 클릭 - 팝업 표시
+    if (feature.layer.id === 'unclustered-point-circle' || feature.layer.id === 'unclustered-point-icon') {
       const props = feature.properties
       const [lng, lat] = feature.geometry.coordinates
       setPopupFacility({ id: props.id, name: props.name, type: props.type, address: props.address, roadAddress: props.roadAddress, phone: props.phone, lat, lng, kakaoUrl: props.kakaoUrl, category: props.category, denomination: props.denomination, isCult: props.isCult === 'true' || props.isCult === true, cultType: props.cultType, region: props.region, website: props.website, serviceTime: null, pastor: null })
@@ -772,22 +803,94 @@ function App() {
     }
   }), [hoveredSigungu?.code])
 
-  // 마커 레이어 - 종류별 다른 색상의 원형 마커
-  const markerLayer: any = {
-    id: 'marker-point',
+  // 클러스터 레이어 - 원형 배경에 숫자 표시
+  const clusterLayer: any = {
+    id: 'clusters',
     type: 'circle',
     source: 'facilities',
-    minzoom: 6,
+    filter: ['has', 'point_count'],
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 2, 10, 5, 14, 8, 18, 12],
+      'circle-color': [
+        'step',
+        ['get', 'point_count'],
+        '#60A5FA',   // 100개 미만: 파란색
+        100, '#3B82F6',   // 100-500: 진한 파란색
+        500, '#1D4ED8',   // 500-1000: 더 진한 파란색
+        1000, '#1E40AF'   // 1000개 이상: 가장 진한 파란색
+      ],
+      'circle-radius': [
+        'step',
+        ['get', 'point_count'],
+        20,    // 100개 미만
+        100, 25,   // 100-500
+        500, 30,   // 500-1000
+        1000, 40   // 1000개 이상
+      ],
+      'circle-stroke-width': 3,
+      'circle-stroke-color': '#FFFFFF'
+    }
+  }
+
+  // 클러스터 숫자 레이어
+  const clusterCountLayer: any = {
+    id: 'cluster-count',
+    type: 'symbol',
+    source: 'facilities',
+    filter: ['has', 'point_count'],
+    layout: {
+      'text-field': '{point_count_abbreviated}',
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': [
+        'step',
+        ['get', 'point_count'],
+        12,    // 기본
+        100, 14,   // 100개 이상
+        500, 16,   // 500개 이상
+        1000, 18   // 1000개 이상
+      ]
+    },
+    paint: {
+      'text-color': '#FFFFFF'
+    }
+  }
+
+  // 개별 마커 아이콘 레이어 (클러스터되지 않은 포인트)
+  const unclusteredIconLayer: any = {
+    id: 'unclustered-point-icon',
+    type: 'symbol',
+    source: 'facilities',
+    filter: ['!', ['has', 'point_count']],
+    minzoom: 12,
+    layout: {
+      'icon-image': ['match', ['get', 'type'],
+        'church', 'church-icon',
+        'catholic', 'catholic-icon',
+        'temple', 'temple-icon',
+        'cult', 'cult-icon',
+        'church-icon'
+      ],
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.5, 16, 0.8, 20, 1],
+      'icon-allow-overlap': true
+    }
+  }
+
+  // 줌이 낮을 때는 원형 마커로 표시 (아이콘 로드 전이나 줌 낮을 때)
+  const unclusteredCircleLayer: any = {
+    id: 'unclustered-point-circle',
+    type: 'circle',
+    source: 'facilities',
+    filter: ['!', ['has', 'point_count']],
+    maxzoom: 12,
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 6, 3, 10, 5, 12, 7],
       'circle-color': ['match', ['get', 'type'],
-        'church', '#3B82F6',    // 파란색 - 교회
-        'catholic', '#8B5CF6',  // 보라색 - 성당
-        'temple', '#10B981',    // 초록색 - 사찰
-        'cult', '#EF4444',      // 빨간색 - 이단
+        'church', '#3B82F6',
+        'catholic', '#8B5CF6',
+        'temple', '#10B981',
+        'cult', '#EF4444',
         '#3B82F6'
       ],
-      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 6, 0.5, 10, 1, 14, 2],
+      'circle-stroke-width': 1.5,
       'circle-stroke-color': '#FFFFFF'
     }
   }
@@ -1016,7 +1119,7 @@ function App() {
                 onTouchEnd={handleDragEnd}
                 style={{ width: '100%', height: '100%' }}
                 mapStyle={mapStyle}
-                interactiveLayerIds={['sigungu-fill', 'marker-point']}
+                interactiveLayerIds={['sigungu-fill', 'clusters', 'unclustered-point-circle', 'unclustered-point-icon']}
                 onClick={handleMapClick}
                 onMouseMove={handleMouseMove}
               >
@@ -1041,9 +1144,19 @@ function App() {
                   <Layer {...sigunguHoverLineLayer} />
                 </Source>
 
-                {/* 개별 시설 포인트 */}
-                <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
-                  <Layer {...markerLayer} />
+                {/* 개별 시설 포인트 - 클러스터링 활성화 */}
+                <Source
+                  id="facilities"
+                  type="geojson"
+                  data={geojsonData}
+                  cluster={true}
+                  clusterMaxZoom={14}
+                  clusterRadius={60}
+                >
+                  <Layer {...clusterLayer} />
+                  <Layer {...clusterCountLayer} />
+                  <Layer {...unclusteredCircleLayer} />
+                  <Layer {...unclusteredIconLayer} />
                 </Source>
 
                 {/* 시군구 hover 툴팁 */}
