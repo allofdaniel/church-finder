@@ -827,59 +827,62 @@ function App() {
     ? MAP_STYLES.satellite
     : (darkMode ? MAP_STYLES.dark : MAP_STYLES.light)
 
-  // choropleth 레이어 (시군구별 색상 채우기) - 줌 12 이하에서만 표시
+  // choropleth 레이어 (시군구별 색상 채우기) - 더 진한 색상
   const sigunguFillLayer: any = {
     id: 'sigungu-fill',
     type: 'fill',
     source: 'sigungu',
-    maxzoom: 12,
     paint: {
       'fill-color': [
         'interpolate',
         ['linear'],
         ['get', 'count'],
-        0, 'rgba(240, 249, 255, 0.4)',
-        10, 'rgba(224, 242, 254, 0.5)',
-        50, 'rgba(186, 230, 253, 0.55)',
-        100, 'rgba(125, 211, 252, 0.6)',
-        200, 'rgba(56, 189, 248, 0.6)',
-        500, 'rgba(14, 165, 233, 0.65)',
-        1000, 'rgba(2, 132, 199, 0.7)',
-        2000, 'rgba(3, 105, 161, 0.75)'
+        0, 'rgba(219, 234, 254, 0.6)',
+        10, 'rgba(147, 197, 253, 0.7)',
+        50, 'rgba(96, 165, 250, 0.75)',
+        100, 'rgba(59, 130, 246, 0.8)',
+        300, 'rgba(37, 99, 235, 0.8)',
+        500, 'rgba(29, 78, 216, 0.85)',
+        1000, 'rgba(30, 64, 175, 0.85)',
+        2000, 'rgba(30, 58, 138, 0.9)'
       ],
       'fill-opacity': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        10, 0.6,
-        12, 0.2
+        5, 0.8,
+        10, 0.7,
+        14, 0.3,
+        16, 0.1
       ]
     }
   }
 
-  // 경계선 레이어 - 줌 12 이하에서만 표시 (굵은 테두리)
+  // 경계선 레이어 - 항상 표시 (줌에 따라 두께 조절)
   const sigunguLineLayer: any = {
     id: 'sigungu-line',
     type: 'line',
     source: 'sigungu',
-    maxzoom: 12,
     paint: {
-      'line-color': darkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(59, 130, 246, 0.7)',
+      'line-color': darkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(30, 64, 175, 0.9)',
       'line-width': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 1.5,
-        8, 2.5,
-        10, 3,
-        12, 2
+        5, 1,
+        8, 2,
+        10, 2.5,
+        12, 2,
+        14, 1.5,
+        16, 1
       ],
       'line-opacity': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        10, 1,
-        12, 0.5
+        5, 1,
+        14, 0.6,
+        16, 0.3
       ]
     }
   }
@@ -936,13 +939,12 @@ function App() {
     }
   }
 
-  // 시군구 라벨 레이어 - 줌 8~12에서만 표시
+  // 시군구 라벨 레이어 - 줌 8 이상에서 표시 (마커가 20개 이하일 때까지 계속)
   const sigunguLabelLayer: any = {
     id: 'sigungu-labels',
     type: 'symbol',
     source: 'sigungu-labels',
     minzoom: 8,
-    maxzoom: 12,
     layout: {
       'text-field': ['get', 'countLabel'],
       'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
@@ -952,14 +954,23 @@ function App() {
         ['zoom'],
         8, 10,
         10, 13,
-        12, 15
+        12, 15,
+        14, 16
       ],
       'text-allow-overlap': false
     },
     paint: {
       'text-color': darkMode ? '#FFFFFF' : '#1E40AF',
       'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-      'text-halo-width': 2
+      'text-halo-width': 2,
+      'text-opacity': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        8, 1,
+        14, 0.9,
+        16, 0.6
+      ]
     }
   }
 
@@ -968,7 +979,7 @@ function App() {
     id: 'unclustered-point-icon',
     type: 'symbol',
     source: 'facilities',
-    minzoom: 12,
+    minzoom: 13,
     layout: {
       'icon-image': ['match', ['get', 'type'],
         'church', 'church-icon',
@@ -977,7 +988,7 @@ function App() {
         'cult', 'cult-icon',
         'church-icon'
       ],
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.5, 16, 0.7, 20, 1],
+      'icon-size': ['interpolate', ['linear'], ['zoom'], 13, 0.5, 16, 0.7, 20, 1],
       'icon-allow-overlap': true
     }
   }
@@ -987,9 +998,10 @@ function App() {
     id: 'unclustered-point-circle',
     type: 'circle',
     source: 'facilities',
-    maxzoom: 12,
+    minzoom: 10,
+    maxzoom: 13,
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 5, 12, 8],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 4, 13, 8],
       'circle-color': ['match', ['get', 'type'],
         'church', '#3B82F6',
         'catholic', '#8B5CF6',
