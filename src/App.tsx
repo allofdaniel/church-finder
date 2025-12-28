@@ -498,7 +498,8 @@ function App() {
     }
   }, [sigunguCounts])
 
-  const geojsonData = useMemo(() => ({
+  // @ts-ignore - 임시 비활성화
+  const _geojsonData = useMemo(() => ({
     type: 'FeatureCollection' as const,
     features: filteredFacilities.map(f => ({
       type: 'Feature' as const,
@@ -772,8 +773,9 @@ function App() {
     }
   }), [hoveredSigungu?.code])
 
+  // @ts-ignore - 임시 비활성화
   // 마커 레이어 - 종류별 다른 색상의 원형 마커
-  const markerLayer: any = {
+  const _markerLayer: any = {
     id: 'marker-point',
     type: 'circle',
     source: 'facilities',
@@ -1041,10 +1043,7 @@ function App() {
                   <Layer {...sigunguHoverLineLayer} />
                 </Source>
 
-                {/* 개별 시설 포인트 */}
-                <Source id="facilities" type="geojson" data={geojsonData} cluster={false}>
-                  <Layer {...markerLayer} />
-                </Source>
+                {/* 개별 시설 포인트 - 마커 임시 비활성화 */}
 
                 {/* 시군구 hover 툴팁 */}
                 {hoveredSigungu && (
