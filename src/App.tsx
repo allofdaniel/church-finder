@@ -85,13 +85,48 @@ interface ReligiousFacility {
   pastor: string | null
 }
 
-type ReligionType = 'all' | 'church' | 'catholic' | 'temple' | 'cult'
+type ReligionType = 'church' | 'catholic' | 'temple' | 'cult'
+type FacilityTypeSet = Set<ReligionType>
 
-const RELIGION_CONFIG = {
+const RELIGION_CONFIG: Record<ReligionType, { icon: string, label: string, color: string }> = {
   church: { icon: '⛪', label: '교회', color: '#6366F1' },
   catholic: { icon: '✝️', label: '성당', color: '#EC4899' },
   temple: { icon: '☸️', label: '사찰', color: '#10B981' },
   cult: { icon: '⚠️', label: '이단의심', color: '#F59E0B' }
+}
+
+// 지역별 중심좌표와 줌 레벨
+const REGION_COORDS: Record<string, { center: [number, number], zoom: number }> = {
+  '전체': { center: [127.5, 36.5], zoom: 7 },
+  '서울': { center: [126.978, 37.566], zoom: 11 },
+  '부산': { center: [129.075, 35.179], zoom: 11 },
+  '대구': { center: [128.601, 35.871], zoom: 11 },
+  '인천': { center: [126.705, 37.456], zoom: 11 },
+  '광주': { center: [126.851, 35.160], zoom: 11 },
+  '대전': { center: [127.384, 36.350], zoom: 11 },
+  '울산': { center: [129.311, 35.539], zoom: 11 },
+  '세종': { center: [127.289, 36.480], zoom: 11 },
+  '경기': { center: [127.009, 37.275], zoom: 9 },
+  '강원': { center: [128.209, 37.555], zoom: 9 },
+  '충북': { center: [127.929, 36.628], zoom: 9 },
+  '충남': { center: [126.800, 36.518], zoom: 9 },
+  '전북': { center: [127.108, 35.716], zoom: 9 },
+  '전남': { center: [126.991, 34.816], zoom: 9 },
+  '경북': { center: [128.888, 36.249], zoom: 9 },
+  '경남': { center: [128.249, 35.238], zoom: 9 },
+  '제주': { center: [126.545, 33.379], zoom: 10 }
+}
+
+// Google API Key
+const GOOGLE_API_KEY = 'AIzaSyAz38gk_qzDIQqf3I7lCCnWjtqD9VNykYI'
+
+// 주소 검색 결과 타입
+interface GeocodingResult {
+  name: string
+  address: string
+  lat: number
+  lng: number
+  type: 'address' | 'facility'
 }
 
 // 지도 스타일 (일반/위성)
@@ -172,6 +207,55 @@ const CULT_INFO: Record<string, { name: string, source: string }> = {
 }
 
 const REGIONS = ['전체', '서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
+
+// 지역명 -> GeoJSON 파일 매핑
+const REGION_TO_GEOJSON: Record<string, string> = {
+  '서울': '/geojson/seoul.geojson',
+  '서울시': '/geojson/seoul.geojson',
+  '서울특별시': '/geojson/seoul.geojson',
+  '부산': '/geojson/busan.geojson',
+  '부산시': '/geojson/busan.geojson',
+  '부산광역시': '/geojson/busan.geojson',
+  '대구': '/geojson/daegu.geojson',
+  '대구시': '/geojson/daegu.geojson',
+  '대구광역시': '/geojson/daegu.geojson',
+  '인천': '/geojson/incheon.geojson',
+  '인천시': '/geojson/incheon.geojson',
+  '인천광역시': '/geojson/incheon.geojson',
+  '광주': '/geojson/gwangju.geojson',
+  '광주시': '/geojson/gwangju.geojson',
+  '광주광역시': '/geojson/gwangju.geojson',
+  '대전': '/geojson/daejeon.geojson',
+  '대전시': '/geojson/daejeon.geojson',
+  '대전광역시': '/geojson/daejeon.geojson',
+  '울산': '/geojson/ulsan.geojson',
+  '울산시': '/geojson/ulsan.geojson',
+  '울산광역시': '/geojson/ulsan.geojson',
+  '세종': '/geojson/sejong.geojson',
+  '세종시': '/geojson/sejong.geojson',
+  '세종특별자치시': '/geojson/sejong.geojson',
+  '경기': '/geojson/gyeonggi.geojson',
+  '경기도': '/geojson/gyeonggi.geojson',
+  '강원': '/geojson/gangwon.geojson',
+  '강원도': '/geojson/gangwon.geojson',
+  '강원특별자치도': '/geojson/gangwon.geojson',
+  '충북': '/geojson/chungbuk.geojson',
+  '충청북도': '/geojson/chungbuk.geojson',
+  '충남': '/geojson/chungnam.geojson',
+  '충청남도': '/geojson/chungnam.geojson',
+  '전북': '/geojson/jeonbuk.geojson',
+  '전라북도': '/geojson/jeonbuk.geojson',
+  '전북특별자치도': '/geojson/jeonbuk.geojson',
+  '전남': '/geojson/jeonnam.geojson',
+  '전라남도': '/geojson/jeonnam.geojson',
+  '경북': '/geojson/gyeongbuk.geojson',
+  '경상북도': '/geojson/gyeongbuk.geojson',
+  '경남': '/geojson/gyeongnam.geojson',
+  '경상남도': '/geojson/gyeongnam.geojson',
+  '제주': '/geojson/jeju.geojson',
+  '제주도': '/geojson/jeju.geojson',
+  '제주특별자치도': '/geojson/jeju.geojson'
+}
 
 const DATA_UPDATE_DATE = '2024.12.14'
 
@@ -255,6 +339,7 @@ function computeSidoCounts(sigunguCounts: Record<string, number>) {
   return sidoCounts
 }
 
+
 // 간단한 중심점 계산 - Polygon과 MultiPolygon 모두 처리
 function getPolygonCenter(coordinates: any): [number, number] {
   if (!coordinates || !Array.isArray(coordinates)) return [127.5, 36.5]
@@ -314,12 +399,14 @@ const highlightText = (text: string, query: string) => {
 }
 
 function App() {
-  const [selectedType, setSelectedType] = useState<ReligionType>('all')
+  // 다중 선택 가능한 시설 유형 (기본: 모두 선택)
+  const [selectedTypes, setSelectedTypes] = useState<FacilityTypeSet>(() => new Set(['church', 'catholic', 'temple', 'cult']))
   const [selectedRegion, setSelectedRegion] = useState('전체')
   const [searchQuery, setSearchQuery] = useState('')
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map')
   const [popupFacility, setPopupFacility] = useState<ReligiousFacility | null>(null)
   const [hoveredSigungu, setHoveredSigungu] = useState<{ code: string, name: string, sido: string, count: number, lng: number, lat: number } | null>(null)
+  const [selectedSido, setSelectedSido] = useState<string | null>(null)
   const [listPage, setListPage] = useState(1)
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -334,17 +421,26 @@ function App() {
     zoom: 7
   })
   // UI 토글 상태 - 모바일에서는 기본으로 사이드바 닫기
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth < 768
-    }
-    return false
-  })
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
   const [legendVisible, setLegendVisible] = useState(true)
-  // 검색 결과 패널 상태
-  const [showSearchResults, setShowSearchResults] = useState(false)
+  // 바텀시트 상태 (collapsed: 접힘, peek: 미리보기, expanded: 확장)
+  const [bottomSheetState, setBottomSheetState] = useState<'collapsed' | 'peek' | 'expanded'>('collapsed')
+  // 검색 자동완성 상태
+  const [showSuggestions, setShowSuggestions] = useState(false)
   const [searchResultsPage, setSearchResultsPage] = useState(1)
+  // 필터 드롭다운 상태
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false)
+  const [showRegionDropdown, setShowRegionDropdown] = useState(false)
+  // 스트리트뷰 모달 상태 (expanded: 전체화면, half: 하단 반)
+  const [streetViewModal, setStreetViewModal] = useState<{ lat: number, lng: number, name: string, expanded: boolean } | null>(null)
+  // 주소 검색 결과 (지오코딩)
+  const [addressResults, setAddressResults] = useState<GeocodingResult[]>([])
+  const [isSearchingAddress, setIsSearchingAddress] = useState(false)
+  // 검색된 지역 경계 GeoJSON
+  const [regionBoundary, setRegionBoundary] = useState<any>(null)
+  const [regionBoundaryLoading, setRegionBoundaryLoading] = useState(false)
   const mapRef = useRef<any>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   const [satelliteMode, setSatelliteMode] = useState(false)
   const ITEMS_PER_PAGE = 20
   // 즐겨찾기 & 최근 본 시설
@@ -355,7 +451,9 @@ function App() {
   // URL 파라미터 초기화
   useEffect(() => {
     const params = getParams()
-    if (params.type !== 'all') setSelectedType(params.type)
+    if (params.type && ['church', 'catholic', 'temple', 'cult'].includes(params.type)) {
+      setSelectedTypes(new Set([params.type as ReligionType]))
+    }
     if (params.region !== '전체') setSelectedRegion(params.region)
     if (params.q) setSearchQuery(params.q)
     if (params.lat && params.lng) {
@@ -370,12 +468,249 @@ function App() {
 
   // URL 파라미터 동기화
   useEffect(() => {
+    const typesArray = Array.from(selectedTypes)
     setParams({
-      type: selectedType !== 'all' ? selectedType : null,
+      type: typesArray.length === 1 ? typesArray[0] : null,
       region: selectedRegion !== '전체' ? selectedRegion : null,
       q: searchQuery || null
     })
-  }, [selectedType, selectedRegion, searchQuery, setParams])
+  }, [selectedTypes, selectedRegion, searchQuery, setParams])
+
+  // 시설 유형 토글 함수
+  const toggleType = useCallback((type: ReligionType) => {
+    setSelectedTypes(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(type)) {
+        // 최소 1개는 선택되어 있어야 함
+        if (newSet.size > 1) {
+          newSet.delete(type)
+        }
+      } else {
+        newSet.add(type)
+      }
+      return newSet
+    })
+  }, [])
+
+  // 전체 선택/해제
+  const toggleAllTypes = useCallback(() => {
+    setSelectedTypes(prev => {
+      if (prev.size === 4) {
+        // 모두 선택된 상태면 교회만 선택
+        return new Set(['church'])
+      } else {
+        // 아니면 모두 선택
+        return new Set(['church', 'catholic', 'temple', 'cult'])
+      }
+    })
+  }, [])
+
+  // 지역 선택 및 지도 이동
+  const selectRegion = useCallback((region: string) => {
+    setSelectedRegion(region)
+    setShowRegionDropdown(false)
+    setSidebarCollapsed(true)
+
+    const coords = REGION_COORDS[region]
+    if (coords) {
+      setViewState(prev => ({
+        ...prev,
+        longitude: coords.center[0],
+        latitude: coords.center[1],
+        zoom: coords.zoom
+      }))
+    }
+  }, [])
+
+  // Google Geocoding API로 주소 검색
+  const searchAddress = useCallback(async (query: string) => {
+    if (!query.trim() || query.length < 2) {
+      setAddressResults([])
+      return
+    }
+
+    setIsSearchingAddress(true)
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query + ' 대한민국')}&key=${GOOGLE_API_KEY}&language=ko&region=kr`
+      )
+      const data = await response.json()
+
+      if (data.status === 'OK' && data.results) {
+        const results: GeocodingResult[] = data.results.slice(0, 5).map((result: any) => ({
+          name: result.formatted_address.replace(/, 대한민국$/, '').replace(/대한민국 /, ''),
+          address: result.formatted_address,
+          lat: result.geometry.location.lat,
+          lng: result.geometry.location.lng,
+          type: 'address' as const
+        }))
+        setAddressResults(results)
+      } else {
+        setAddressResults([])
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error)
+      setAddressResults([])
+    } finally {
+      setIsSearchingAddress(false)
+    }
+  }, [])
+
+  // 주소 검색 결과 선택시 해당 위치로 이동
+  const handleAddressSelect = useCallback((result: GeocodingResult) => {
+    setViewState(prev => ({
+      ...prev,
+      longitude: result.lng,
+      latitude: result.lat,
+      zoom: 15
+    }))
+    setShowSuggestions(false)
+    setAddressResults([])
+    setSearchQuery(result.name)
+  }, [])
+
+  // 검색어에서 지역 경계선 검색 및 표시
+  const searchRegionBoundary = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setRegionBoundary(null)
+      return
+    }
+
+    // 검색어에서 지역명 추출 시도
+    const q = query.trim()
+
+    // 1. 시도명 직접 매칭
+    const geojsonPath = REGION_TO_GEOJSON[q]
+    if (geojsonPath) {
+      setRegionBoundaryLoading(true)
+      try {
+        const response = await fetch(geojsonPath)
+        if (response.ok) {
+          const geojsonData = await response.json()
+          setRegionBoundary(geojsonData)
+
+          // 해당 지역으로 줌인
+          if (geojsonData.features && geojsonData.features.length > 0) {
+            let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity
+            geojsonData.features.forEach((feature: any) => {
+              const processCoords = (coords: any) => {
+                if (Array.isArray(coords) && coords.length >= 2 && typeof coords[0] === 'number') {
+                  minLng = Math.min(minLng, coords[0])
+                  maxLng = Math.max(maxLng, coords[0])
+                  minLat = Math.min(minLat, coords[1])
+                  maxLat = Math.max(maxLat, coords[1])
+                } else if (Array.isArray(coords)) {
+                  coords.forEach(processCoords)
+                }
+              }
+              processCoords(feature.geometry.coordinates)
+            })
+
+            if (minLng !== Infinity) {
+              mapRef.current?.fitBounds(
+                [[minLng, minLat], [maxLng, maxLat]],
+                { padding: 50, duration: 1000 }
+              )
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load region boundary:', error)
+      } finally {
+        setRegionBoundaryLoading(false)
+      }
+      return
+    }
+
+    // 2. 구/군/동 등 세부 지역명 검색
+    // 어떤 시도에 속하는지 찾아서 해당 GeoJSON에서 필터링
+    const districtPatterns = [
+      /(.+)[구군읍면동리]$/,  // 강남구, 수원시, 판교동 등
+      /(.+시)$/              // 수원시, 성남시 등
+    ]
+
+    for (const pattern of districtPatterns) {
+      const match = q.match(pattern)
+      if (match) {
+        // 모든 지역 GeoJSON에서 검색
+        const allRegions = [
+          'seoul', 'busan', 'daegu', 'incheon', 'gwangju', 'daejeon',
+          'ulsan', 'sejong', 'gyeonggi', 'gangwon', 'chungbuk', 'chungnam',
+          'jeonbuk', 'jeonnam', 'gyeongbuk', 'gyeongnam', 'jeju'
+        ]
+
+        setRegionBoundaryLoading(true)
+
+        for (const region of allRegions) {
+          try {
+            const response = await fetch(`/geojson/${region}.geojson`)
+            if (response.ok) {
+              const geojsonData = await response.json()
+
+              // 해당 지역 이름이 포함된 feature 찾기
+              const matchedFeatures = geojsonData.features.filter((feature: any) => {
+                const admNm = feature.properties.adm_nm || ''
+                const sggNm = feature.properties.sggnm || ''
+                return admNm.includes(q) || sggNm.includes(q) ||
+                       admNm.includes(match[1]) || sggNm.includes(match[1])
+              })
+
+              if (matchedFeatures.length > 0) {
+                const filteredGeoJSON = {
+                  type: 'FeatureCollection',
+                  features: matchedFeatures
+                }
+                setRegionBoundary(filteredGeoJSON)
+
+                // 해당 지역으로 줌인
+                let minLng = Infinity, maxLng = -Infinity, minLat = Infinity, maxLat = -Infinity
+                matchedFeatures.forEach((feature: any) => {
+                  const processCoords = (coords: any) => {
+                    if (Array.isArray(coords) && coords.length >= 2 && typeof coords[0] === 'number') {
+                      minLng = Math.min(minLng, coords[0])
+                      maxLng = Math.max(maxLng, coords[0])
+                      minLat = Math.min(minLat, coords[1])
+                      maxLat = Math.max(maxLat, coords[1])
+                    } else if (Array.isArray(coords)) {
+                      coords.forEach(processCoords)
+                    }
+                  }
+                  processCoords(feature.geometry.coordinates)
+                })
+
+                if (minLng !== Infinity) {
+                  mapRef.current?.fitBounds(
+                    [[minLng, minLat], [maxLng, maxLat]],
+                    { padding: 50, duration: 1000 }
+                  )
+                }
+
+                setRegionBoundaryLoading(false)
+                return
+              }
+            }
+          } catch {}
+        }
+        setRegionBoundaryLoading(false)
+        break
+      }
+    }
+  }, [])
+
+  // 키워드 하이라이트 함수
+  const highlightKeyword = useCallback((text: string, keyword: string) => {
+    if (!keyword.trim()) return text
+    const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    const parts = text.split(regex)
+    return parts.map((part, i) =>
+      regex.test(part) ? <mark key={i} className="highlight">{part}</mark> : part
+    )
+  }, [])
+
+  // 스트리트뷰 열기 (기본: 하단 절반)
+  const openStreetView = useCallback((lat: number, lng: number, name: string) => {
+    setStreetViewModal({ lat, lng, name, expanded: false })
+  }, [])
 
   // 즐겨찾기 토글
   const toggleFavorite = useCallback((id: string) => {
@@ -411,6 +746,19 @@ function App() {
 
   // 디바운스된 검색어
   const debouncedSearchQuery = useDebounce(searchQuery, 150)
+
+  // 주소 패턴 감지하여 지오코딩 실행
+  useEffect(() => {
+    const query = debouncedSearchQuery.trim()
+    // 주소 패턴: 시/군/구/동/읍/면/리 또는 숫자 포함
+    const isAddressPattern = /[시군구동읍면리로길]/.test(query) || /\d+/.test(query)
+
+    if (isAddressPattern && query.length >= 2) {
+      searchAddress(query)
+    } else {
+      setAddressResults([])
+    }
+  }, [debouncedSearchQuery, searchAddress])
 
   useEffect(() => {
     document.body.classList.toggle('dark', darkMode)
@@ -494,7 +842,7 @@ function App() {
     const query = debouncedSearchQuery.trim()
 
     // 검색어가 없고 필터도 기본값이면 전체 반환 (가장 빠름)
-    if (!query && selectedType === 'all' && selectedRegion === '전체') {
+    if (!query && selectedTypes.size === 4 && selectedRegion === '전체') {
       return facilities
     }
 
@@ -502,8 +850,8 @@ function App() {
     let results: { idx: SearchIndex, score: number, isLocationMatch: boolean }[] = []
 
     for (const idx of searchIndex) {
-      // 타입 필터
-      if (selectedType !== 'all' && idx.type !== selectedType) continue
+      // 타입 필터 (Set 사용)
+      if (!selectedTypes.has(idx.type as ReligionType)) continue
       // 지역 필터
       if (selectedRegion !== '전체' && (!idx.region || !idx.region.includes(selectedRegion))) continue
 
@@ -529,7 +877,7 @@ function App() {
 
     // ID로 실제 facility 객체 조회 (facilityMap 사용으로 O(1))
     return results.map(r => facilityMap.get(r.idx.id)!).filter(Boolean)
-  }, [selectedType, selectedRegion, debouncedSearchQuery, fastSearch])
+  }, [selectedTypes, selectedRegion, debouncedSearchQuery, fastSearch])
 
   // 시군구별 시설 수 계산 (필터된 데이터 기준)
   const sigunguCounts = useMemo(() => {
@@ -674,8 +1022,17 @@ function App() {
     }
     const feature = features[0]
 
-    // 시군구 레이어 클릭 - 해당 구역으로 줌인
-    if (feature.layer.id === 'sigungu-fill') {
+    // 시군구 레이어 클릭 - 해당 시도 선택 및 줌인
+    if (feature.layer.id === 'sido-fill') {
+      const clickedSido = feature.properties?.sido
+
+      // 같은 시도 다시 클릭하면 선택 해제
+      if (selectedSido === clickedSido) {
+        setSelectedSido(null)
+      } else {
+        setSelectedSido(clickedSido)
+      }
+
       // 해당 시군구의 경계 박스 계산
       const geometry = feature.geometry
       if (geometry) {
@@ -707,12 +1064,12 @@ function App() {
     }
 
     // 개별 마커 클릭 - 팝업 표시
-    if (feature.layer.id === 'unclustered-point-circle' || feature.layer.id === 'unclustered-point-icon') {
+    if (feature.layer.id === 'facility-markers') {
       const props = feature.properties
       const [lng, lat] = feature.geometry.coordinates
       setPopupFacility({ id: props.id, name: props.name, type: props.type, address: props.address, roadAddress: props.roadAddress, phone: props.phone, lat, lng, kakaoUrl: props.kakaoUrl, category: props.category, denomination: props.denomination, isCult: props.isCult === 'true' || props.isCult === true, cultType: props.cultType, region: props.region, website: props.website, serviceTime: null, pastor: null })
     }
-  }, [])
+  }, [selectedSido])
 
   // 모바일 감지
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
@@ -734,7 +1091,7 @@ function App() {
     try {
       const features = e.features
       if (features && features.length > 0) {
-        const feature = features.find((f: any) => f.layer?.id === 'sigungu-fill')
+        const feature = features.find((f: any) => f.layer?.id === 'sido-fill')
         if (feature?.geometry?.coordinates && feature?.properties) {
           const { code, name, sido, count } = feature.properties
           setHoveredSigungu(prev => {
@@ -761,18 +1118,29 @@ function App() {
     isDragging.current = false
   }, [])
 
-  useEffect(() => setListPage(1), [selectedType, selectedRegion, debouncedSearchQuery])
+  useEffect(() => setListPage(1), [selectedTypes, selectedRegion, debouncedSearchQuery])
 
-  // 검색어 변경시 결과 패널 페이지 초기화
-  useEffect(() => setSearchResultsPage(1), [debouncedSearchQuery])
+  // 검색어 변경시 결과 패널 페이지 초기화 및 경계선 초기화
+  useEffect(() => {
+    setSearchResultsPage(1)
+    // 검색어가 비었으면 경계선 숨기기
+    if (!debouncedSearchQuery.trim()) {
+      setRegionBoundary(null)
+    }
+  }, [debouncedSearchQuery])
 
-  // Enter 키 핸들러 - 검색 결과 패널 표시 및 첫 번째 결과로 지도 이동
+  // Enter 키 핸들러 - 검색 결과 첫 번째로 지도 이동 + 지역 경계선 검색
   const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
-      setShowSearchResults(true)
+      setShowSuggestions(false)
+      setBottomSheetState('peek')
       setSearchResultsPage(1)
-      // 첫 번째 결과로 지도 이동
-      if (filteredFacilities.length > 0) {
+
+      // 지역 경계선 검색 (지역명 검색인 경우)
+      searchRegionBoundary(searchQuery.trim())
+
+      // 첫 번째 결과로 지도 이동 (경계선 검색이 없는 경우)
+      if (filteredFacilities.length > 0 && !REGION_TO_GEOJSON[searchQuery.trim()]) {
         const first = filteredFacilities[0]
         setViewState(prev => ({
           ...prev,
@@ -782,12 +1150,7 @@ function App() {
         }))
       }
     }
-  }, [searchQuery, filteredFacilities])
-
-  // 검색 결과 패널 닫기
-  const closeSearchResults = useCallback(() => {
-    setShowSearchResults(false)
-  }, [])
+  }, [searchQuery, filteredFacilities, searchRegionBoundary])
 
   // 검색 결과 클릭시 해당 위치로 이동
   const handleSearchResultClick = useCallback((facility: ReligiousFacility) => {
@@ -812,80 +1175,203 @@ function App() {
     ? MAP_STYLES.satellite
     : (darkMode ? MAP_STYLES.dark : MAP_STYLES.light)
 
-  // 경계선 레이어 - 줌 레벨에 따라 시도/시군구 구분
+  // 시도별 색상 맵
+  const SIDO_COLORS: Record<string, string> = {
+    '서울': '#EF4444',
+    '부산': '#F97316',
+    '대구': '#F59E0B',
+    '인천': '#84CC16',
+    '광주': '#22C55E',
+    '대전': '#14B8A6',
+    '울산': '#06B6D4',
+    '세종': '#0EA5E9',
+    '경기': '#3B82F6',
+    '강원': '#6366F1',
+    '충북': '#8B5CF6',
+    '충남': '#A855F7',
+    '전북': '#D946EF',
+    '전남': '#EC4899',
+    '경북': '#F43F5E',
+    '경남': '#FB7185',
+    '제주': '#FDA4AF'
+  }
+
+  // 시도별 배경색 레이어 - 선택된 시도만 강조 (줌 10 이하에서만 표시)
+  const sidoFillLayer: any = {
+    id: 'sido-fill',
+    type: 'fill',
+    source: 'sigungu',
+    maxzoom: 10,  // 줌 10 이상 확대하면 음영 숨김
+    paint: {
+      'fill-color': selectedSido
+        ? ['case',
+            ['==', ['get', 'sido'], selectedSido],
+            ['match', ['get', 'sido'],
+              '서울', SIDO_COLORS['서울'],
+              '부산', SIDO_COLORS['부산'],
+              '대구', SIDO_COLORS['대구'],
+              '인천', SIDO_COLORS['인천'],
+              '광주', SIDO_COLORS['광주'],
+              '대전', SIDO_COLORS['대전'],
+              '울산', SIDO_COLORS['울산'],
+              '세종', SIDO_COLORS['세종'],
+              '경기', SIDO_COLORS['경기'],
+              '강원', SIDO_COLORS['강원'],
+              '충북', SIDO_COLORS['충북'],
+              '충남', SIDO_COLORS['충남'],
+              '전북', SIDO_COLORS['전북'],
+              '전남', SIDO_COLORS['전남'],
+              '경북', SIDO_COLORS['경북'],
+              '경남', SIDO_COLORS['경남'],
+              '제주', SIDO_COLORS['제주'],
+              '#94A3B8'
+            ],
+            darkMode ? '#374151' : '#D1D5DB'
+          ]
+        : ['match', ['get', 'sido'],
+            '서울', SIDO_COLORS['서울'],
+            '부산', SIDO_COLORS['부산'],
+            '대구', SIDO_COLORS['대구'],
+            '인천', SIDO_COLORS['인천'],
+            '광주', SIDO_COLORS['광주'],
+            '대전', SIDO_COLORS['대전'],
+            '울산', SIDO_COLORS['울산'],
+            '세종', SIDO_COLORS['세종'],
+            '경기', SIDO_COLORS['경기'],
+            '강원', SIDO_COLORS['강원'],
+            '충북', SIDO_COLORS['충북'],
+            '충남', SIDO_COLORS['충남'],
+            '전북', SIDO_COLORS['전북'],
+            '전남', SIDO_COLORS['전남'],
+            '경북', SIDO_COLORS['경북'],
+            '경남', SIDO_COLORS['경남'],
+            '제주', SIDO_COLORS['제주'],
+            '#94A3B8'
+          ],
+      'fill-opacity': selectedSido
+        ? ['case',
+            ['==', ['get', 'sido'], selectedSido],
+            0.7,
+            0.2
+          ]
+        : [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            5, 0.5,
+            8, 0.45,
+            10, 0.4,
+            12, 0.35,
+            14, 0.3
+          ]
+    }
+  }
+
+  // 시군구 경계선 레이어 - 연한 선으로 구분 (줌 10 이하에서만 표시)
   const sigunguLineLayer: any = {
     id: 'sigungu-line',
     type: 'line',
     source: 'sigungu',
+    maxzoom: 10,  // 줌 10 이상 확대하면 경계선 숨김
     paint: {
-      'line-color': darkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(100, 116, 139, 0.8)',
+      'line-color': darkMode ? 'rgba(255, 255, 255, 0.3)' : 'rgba(100, 100, 100, 0.3)',
       'line-width': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 0.5,
-        8, 1,
-        10, 1.5,
-        12, 1.5,
-        14, 1,
-        16, 0.5
-      ],
-      'line-opacity': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        5, 0.6,
+        5, 0.3,
+        8, 0.5,
         10, 0.8,
-        14, 0.5,
-        16, 0.3
-      ]
+        12, 0.6,
+        14, 0.4
+      ],
+      'line-opacity': 0.5
     }
   }
 
-  // 시도 경계선 레이어 (더 굵게)
-  const sidoLineLayer: any = {
-    id: 'sido-line',
-    type: 'line',
-    source: 'sigungu',
-    filter: ['any',
-      ['==', ['get', 'name'], '강남구'],  // 서울시 대표
-      ['==', ['get', 'name'], '중구'],
-      ['==', ['get', 'name'], '해운대구'],  // 부산시 대표
-      ['==', ['get', 'name'], '수성구'],  // 대구시 대표
-      ['==', ['get', 'name'], '남동구'],  // 인천시 대표
-      ['==', ['get', 'name'], '수원시'],  // 경기도 대표
-    ],
-    paint: {
-      'line-color': darkMode ? 'rgba(255, 255, 255, 0.9)' : 'rgba(30, 64, 175, 0.9)',
-      'line-width': [
+  // 시도 라벨 레이어 - 줌 8 이하에서만 표시 (지역명 + 숫자)
+  const sidoLabelLayer: any = {
+    id: 'sido-labels',
+    type: 'symbol',
+    source: 'sido-labels',
+    maxzoom: 8,
+    layout: {
+      'text-field': ['concat', ['get', 'sido'], '\n', ['get', 'countLabel']],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        5, 2,
-        8, 3,
-        10, 2,
-        14, 1.5
-      ]
+        5, 12,
+        7, 16,
+        8, 18
+      ],
+      'text-line-height': 1.3,
+      'text-allow-overlap': true,
+      'text-anchor': 'center'
+    },
+    paint: {
+      'text-color': '#FFFFFF',
+      'text-halo-color': 'rgba(0, 0, 0, 0.8)',
+      'text-halo-width': 2
     }
   }
 
-  // 개별 마커 원형 레이어 - RELIGION_CONFIG 색상 일치
-  const unclusteredCircleLayer: any = {
-    id: 'unclustered-point-circle',
-    type: 'circle',
-    source: 'facilities',
+  // 시군구 라벨 레이어 - 줌 8~13에서 표시 (지역명 + 숫자)
+  const sigunguLabelLayer: any = {
+    id: 'sigungu-labels',
+    type: 'symbol',
+    source: 'sigungu-labels',
     minzoom: 8,
-    paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 3, 12, 6, 14, 8, 16, 10],
-      'circle-color': ['match', ['get', 'type'],
-        'church', '#6366F1',    // RELIGION_CONFIG와 일치
-        'catholic', '#EC4899',  // RELIGION_CONFIG와 일치
-        'temple', '#10B981',    // RELIGION_CONFIG와 일치
-        'cult', '#F59E0B',      // RELIGION_CONFIG와 일치
-        '#6366F1'
+    maxzoom: 13,
+    layout: {
+      'text-field': ['concat', ['get', 'name'], '\n', ['get', 'countLabel']],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+      'text-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        8, 10,
+        10, 12,
+        12, 14
       ],
-      'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 8, 1, 12, 2, 16, 2.5],
-      'circle-stroke-color': '#FFFFFF'
+      'text-line-height': 1.2,
+      'text-allow-overlap': false,
+      'text-anchor': 'center'
+    },
+    paint: {
+      'text-color': '#FFFFFF',
+      'text-halo-color': 'rgba(0, 0, 0, 0.7)',
+      'text-halo-width': 1.5
+    }
+  }
+
+  // 시설 마커 레이어 - 줌 10 이상에서만 표시 (SVG 아이콘 사용)
+  const facilityMarkerLayer: any = {
+    id: 'facility-markers',
+    type: 'symbol',
+    source: 'facilities',
+    minzoom: 10,
+    layout: {
+      'icon-image': ['match', ['get', 'type'],
+        'church', 'church-icon',
+        'catholic', 'catholic-icon',
+        'temple', 'temple-icon',
+        'cult', 'cult-icon',
+        'church-icon'
+      ],
+      'icon-size': [
+        'interpolate',
+        ['linear'],
+        ['zoom'],
+        10, 0.4,
+        12, 0.5,
+        14, 0.7,
+        16, 0.9,
+        18, 1.1
+      ],
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': false
     }
   }
 
@@ -894,425 +1380,517 @@ function App() {
     id: 'facility-labels',
     type: 'symbol',
     source: 'facilities',
-    minzoom: 14,
+    minzoom: 12,
     layout: {
       'text-field': ['concat',
-        ['get', 'name'],
-        '\n',
         ['match', ['get', 'type'],
-          'church', '⛪ 교회',
-          'catholic', '✝️ 성당',
-          'temple', '☸️ 사찰',
-          'cult', '⚠️ 이단의심',
+          'church', '⛪ ',
+          'catholic', '✝️ ',
+          'temple', '☸️ ',
+          'cult', '⚠️ ',
           ''
-        ]
+        ],
+        ['get', 'name']
       ],
       'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
       'text-size': ['interpolate', ['linear'], ['zoom'], 14, 10, 16, 12, 18, 14],
-      'text-offset': [1.2, 0],
-      'text-anchor': 'left',
+      'text-offset': [0, 1.8],
+      'text-anchor': 'top',
       'text-max-width': 10,
-      'text-allow-overlap': false,
-      'icon-allow-overlap': true
+      'text-allow-overlap': false
     },
     paint: {
       'text-color': darkMode ? '#FFFFFF' : '#1F2937',
-      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-      'text-halo-width': 1.5
+      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+      'text-halo-width': 2
     }
   }
 
   return (
-    <div className={`app ${darkMode ? 'dark' : ''}`}>
-      <header className="header">
-        <div className="header-content">
-          <div className="logo">
-            <span className="logo-icon">🙏</span>
-            <div className="logo-text">
-              <h1>종교시설 찾기</h1>
-              <span className="update-date">업데이트: {DATA_UPDATE_DATE}</span>
+    <div className={`app kakao-style ${darkMode ? 'dark' : ''}`}>
+      {/* 상단 검색바 - 카카오맵 스타일 */}
+      <header className="search-header">
+        <button className="menu-btn" onClick={() => setSidebarCollapsed(false)} title="메뉴">
+          <span className="menu-icon">☰</span>
+        </button>
+        <div className="search-bar-wrapper">
+          <div className="search-bar">
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="장소, 주소 검색"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+                setShowSuggestions(e.target.value.length > 0)
+              }}
+              onKeyDown={handleSearchKeyDown}
+              onFocus={() => {
+                if (searchQuery) setShowSuggestions(true)
+              }}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+            />
+            {searchQuery && (
+              <button className="search-clear" onClick={() => { setSearchQuery(''); setShowSuggestions(false); setBottomSheetState('collapsed'); }}>×</button>
+            )}
+          </div>
+          {/* 검색 자동완성 드롭다운 */}
+          {showSuggestions && searchQuery && (filteredFacilities.length > 0 || addressResults.length > 0) && (
+            <div className="search-suggestions">
+              {/* 주소 검색 결과 (Google Geocoding) */}
+              {addressResults.length > 0 && (
+                <>
+                  <div className="suggestion-section-header">
+                    <span className="section-icon">📍</span> 주소 검색 결과
+                    {isSearchingAddress && <span className="loading-spinner" />}
+                  </div>
+                  {addressResults.map((result, idx) => (
+                    <div
+                      key={`addr-${idx}`}
+                      className="suggestion-item address-item"
+                      onClick={() => handleAddressSelect(result)}
+                    >
+                      <span className="suggestion-icon address-icon">📍</span>
+                      <div className="suggestion-info">
+                        <span className="suggestion-name">{highlightKeyword(result.name, searchQuery)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+              {/* 시설 검색 결과 */}
+              {filteredFacilities.length > 0 && (
+                <>
+                  {addressResults.length > 0 && (
+                    <div className="suggestion-section-header">
+                      <span className="section-icon">🏛️</span> 시설 검색 결과
+                    </div>
+                  )}
+                  {filteredFacilities.slice(0, 8).map(facility => (
+                    <div
+                      key={facility.id}
+                      className="suggestion-item"
+                      onClick={() => {
+                        handleSearchResultClick(facility)
+                        setShowSuggestions(false)
+                        setSearchQuery(facility.name)
+                      }}
+                    >
+                      <span className="suggestion-icon" style={{ color: RELIGION_CONFIG[facility.type]?.color }}>
+                        {RELIGION_CONFIG[facility.type]?.icon}
+                      </span>
+                      <div className="suggestion-info">
+                        <span className="suggestion-name">{highlightKeyword(facility.name, searchQuery)}</span>
+                        <span className="suggestion-address">{highlightKeyword(facility.address, searchQuery)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
-          </div>
-          <div className="header-right">
-            <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} title={darkMode ? '라이트 모드' : '다크 모드'}>{darkMode ? '☀️' : '🌙'}</button>
-            <span className="total-count">{facilities.length.toLocaleString()}개 시설</span>
-          </div>
+          )}
         </div>
+        <button className="header-action" onClick={() => setDarkMode(!darkMode)} title={darkMode ? '라이트 모드' : '다크 모드'}>
+          {darkMode ? '☀️' : '🌙'}
+        </button>
       </header>
 
-      <div className="main-container">
-        {/* 사이드바 토글 버튼 (접힌 상태에서 표시) */}
-        {sidebarCollapsed && (
-          <button className="sidebar-toggle collapsed" onClick={() => setSidebarCollapsed(false)} title="검색 패널 열기">
-            <span>☰</span>
+      {/* 필터 영역 - 시설 유형 드롭다운 + 지역 드롭다운 */}
+      <div className="filter-bar">
+        {/* 시설 유형 드롭다운 */}
+        <div className="filter-dropdown-wrapper">
+          <button
+            className={`filter-dropdown-btn ${selectedTypes.size < 4 ? 'filtered' : ''}`}
+            onClick={() => { setShowTypeDropdown(!showTypeDropdown); setShowRegionDropdown(false); }}
+          >
+            <span className="dropdown-label">
+              {selectedTypes.size === 4 ? '전체 유형' :
+               selectedTypes.size === 1 ? RELIGION_CONFIG[Array.from(selectedTypes)[0]]?.label :
+               `${selectedTypes.size}개 선택`}
+            </span>
+            <span className="dropdown-arrow">{showTypeDropdown ? '▲' : '▼'}</span>
           </button>
-        )}
-
-        <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
-          <div className="sidebar-header">
-            <h2>🔍 검색</h2>
-            <button className="sidebar-collapse-btn" onClick={() => setSidebarCollapsed(true)} title="검색 패널 접기">
-              ✕
-            </button>
-          </div>
-
-          {/* 통합 검색창 */}
-          <div className="filter-section search-main">
-            <div className="search-box large">
-              <span className="search-icon">🔍</span>
-              <input
-                type="text"
-                placeholder="교회명, 동네, 주소, 교단 검색..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                className="search-input"
-              />
-              {searchQuery && <button className="clear-btn" onClick={() => { setSearchQuery(''); setShowSearchResults(false) }}>×</button>}
-            </div>
-            <div className="search-hints">
-              <span>예: 강남, ㅅㅊㅈ, 침례교, 해운대 (Enter로 검색)</span>
-            </div>
-          </div>
-
-          <div className="filter-section">
-            <h3>종교 유형</h3>
-            <div className="type-filters">
+          {showTypeDropdown && (
+            <div className="filter-dropdown">
+              <label className="dropdown-item" onClick={() => toggleAllTypes()}>
+                <input
+                  type="checkbox"
+                  checked={selectedTypes.size === 4}
+                  onChange={() => {}}
+                />
+                <span className="item-label">전체 선택</span>
+              </label>
+              <div className="dropdown-divider" />
               {Object.entries(RELIGION_CONFIG).map(([type, config]) => (
-                <button key={type} className={`type-btn ${selectedType === type ? 'active' : ''}`} onClick={() => setSelectedType(selectedType === type ? 'all' : type as ReligionType)} style={{ '--type-color': config.color } as React.CSSProperties}>
-                  <span className="type-icon">{config.icon}</span>
-                  <span className="type-label">{config.label}</span>
-                  <span className="type-count">{stats[type as keyof typeof stats].toLocaleString()}</span>
-                </button>
+                <label
+                  key={type}
+                  className="dropdown-item"
+                  onClick={(e) => { e.preventDefault(); toggleType(type as ReligionType); }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.has(type as ReligionType)}
+                    onChange={() => {}}
+                  />
+                  <span className="item-icon" style={{ color: config.color }}>{config.icon}</span>
+                  <span className="item-label">{config.label}</span>
+                </label>
               ))}
             </div>
-          </div>
+          )}
+        </div>
 
-          <div className="filter-section">
+        {/* 지역 드롭다운 */}
+        <div className="filter-dropdown-wrapper">
+          <button
+            className={`filter-dropdown-btn ${selectedRegion !== '전체' ? 'filtered' : ''}`}
+            onClick={() => { setShowRegionDropdown(!showRegionDropdown); setShowTypeDropdown(false); }}
+          >
+            <span className="dropdown-label">{selectedRegion === '전체' ? '전국' : selectedRegion}</span>
+            <span className="dropdown-arrow">{showRegionDropdown ? '▲' : '▼'}</span>
+          </button>
+          {showRegionDropdown && (
+            <div className="filter-dropdown region-dropdown">
+              {REGIONS.map(region => (
+                <div
+                  key={region}
+                  className={`dropdown-item ${selectedRegion === region ? 'active' : ''}`}
+                  onClick={() => selectRegion(region)}
+                >
+                  <span className="item-label">{region === '전체' ? '전국' : region}</span>
+                  {selectedRegion === region && <span className="item-check">✓</span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* 필터 초기화 */}
+        {(selectedTypes.size < 4 || selectedRegion !== '전체') && (
+          <button
+            className="filter-reset-btn"
+            onClick={() => {
+              setSelectedTypes(new Set(['church', 'catholic', 'temple', 'cult']))
+              setSelectedRegion('전체')
+            }}
+          >
+            초기화
+          </button>
+        )}
+      </div>
+
+      {/* 드롭다운 배경 클릭 시 닫기 */}
+      {(showTypeDropdown || showRegionDropdown) && (
+        <div
+          className="dropdown-overlay"
+          onClick={() => { setShowTypeDropdown(false); setShowRegionDropdown(false); }}
+        />
+      )}
+
+      {/* 사이드 메뉴 (슬라이드) */}
+      <div className={`side-menu-overlay ${!sidebarCollapsed ? 'open' : ''}`} onClick={() => setSidebarCollapsed(true)} />
+      <aside className={`side-menu ${!sidebarCollapsed ? 'open' : ''}`}>
+        <div className="side-menu-header">
+          <div className="app-info">
+            <span className="app-logo">🙏</span>
+            <div className="app-title">
+              <h2>종교시설 찾기</h2>
+              <span className="app-subtitle">{facilities.length.toLocaleString()}개 시설</span>
+            </div>
+          </div>
+          <button className="side-menu-close" onClick={() => setSidebarCollapsed(true)}>×</button>
+        </div>
+
+        <div className="side-menu-content">
+          {/* 지역 바로가기 */}
+          <div className="menu-section">
             <h3>지역 바로가기</h3>
-            <div className="region-chips">
+            <div className="region-grid">
               {REGIONS.map(region => (
                 <button
                   key={region}
-                  className={`region-chip ${selectedRegion === region ? 'active' : ''}`}
-                  onClick={() => setSelectedRegion(region)}
+                  className={`region-btn ${selectedRegion === region ? 'active' : ''}`}
+                  onClick={() => selectRegion(region)}
                 >
-                  {region}
+                  {region === '전체' ? '전국' : region}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="filter-section results">
-            <div className="results-count">검색 결과: <strong>{filteredFacilities.length.toLocaleString()}</strong>개</div>
-          </div>
-
-          <div className="view-toggle">
-            <button className={viewMode === 'map' ? 'active' : ''} onClick={() => setViewMode('map')}>🗺️ 지도</button>
-            <button className={viewMode === 'list' ? 'active' : ''} onClick={() => setViewMode('list')}>📋 목록</button>
-          </div>
-
-          {/* 즐겨찾기 섹션 */}
+          {/* 즐겨찾기 */}
           {favoriteFacilities.length > 0 && (
-            <div className="filter-section favorites-section">
-              <h3>⭐ 즐겨찾기 ({favoriteFacilities.length})</h3>
-              <div className="favorites-list">
+            <div className="menu-section">
+              <h3>즐겨찾기 ({favoriteFacilities.length})</h3>
+              <div className="menu-list">
                 {favoriteFacilities.slice(0, 5).map(facility => (
-                  <div
-                    key={facility.id}
-                    className="favorite-item"
-                    onClick={() => handleSearchResultClick(facility)}
-                  >
-                    <span className="favorite-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color }}>
-                      {RELIGION_CONFIG[facility.type]?.icon}
-                    </span>
-                    <div className="favorite-info">
-                      <span className="favorite-name">{facility.name}</span>
-                      <span className="favorite-address">{facility.roadAddress || facility.address}</span>
+                  <div key={facility.id} className="menu-item" onClick={() => { handleSearchResultClick(facility); setSidebarCollapsed(true); }}>
+                    <span className="item-dot" style={{ background: RELIGION_CONFIG[facility.type]?.color }} />
+                    <div className="item-info">
+                      <span className="item-name">{facility.name}</span>
+                      <span className="item-sub">{RELIGION_CONFIG[facility.type]?.label}</span>
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 최근 본 시설 */}
+          {recentFacilities.length > 0 && (
+            <div className="menu-section">
+              <h3>최근 본 시설</h3>
+              <div className="menu-list">
+                {recentFacilities.slice(0, 5).map(facility => (
+                  <div key={facility.id} className="menu-item" onClick={() => { handleSearchResultClick(facility); setSidebarCollapsed(true); }}>
+                    <span className="item-dot" style={{ background: RELIGION_CONFIG[facility.type]?.color }} />
+                    <div className="item-info">
+                      <span className="item-name">{facility.name}</span>
+                      <span className="item-sub">{RELIGION_CONFIG[facility.type]?.label}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="menu-footer">
+            <p>데이터: 카카오맵 · 업데이트: {DATA_UPDATE_DATE}</p>
+          </div>
+        </div>
+      </aside>
+
+      {/* 지도 영역 */}
+      <main className="map-area">
+        <div className="map-container">
+          <Map
+            ref={mapRef}
+            {...viewState}
+            onMove={evt => setViewState(evt.viewState)}
+            onLoad={handleMapLoad}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onTouchStart={handleDragStart}
+            onTouchEnd={handleDragEnd}
+            style={{ width: '100%', height: '100%' }}
+            mapStyle={mapStyle}
+            interactiveLayerIds={['facility-markers', 'sido-fill']}
+            onClick={handleMapClick}
+          >
+            <NavigationControl position="top-right" />
+
+            {/* 위성 모드 토글 버튼 */}
+            <div className="satellite-toggle-container">
+              <button
+                className={`satellite-toggle ${satelliteMode ? 'active' : ''}`}
+                onClick={() => setSatelliteMode(!satelliteMode)}
+                title={satelliteMode ? '일반 지도' : '위성 사진'}
+              >
+                {satelliteMode ? '🗺️' : '🛰️'}
+              </button>
+            </div>
+
+            {/* 시도별 배경색 + 시군구 경계선 */}
+            <Source id="sigungu" type="geojson" data={choroplethData}>
+              <Layer key={`sido-fill-${selectedSido || 'none'}`} {...sidoFillLayer} />
+              <Layer {...sigunguLineLayer} />
+            </Source>
+
+            {/* 시도 라벨 - 줌 8 이하 */}
+            <Source id="sido-labels" type="geojson" data={sidoLabelData}>
+              <Layer {...sidoLabelLayer} />
+            </Source>
+
+            {/* 시군구 라벨 - 줌 8~13 */}
+            <Source id="sigungu-labels" type="geojson" data={sigunguLabelData}>
+              <Layer {...sigunguLabelLayer} />
+            </Source>
+
+            {/* 개별 시설 이모지 마커 + 라벨 */}
+            <Source
+              id="facilities"
+              type="geojson"
+              data={geojsonData}
+            >
+              <Layer {...facilityMarkerLayer} />
+              <Layer {...facilityLabelLayer} />
+            </Source>
+
+            {/* 검색된 지역 경계선 표시 */}
+            {regionBoundary && (
+              <Source id="region-boundary" type="geojson" data={regionBoundary}>
+                <Layer
+                  id="region-boundary-fill"
+                  type="fill"
+                  paint={{
+                    'fill-color': '#3B82F6',
+                    'fill-opacity': 0.15
+                  }}
+                />
+                <Layer
+                  id="region-boundary-line"
+                  type="line"
+                  paint={{
+                    'line-color': '#3B82F6',
+                    'line-width': 3,
+                    'line-opacity': 0.8
+                  }}
+                />
+              </Source>
+            )}
+
+            {popupFacility && (
+              <Popup longitude={popupFacility.lng} latitude={popupFacility.lat} anchor="bottom" onClose={() => setPopupFacility(null)} closeButton closeOnClick={false} maxWidth="320px" className="full-popup">
+                <div className="popup-full">
+                  <div className="popup-header">
+                    <span className="popup-type-badge" style={{ background: RELIGION_CONFIG[popupFacility.type]?.color || '#888' }}>{RELIGION_CONFIG[popupFacility.type]?.icon} {RELIGION_CONFIG[popupFacility.type]?.label}</span>
+                    {popupFacility.isCult && popupFacility.cultType && (
+                      <span className="popup-cult-badge" title={CULT_INFO[popupFacility.cultType]?.source || '이단대책협의회'}>
+                        ⚠️ {CULT_INFO[popupFacility.cultType]?.name || popupFacility.cultType}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="popup-name">{popupFacility.name}</h3>
+                  {popupFacility.denomination && <p className="popup-denomination">{popupFacility.denomination}</p>}
+                  <div className="popup-info">
+                    <div className="popup-info-row"><span className="popup-info-icon">📍</span><span>{popupFacility.roadAddress || popupFacility.address}</span></div>
+                    {popupFacility.phone && <div className="popup-info-row"><span className="popup-info-icon">📞</span><a href={`tel:${popupFacility.phone}`} className="popup-phone-link">{popupFacility.phone}</a></div>}
+                  </div>
+                  <div className="popup-actions-top">
                     <button
-                      className="favorite-remove"
-                      onClick={(e) => { e.stopPropagation(); toggleFavorite(facility.id); }}
-                      title="즐겨찾기 해제"
+                      className={`popup-btn favorite ${favorites.includes(popupFacility.id) ? 'active' : ''}`}
+                      onClick={() => toggleFavorite(popupFacility.id)}
+                      title={favorites.includes(popupFacility.id) ? '즐겨찾기 해제' : '즐겨찾기 추가'}
                     >
-                      ✕
+                      {favorites.includes(popupFacility.id) ? '★' : '☆'} 즐겨찾기
+                    </button>
+                    <button className="popup-btn share" onClick={() => shareLocation(popupFacility)} title="공유하기">
+                      📤 공유
                     </button>
                   </div>
-                ))}
-                {favoriteFacilities.length > 5 && (
-                  <div className="favorites-more">+{favoriteFacilities.length - 5}개 더보기</div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* 최근 본 시설 섹션 */}
-          {recentFacilities.length > 0 && (
-            <div className="filter-section recent-section">
-              <h3>🕐 최근 본 시설</h3>
-              <div className="recent-list">
-                {recentFacilities.slice(0, 5).map(facility => (
-                  <div
-                    key={facility.id}
-                    className="recent-item"
-                    onClick={() => handleSearchResultClick(facility)}
-                  >
-                    <span className="recent-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color }}>
-                      {RELIGION_CONFIG[facility.type]?.icon}
-                    </span>
-                    <div className="recent-info">
-                      <span className="recent-name">{facility.name}</span>
-                      <span className="recent-type">{RELIGION_CONFIG[facility.type]?.label}</span>
-                    </div>
+                  <div className="popup-nav-buttons">
+                    <a href={popupFacility.kakaoUrl || `https://place.map.kakao.com/${popupFacility.id}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav kakao" title="카카오맵에서 보기">
+                      🗺️ 카카오
+                    </a>
+                    <a href={`https://map.naver.com/p/search/${encodeURIComponent(popupFacility.name + ' ' + (popupFacility.roadAddress || popupFacility.address))}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav naver" title="네이버지도에서 보기">
+                      🗺️ 네이버
+                    </a>
+                    <button
+                      className="popup-btn nav roadview"
+                      onClick={() => openStreetView(popupFacility.lat, popupFacility.lng, popupFacility.name)}
+                      title="스트리트뷰 보기"
+                    >
+                      👁️ 스트리트뷰
+                    </button>
+                    {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
+                      <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="popup-btn nav youtube" title="YouTube 채널">
+                        ▶️ YouTube
+                      </a>
+                    )}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+                  <div className="popup-actions">
+                    {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="popup-btn website">🌐 웹사이트</a>}
+                    {popupFacility.phone && <a href={`tel:${popupFacility.phone}`} className="popup-btn call">📞 전화</a>}
+                  </div>
+                </div>
+              </Popup>
+            )}
+          </Map>
+        </div>
+      </main>
 
-          {/* AdSense 광고 배너 */}
-          <div className="ad-banner sidebar-ad">
-            <div className="ad-placeholder">
-              <span className="ad-label">광고</span>
-              <span className="ad-text">AdSense 연동 후 표시됩니다</span>
-              {/* 실제 AdSense 코드는 아래와 같이 추가 */}
-              {/* <ins className="adsbygoogle"
-                style={{ display: 'block' }}
-                data-ad-client="ca-pub-YOUR_ID"
-                data-ad-slot="YOUR_SLOT"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              /> */}
+      {/* 로드뷰 바텀시트 */}
+      {streetViewModal && (
+        <div className={`streetview-sheet ${streetViewModal.expanded ? 'expanded' : 'half'}`}>
+          <div className="streetview-header">
+            <div className="streetview-handle" onClick={() => setStreetViewModal(prev => prev ? { ...prev, expanded: !prev.expanded } : null)}>
+              <div className="handle-bar" />
+            </div>
+            <div className="streetview-title-row">
+              <h3>{streetViewModal.name}</h3>
+              <div className="streetview-actions">
+                <button
+                  className="streetview-expand-btn"
+                  onClick={() => setStreetViewModal(prev => prev ? { ...prev, expanded: !prev.expanded } : null)}
+                  title={streetViewModal.expanded ? '축소' : '전체화면'}
+                >
+                  {streetViewModal.expanded ? '⬇️' : '⬆️'}
+                </button>
+                <button className="streetview-close" onClick={() => setStreetViewModal(null)}>×</button>
+              </div>
             </div>
           </div>
-        </aside>
-
-        {/* 검색 결과 패널 */}
-        {showSearchResults && viewMode === 'map' && (
-          <aside className="search-results-panel">
-            <div className="search-results-header">
-              <h3>검색 결과</h3>
-              <span className="search-results-count">{filteredFacilities.length.toLocaleString()}개</span>
-              <button className="search-results-close" onClick={closeSearchResults}>✕</button>
-            </div>
-            <div className="search-results-list">
-              {paginatedSearchResults.map(facility => (
-                <div
-                  key={facility.id}
-                  className="search-result-item"
-                  onClick={() => handleSearchResultClick(facility)}
-                >
-                  <div className="search-result-header">
-                    <span className="search-result-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color }}>
-                      {RELIGION_CONFIG[facility.type]?.icon}
-                    </span>
-                    <div className="search-result-title">
-                      <h4>{highlightText(facility.name, searchQuery)}</h4>
-                      <span className="search-result-type">{RELIGION_CONFIG[facility.type]?.label}</span>
-                    </div>
-                  </div>
-                  <p className="search-result-address">
-                    {highlightText(facility.roadAddress || facility.address, searchQuery)}
-                  </p>
-                  {facility.denomination && (
-                    <p className="search-result-denomination">
-                      {highlightText(facility.denomination, searchQuery)}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-            {totalSearchPages > 1 && (
-              <div className="search-results-pagination">
-                <button onClick={() => setSearchResultsPage(p => Math.max(1, p - 1))} disabled={searchResultsPage === 1}>◀</button>
-                <span>{searchResultsPage} / {totalSearchPages}</span>
-                <button onClick={() => setSearchResultsPage(p => Math.min(totalSearchPages, p + 1))} disabled={searchResultsPage === totalSearchPages}>▶</button>
-              </div>
-            )}
-          </aside>
-        )}
-
-        <main className="content">
-          {viewMode === 'map' ? (
-            <div className="map-container">
-              <Map
-                ref={mapRef}
-                {...viewState}
-                onMove={evt => setViewState(evt.viewState)}
-                onLoad={handleMapLoad}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                onTouchStart={handleDragStart}
-                onTouchEnd={handleDragEnd}
-                style={{ width: '100%', height: '100%' }}
-                mapStyle={mapStyle}
-                interactiveLayerIds={['unclustered-point-circle']}
-                onClick={handleMapClick}
+          <div className="streetview-content">
+            <div className="streetview-buttons">
+              <a
+                href={`https://map.kakao.com/?map_type=TYPE_MAP&map_attribute=ROADVIEW&urlLevel=3&itemId=&q=&srcid=&confirmid=&rv=on&p=127.001,37.001&rv=on&urlX=${Math.round(streetViewModal.lng * 1000000)}&urlY=${Math.round(streetViewModal.lat * 1000000)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="streetview-main-btn kakao"
               >
-                <NavigationControl position="top-right" />
-
-                {/* 위성 모드 토글 버튼 */}
-                <div className="satellite-toggle-container">
-                  <button
-                    className={`satellite-toggle ${satelliteMode ? 'active' : ''}`}
-                    onClick={() => setSatelliteMode(!satelliteMode)}
-                    title={satelliteMode ? '일반 지도' : '위성 사진'}
-                  >
-                    {satelliteMode ? '🗺️' : '🛰️'}
-                  </button>
-                </div>
-
-                {/* 시군구 경계선만 표시 (밀집도 색상 제거) */}
-                <Source id="sigungu" type="geojson" data={choroplethData}>
-                  <Layer {...sigunguLineLayer} />
-                </Source>
-
-                {/* 개별 시설 포인트 + 라벨 */}
-                <Source
-                  id="facilities"
-                  type="geojson"
-                  data={geojsonData}
-                >
-                  <Layer {...unclusteredCircleLayer} />
-                  <Layer {...facilityLabelLayer} />
-                </Source>
-
-                {popupFacility && (
-                  <Popup longitude={popupFacility.lng} latitude={popupFacility.lat} anchor="bottom" onClose={() => setPopupFacility(null)} closeButton closeOnClick={false} maxWidth="320px" className="full-popup">
-                    <div className="popup-full">
-                      <div className="popup-header">
-                        <span className="popup-type-badge" style={{ background: RELIGION_CONFIG[popupFacility.type]?.color || '#888' }}>{RELIGION_CONFIG[popupFacility.type]?.icon} {RELIGION_CONFIG[popupFacility.type]?.label}</span>
-                        {popupFacility.isCult && popupFacility.cultType && (
-                          <span className="popup-cult-badge" title={CULT_INFO[popupFacility.cultType]?.source || '이단대책협의회'}>
-                            ⚠️ {CULT_INFO[popupFacility.cultType]?.name || popupFacility.cultType}
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="popup-name">{popupFacility.name}</h3>
-                      {popupFacility.denomination && <p className="popup-denomination">{popupFacility.denomination}</p>}
-                      <div className="popup-info">
-                        <div className="popup-info-row"><span className="popup-info-icon">📍</span><span>{popupFacility.roadAddress || popupFacility.address}</span></div>
-                        {popupFacility.phone && <div className="popup-info-row"><span className="popup-info-icon">📞</span><a href={`tel:${popupFacility.phone}`} className="popup-phone-link">{popupFacility.phone}</a></div>}
-                      </div>
-                      <div className="popup-actions-top">
-                        <button
-                          className={`popup-btn favorite ${favorites.includes(popupFacility.id) ? 'active' : ''}`}
-                          onClick={() => toggleFavorite(popupFacility.id)}
-                          title={favorites.includes(popupFacility.id) ? '즐겨찾기 해제' : '즐겨찾기 추가'}
-                        >
-                          {favorites.includes(popupFacility.id) ? '★' : '☆'} 즐겨찾기
-                        </button>
-                        <button className="popup-btn share" onClick={() => shareLocation(popupFacility)} title="공유하기">
-                          📤 공유
-                        </button>
-                      </div>
-                      <div className="popup-nav-buttons">
-                        <a href={popupFacility.kakaoUrl || `https://place.map.kakao.com/${popupFacility.id}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav kakao" title="카카오맵에서 보기">
-                          🗺️ 카카오
-                        </a>
-                        <a href={`https://map.naver.com/p/search/${encodeURIComponent(popupFacility.name + ' ' + (popupFacility.roadAddress || popupFacility.address))}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav naver" title="네이버지도에서 보기">
-                          🗺️ 네이버
-                        </a>
-                        <a href={`https://map.kakao.com/link/roadview/${popupFacility.lat},${popupFacility.lng}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav roadview" title="로드뷰 보기">
-                          👁️ 로드뷰
-                        </a>
-                        {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
-                          <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="popup-btn nav youtube" title="YouTube 채널">
-                            ▶️ YouTube
-                          </a>
-                        )}
-                      </div>
-                      <div className="popup-actions">
-                        {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="popup-btn website">🌐 웹사이트</a>}
-                        {popupFacility.phone && <a href={`tel:${popupFacility.phone}`} className="popup-btn call">📞 전화</a>}
-                      </div>
-                    </div>
-                  </Popup>
-                )}
-              </Map>
-              <div className={`map-legend glass ${legendVisible ? '' : 'collapsed'}`}>
-                <div className="legend-header" onClick={() => setLegendVisible(!legendVisible)}>
-                  <span className="legend-icon">📍</span>
-                  <span className="legend-title">시설 유형</span>
-                  <span className="legend-toggle">{legendVisible ? '▼' : '▲'}</span>
-                </div>
-                {legendVisible && (
-                  <div className="legend-section">
-                    <div className="legend-types">
-                      <div className="type-item"><span className="type-dot" style={{ background: '#6366F1' }}></span><span>⛪ 교회</span></div>
-                      <div className="type-item"><span className="type-dot" style={{ background: '#EC4899' }}></span><span>✝️ 성당</span></div>
-                      <div className="type-item"><span className="type-dot" style={{ background: '#10B981' }}></span><span>☸️ 사찰</span></div>
-                      <div className="type-item"><span className="type-dot" style={{ background: '#F59E0B' }}></span><span>⚠️ 이단의심</span></div>
-                    </div>
-                  </div>
-                )}
-              </div>
+                <span className="btn-icon">🗺️</span>
+                <span className="btn-text">카카오 로드뷰</span>
+                <span className="btn-desc">가장 정확한 한국 거리뷰</span>
+              </a>
+              <a
+                href={`https://map.naver.com/p/entry/place/${streetViewModal.name}?c=${streetViewModal.lng},${streetViewModal.lat},15,0,0,0,dh`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="streetview-main-btn naver"
+              >
+                <span className="btn-icon">🟢</span>
+                <span className="btn-text">네이버 거리뷰</span>
+                <span className="btn-desc">상세 정보와 함께 보기</span>
+              </a>
             </div>
-          ) : (
-            <div className="list-container">
-              <div className="facility-grid">
-                {paginatedList.map(facility => (
-                  <div key={facility.id} className="facility-card" onClick={() => setPopupFacility(facility)}>
-                    <div className="card-header">
-                      <span className="card-icon" style={{ background: RELIGION_CONFIG[facility.type]?.color || '#888' }}>{RELIGION_CONFIG[facility.type]?.icon}</span>
-                      <div className="card-title"><h4>{facility.name}</h4><span className="card-type">{RELIGION_CONFIG[facility.type]?.label}</span></div>
-                      {isValidWebsite(facility.website) && <span className="has-website">🌐</span>}
-                    </div>
-                    <p className="card-address">{facility.roadAddress || facility.address}</p>
-                    {facility.phone && <p className="card-phone">📞 {facility.phone}</p>}
-                  </div>
-                ))}
-              </div>
-              {totalPages > 1 && (
-                <div className="pagination">
-                  <button onClick={() => setListPage(1)} disabled={listPage === 1}>⟪</button>
-                  <button onClick={() => setListPage(p => Math.max(1, p - 1))} disabled={listPage === 1}>◀</button>
-                  <span className="page-info">{listPage} / {totalPages}</span>
-                  <button onClick={() => setListPage(p => Math.min(totalPages, p + 1))} disabled={listPage === totalPages}>▶</button>
-                  <button onClick={() => setListPage(totalPages)} disabled={listPage === totalPages}>⟫</button>
-                </div>
-              )}
-            </div>
-          )}
-        </main>
-      </div>
-
-      {viewMode === 'list' && popupFacility && (
-        <div className="modal-overlay" onClick={() => setPopupFacility(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setPopupFacility(null)}>×</button>
-            <div className="modal-header">
-              <span className="modal-icon" style={{ background: RELIGION_CONFIG[popupFacility.type]?.color || '#888' }}>{RELIGION_CONFIG[popupFacility.type]?.icon}</span>
-              <div className="modal-title"><h2>{popupFacility.name}</h2><span className="modal-type">{RELIGION_CONFIG[popupFacility.type]?.label}{popupFacility.denomination && ` · ${popupFacility.denomination}`}</span></div>
-            </div>
-            {popupFacility.isCult && popupFacility.cultType && (
-              <div className="cult-warning">
-                ⚠️ {CULT_INFO[popupFacility.cultType]?.name || popupFacility.cultType}
-                <span className="cult-source">(출처: {CULT_INFO[popupFacility.cultType]?.source || '이단대책협의회'})</span>
-              </div>
-            )}
-            <div className="modal-body">
-              <div className="info-row"><span className="info-icon">📍</span><div className="info-content"><span className="info-label">주소</span><span className="info-value">{popupFacility.roadAddress || popupFacility.address}</span></div></div>
-              {popupFacility.phone && <div className="info-row"><span className="info-icon">📞</span><div className="info-content"><span className="info-label">연락처</span><span className="info-value">{popupFacility.phone}</span></div></div>}
-              {popupFacility.category && <div className="info-row"><span className="info-icon">📂</span><div className="info-content"><span className="info-label">분류</span><span className="info-value">{popupFacility.category}</span></div></div>}
-            </div>
-            <div className="modal-actions">
-              <a href={popupFacility.kakaoUrl || `https://map.kakao.com/link/search/${encodeURIComponent(popupFacility.name)}`} target="_blank" rel="noopener noreferrer" className="action-btn kakao">🗺️ 카카오맵</a>
-              {isValidWebsite(popupFacility.website) && popupFacility.website && <a href={popupFacility.website.startsWith('http') ? popupFacility.website : `https://${popupFacility.website}`} target="_blank" rel="noopener noreferrer" className="action-btn website">🌐 웹사이트</a>}
-              {popupFacility.phone && <a href={`tel:${popupFacility.phone}`} className="action-btn call">📞 전화</a>}
-              <a href={`https://map.naver.com/v5/search/${encodeURIComponent(popupFacility.roadAddress || popupFacility.address)}`} target="_blank" rel="noopener noreferrer" className="action-btn naver">🗺️ 네이버맵</a>
-              {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
-                <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="action-btn youtube">▶️ YouTube</a>
-              )}
-            </div>
-            <div className="modal-footer"><span className="data-source">출처: 카카오맵 · 업데이트: {DATA_UPDATE_DATE}</span></div>
           </div>
         </div>
       )}
 
-      <footer className="footer">
-        <p>데이터 출처: <a href="https://map.kakao.com" target="_blank" rel="noopener noreferrer">카카오맵</a> · 업데이트: {DATA_UPDATE_DATE} · 총 {facilities.length.toLocaleString()}개 시설</p>
-      </footer>
+      {/* 바텀시트 - 검색 결과 */}
+      <div className={`bottom-sheet ${bottomSheetState}`}>
+        <div className="bottom-sheet-handle" onClick={() => setBottomSheetState(bottomSheetState === 'expanded' ? 'peek' : 'expanded')}>
+          <div className="handle-bar" />
+        </div>
+        <div className="bottom-sheet-header">
+          <span className="result-count">
+            {searchQuery ? `"${searchQuery}" 검색 결과 ` : ''}
+            {filteredFacilities.length.toLocaleString()}개
+          </span>
+          {bottomSheetState !== 'collapsed' && (
+            <button className="close-sheet" onClick={() => setBottomSheetState('collapsed')}>×</button>
+          )}
+        </div>
+        <div className="bottom-sheet-content">
+          {paginatedSearchResults.map(facility => (
+            <div
+              key={facility.id}
+              className="result-item"
+              onClick={() => { handleSearchResultClick(facility); setBottomSheetState('peek'); }}
+            >
+              <span className="result-dot" style={{ background: RELIGION_CONFIG[facility.type]?.color }} />
+              <div className="result-info">
+                <span className="result-name">{highlightText(facility.name, debouncedSearchQuery)}</span>
+                <span className="result-address">{facility.roadAddress || facility.address}</span>
+                <span className="result-type">{RELIGION_CONFIG[facility.type]?.label}</span>
+              </div>
+              <button
+                className={`result-fav ${favorites.includes(facility.id) ? 'active' : ''}`}
+                onClick={(e) => { e.stopPropagation(); toggleFavorite(facility.id); }}
+              >
+                {favorites.includes(facility.id) ? '★' : '☆'}
+              </button>
+            </div>
+          ))}
+          {totalSearchPages > 1 && (
+            <div className="sheet-pagination">
+              <button onClick={() => setSearchResultsPage(p => Math.max(1, p - 1))} disabled={searchResultsPage === 1}>이전</button>
+              <span>{searchResultsPage} / {totalSearchPages}</span>
+              <button onClick={() => setSearchResultsPage(p => Math.min(totalSearchPages, p + 1))} disabled={searchResultsPage === totalSearchPages}>다음</button>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
