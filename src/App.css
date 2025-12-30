@@ -2818,9 +2818,10 @@ body.dark .bottom-sheet {
   transition: height 0.3s ease, transform 0.3s ease;
 }
 
-/* 하단 절반 상태 */
+/* 하단 절반 상태 - 웹에서는 컴팩트하게 */
 .streetview-sheet.half {
-  height: 50vh;
+  height: 280px;
+  max-height: 35vh;
 }
 
 /* 전체화면 상태 */
@@ -2983,11 +2984,36 @@ body.dark .bottom-sheet {
 /* 모바일 반응형 */
 @media (max-width: 768px) {
   .streetview-sheet.half {
-    height: 45vh;
+    height: 240px;
+    max-height: 30vh;
   }
 
   .streetview-title-row h3 {
     font-size: 0.9rem;
+  }
+
+  .streetview-content {
+    padding: 0.75rem;
+  }
+
+  .streetview-buttons {
+    gap: 0.5rem;
+  }
+
+  .streetview-main-btn {
+    padding: 0.75rem 1rem;
+  }
+
+  .streetview-main-btn .btn-icon {
+    font-size: 1.5rem;
+  }
+
+  .streetview-main-btn .btn-text {
+    font-size: 0.9rem;
+  }
+
+  .streetview-main-btn .btn-desc {
+    font-size: 0.75rem;
   }
 
   .streetview-footer {

@@ -1346,7 +1346,7 @@ function App() {
     }
   }
 
-  // 시설 마커 레이어 - 줌 10 이상에서만 표시 (SVG 아이콘 사용)
+  // 시설 마커 레이어 - 줌 10 이상에서만 표시 (SVG 아이콘 사용, 즐겨찾기는 더 크게)
   const facilityMarkerLayer: any = {
     id: 'facility-markers',
     type: 'symbol',
@@ -1361,21 +1361,33 @@ function App() {
         'church-icon'
       ],
       'icon-size': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        10, 0.4,
-        12, 0.5,
-        14, 0.7,
-        16, 0.9,
-        18, 1.1
+        'case',
+        ['==', ['get', 'isFavorite'], 1],
+        // 즐겨찾기 시설은 1.5배 크기
+        ['interpolate', ['linear'], ['zoom'],
+          10, 0.6,
+          12, 0.75,
+          14, 1.05,
+          16, 1.35,
+          18, 1.65
+        ],
+        // 일반 시설
+        ['interpolate', ['linear'], ['zoom'],
+          10, 0.4,
+          12, 0.5,
+          14, 0.7,
+          16, 0.9,
+          18, 1.1
+        ]
       ],
       'icon-allow-overlap': true,
-      'icon-ignore-placement': false
+      'icon-ignore-placement': false,
+      // 즐겨찾기 시설 먼저 정렬 (위에 표시)
+      'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1]
     }
   }
 
-  // 시설 라벨 레이어 - 확대 시 이름 + 유형 표시
+  // 시설 라벨 레이어 - 확대 시 이름 + 유형 표시 (즐겨찾기에 별표 추가)
   const facilityLabelLayer: any = {
     id: 'facility-labels',
     type: 'symbol',
@@ -1383,6 +1395,8 @@ function App() {
     minzoom: 12,
     layout: {
       'text-field': ['concat',
+        // 즐겨찾기면 별표 추가
+        ['case', ['==', ['get', 'isFavorite'], 1], '★ ', ''],
         ['match', ['get', 'type'],
           'church', '⛪ ',
           'catholic', '✝️ ',
@@ -1397,10 +1411,16 @@ function App() {
       'text-offset': [0, 1.8],
       'text-anchor': 'top',
       'text-max-width': 10,
-      'text-allow-overlap': false
+      'text-allow-overlap': false,
+      // 즐겨찾기 시설 먼저 정렬
+      'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1]
     },
     paint: {
-      'text-color': darkMode ? '#FFFFFF' : '#1F2937',
+      'text-color': ['case',
+        ['==', ['get', 'isFavorite'], 1],
+        '#F59E0B',  // 즐겨찾기는 황금색
+        darkMode ? '#FFFFFF' : '#1F2937'
+      ],
       'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
       'text-halo-width': 2
     }
@@ -1823,7 +1843,7 @@ function App() {
           <div className="streetview-content">
             <div className="streetview-buttons">
               <a
-                href={`https://map.kakao.com/?map_type=TYPE_MAP&map_attribute=ROADVIEW&urlLevel=3&itemId=&q=&srcid=&confirmid=&rv=on&p=127.001,37.001&rv=on&urlX=${Math.round(streetViewModal.lng * 1000000)}&urlY=${Math.round(streetViewModal.lat * 1000000)}`}
+                href={`https://map.kakao.com/?q=${encodeURIComponent(streetViewModal.name)}&map_type=TYPE_MAP&target=bike&rt=,,,${streetViewModal.lat},${streetViewModal.lng}&rv=on`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="streetview-main-btn kakao"
@@ -1833,7 +1853,7 @@ function App() {
                 <span className="btn-desc">가장 정확한 한국 거리뷰</span>
               </a>
               <a
-                href={`https://map.naver.com/p/entry/place/${streetViewModal.name}?c=${streetViewModal.lng},${streetViewModal.lat},15,0,0,0,dh`}
+                href={`https://map.naver.com/p/search/${encodeURIComponent(streetViewModal.name)}?c=${streetViewModal.lng},${streetViewModal.lat},18,0,0,0,dh`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="streetview-main-btn naver"
