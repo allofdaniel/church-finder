@@ -765,17 +765,17 @@ function App() {
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
-  // 맵 로드 핸들러 - 커스텀 아이콘 로드
+  // 맵 로드 핸들러 - 커스텀 아이콘 로드 (PNG 사용)
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
     if (!map) return
 
-    // 아이콘 이미지 로드
+    // PNG 아이콘 이미지 로드 (Android WebView 호환성)
     const icons = [
-      { id: 'church-icon', url: '/icons/church.svg' },
-      { id: 'catholic-icon', url: '/icons/catholic.svg' },
-      { id: 'temple-icon', url: '/icons/temple.svg' },
-      { id: 'cult-icon', url: '/icons/cult.svg' }
+      { id: 'church-icon', url: '/icons/church.png' },
+      { id: 'catholic-icon', url: '/icons/cathedral.png' },
+      { id: 'temple-icon', url: '/icons/buddha.png' },
+      { id: 'cult-icon', url: '/icons/caution.png' }
     ]
 
     icons.forEach(({ id, url }) => {
@@ -785,6 +785,9 @@ function App() {
           if (!map.hasImage(id)) {
             map.addImage(id, img, { sdf: false })
           }
+        }
+        img.onerror = () => {
+          console.warn(`Failed to load icon: ${url}`)
         }
         img.src = url
       }
@@ -1510,9 +1513,6 @@ function App() {
             </div>
           )}
         </div>
-        <button className="header-action" onClick={() => setDarkMode(!darkMode)} title={darkMode ? '라이트 모드' : '다크 모드'}>
-          {darkMode ? '☀️' : '🌙'}
-        </button>
       </header>
 
       {/* 필터 영역 - 시설 유형 드롭다운 + 지역 드롭다운 */}

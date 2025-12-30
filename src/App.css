@@ -4,6 +4,14 @@
   box-sizing: border-box;
 }
 
+/* Safe Area for mobile devices (notch, status bar, home indicator) */
+:root {
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+}
+
 :root {
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
@@ -1915,6 +1923,9 @@ body.dark .favorite-remove:hover {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
+  padding-top: calc(0.5rem + var(--safe-area-top));
+  padding-left: calc(0.75rem + var(--safe-area-left));
+  padding-right: calc(0.75rem + var(--safe-area-right));
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   z-index: 100;
@@ -2261,6 +2272,7 @@ body.dark .favorite-remove:hover {
   left: 0;
   right: 0;
   bottom: 0;
+  padding-bottom: var(--safe-area-bottom);
   background: var(--bg-secondary);
   border-radius: 1rem 1rem 0 0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
@@ -2809,6 +2821,7 @@ body.dark .bottom-sheet {
   left: 0;
   right: 0;
   bottom: 0;
+  padding-bottom: var(--safe-area-bottom);
   background: var(--bg-secondary);
   border-radius: 1rem 1rem 0 0;
   box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.25);

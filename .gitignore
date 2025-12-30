@@ -25,3 +25,16 @@ dist-ssr
 
 .vercel
 .env*.local
+
+# Large files
+BND_ADM_DONG_PG/
+src/data/admin-boundaries.json
+src/data/churches-grid-raw.json
+src/data/gap-fill-data.json
+src/data/crawled-websites.json
+src/data/cults-full.json
+keystore_base64.txt
+
+# Scripts (not needed for build)
+*.cjs
+scripts/
