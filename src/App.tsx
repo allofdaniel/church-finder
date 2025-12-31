@@ -8,6 +8,12 @@ import sigunguBoundaries from './data/sigungu-boundaries.json'
 import facilitySigunguMap from './data/facility-sigungu-map.json'
 import youtubeChannels from './data/youtube-channels.json'
 
+// 아이콘 이미지 import (Capacitor Android 호환성)
+import churchIconUrl from '/icons/church.png?url'
+import cathedralIconUrl from '/icons/cathedral.png?url'
+import buddhaIconUrl from '/icons/buddha.png?url'
+import cautionIconUrl from '/icons/caution.png?url'
+
 
 // URL 파라미터 관리 훅
 function useUrlParams() {
@@ -770,17 +776,18 @@ function App() {
     const map = mapRef.current?.getMap()
     if (!map) return
 
-    // PNG 아이콘 이미지 로드 (Android WebView 호환성)
+    // PNG 아이콘 이미지 로드 (Android WebView 호환성 - import된 URL 사용)
     const icons = [
-      { id: 'church-icon', url: '/icons/church.png' },
-      { id: 'catholic-icon', url: '/icons/cathedral.png' },
-      { id: 'temple-icon', url: '/icons/buddha.png' },
-      { id: 'cult-icon', url: '/icons/caution.png' }
+      { id: 'church-icon', url: churchIconUrl },
+      { id: 'catholic-icon', url: cathedralIconUrl },
+      { id: 'temple-icon', url: buddhaIconUrl },
+      { id: 'cult-icon', url: cautionIconUrl }
     ]
 
     icons.forEach(({ id, url }) => {
       if (!map.hasImage(id)) {
         const img = new Image(48, 48)
+        img.crossOrigin = 'anonymous' // CORS 문제 방지
         img.onload = () => {
           if (!map.hasImage(id)) {
             map.addImage(id, img, { sdf: false })
