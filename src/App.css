@@ -56,6 +56,7 @@ body {
   background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
   color: white;
   padding: 1rem 1.5rem;
+  padding-top: calc(1rem + var(--safe-area-top));
   box-shadow: var(--shadow-sm);
 }
 
@@ -1325,6 +1326,7 @@ body {
 .footer {
   background: var(--bg-secondary);
   padding: 1rem;
+  padding-bottom: calc(1rem + var(--safe-area-bottom));
   text-align: center;
   border-top: 1px solid var(--border-color);
 }
@@ -2243,6 +2245,7 @@ body.dark .favorite-remove:hover {
 
 .menu-footer {
   padding-top: 1rem;
+  padding-bottom: var(--safe-area-bottom);
   border-top: 1px solid var(--border-color);
   margin-top: auto;
 }
