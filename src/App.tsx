@@ -773,12 +773,12 @@ function App() {
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
-  // 맵 로드 핸들러 - 커스텀 아이콘 로드 (Base64 인라인 이미지 사용 - Android WebView 호환)
+  // 맵 로드 핸들러 - 커스텀 아이콘 로드 (HTMLImageElement 사용 - Android WebView 호환)
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
     if (!map) return
 
-    // Base64 인라인 이미지 직접 로드 (Android WebView 호환)
+    // Base64 이미지를 HTMLImageElement로 로드 후 맵에 추가
     const icons = [
       { id: 'church-icon', base64: ICON_BASE64.church },
       { id: 'catholic-icon', base64: ICON_BASE64.catholic },
@@ -788,16 +788,17 @@ function App() {
 
     icons.forEach(({ id, base64 }) => {
       if (!map.hasImage(id)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        map.loadImage(base64, (error: any, image: any) => {
-          if (error) {
-            console.error(`Failed to load icon ${id}:`, error)
-            return
+        const img = new Image()
+        img.crossOrigin = 'anonymous'
+        img.onload = () => {
+          if (!map.hasImage(id)) {
+            map.addImage(id, img, { sdf: false })
           }
-          if (image && !map.hasImage(id)) {
-            map.addImage(id, image, { sdf: false })
-          }
-        })
+        }
+        img.onerror = (error) => {
+          console.error(`Failed to load icon ${id}:`, error)
+        }
+        img.src = base64
       }
     })
   }, [])
