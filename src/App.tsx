@@ -1,5 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import Map, { Source, Layer, Popup, NavigationControl } from 'react-map-gl/maplibre'
+import { Share } from '@capacitor/share'
+import { Capacitor } from '@capacitor/core'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
 
@@ -435,6 +437,8 @@ function App() {
   const [showRegionDropdown, setShowRegionDropdown] = useState(false)
   // 스트리트뷰 모달 상태 (expanded: 전체화면, half: 하단 반)
   const [streetViewModal, setStreetViewModal] = useState<{ lat: number, lng: number, name: string, expanded: boolean } | null>(null)
+  // 즐겨찾기 패널 상태
+  const [showFavoritesPanel, setShowFavoritesPanel] = useState(false)
   // 주소 검색 결과 (지오코딩)
   const [addressResults, setAddressResults] = useState<GeocodingResult[]>([])
   const [isSearchingAddress, setIsSearchingAddress] = useState(false)
@@ -709,9 +713,22 @@ function App() {
     )
   }, [])
 
-  // 스트리트뷰 열기 (기본: 하단 절반)
+  // 스트리트뷰 열기 - 카카오 로드뷰 또는 네이버 거리뷰 선택
   const openStreetView = useCallback((lat: number, lng: number, name: string) => {
-    setStreetViewModal({ lat, lng, name, expanded: false })
+    // 선택 다이얼로그 표시
+    const choice = window.confirm(
+      `${name}\n\n[확인] 카카오 로드뷰\n[취소] 네이버 거리뷰`
+    )
+
+    if (choice) {
+      // 카카오 로드뷰
+      const kakaoUrl = `https://map.kakao.com/?q=${encodeURIComponent(name)}&rv=on`
+      window.open(kakaoUrl, '_blank')
+    } else {
+      // 네이버 거리뷰
+      const naverUrl = `https://map.naver.com/p/search/${encodeURIComponent(name)}?c=${lng},${lat},18,0,0,0,dh`
+      window.open(naverUrl, '_blank')
+    }
   }, [])
 
   // 즐겨찾기 토글
@@ -1032,18 +1049,33 @@ function App() {
 
   
 
-  // 공유하기
+  // 공유하기 - Capacitor 네이티브 공유 또는 Web Share API 사용
   const shareLocation = useCallback(async (facility: ReligiousFacility) => {
     const url = `${window.location.origin}?lat=${facility.lat}&lng=${facility.lng}&zoom=16`
-    const text = `${facility.name} - ${facility.roadAddress || facility.address}`
-    
-    if (navigator.share) {
-      try {
+    const text = `${facility.name}\n${facility.roadAddress || facility.address}`
+
+    try {
+      if (Capacitor.isNativePlatform()) {
+        // 네이티브 앱에서는 Capacitor Share 플러그인 사용
+        await Share.share({
+          title: facility.name,
+          text: text,
+          url: url,
+          dialogTitle: '시설 정보 공유'
+        })
+      } else if (navigator.share) {
+        // 웹에서 Web Share API 지원 시
         await navigator.share({ title: facility.name, text, url })
-      } catch {}
-    } else {
-      await navigator.clipboard.writeText(url)
-      alert('링크가 복사되었습니다!')
+      } else {
+        // 폴백: 클립보드에 복사
+        await navigator.clipboard.writeText(`${facility.name}\n${facility.roadAddress || facility.address}\n${url}`)
+        alert('링크가 복사되었습니다!')
+      }
+    } catch (err) {
+      // 사용자가 공유 취소한 경우 무시
+      if ((err as Error).name !== 'AbortError') {
+        console.error('공유 실패:', err)
+      }
     }
   }, [])
 
@@ -1097,11 +1129,18 @@ function App() {
       return
     }
 
-    // 개별 마커 클릭 - 팝업 표시
+    // 개별 마커 클릭 - 팝업 표시 및 지도 이동
     if (feature.layer.id === 'facility-markers') {
       const props = feature.properties
       const [lng, lat] = feature.geometry.coordinates
       setPopupFacility({ id: props.id, name: props.name, type: props.type, address: props.address, roadAddress: props.roadAddress, phone: props.phone, lat, lng, kakaoUrl: props.kakaoUrl, category: props.category, denomination: props.denomination, isCult: props.isCult === 'true' || props.isCult === true, cultType: props.cultType, region: props.region, website: props.website, serviceTime: null, pastor: null })
+
+      // 팝업이 화면 중앙에 오도록 지도 이동 (팝업이 위에 뜨므로 약간 아래로)
+      setViewState(prev => ({
+        ...prev,
+        latitude: lat - 0.002,  // 팝업이 위에 뜨므로 지도를 약간 위로 이동
+        longitude: lng
+      }))
     }
   }, [selectedSido])
 
@@ -1793,13 +1832,26 @@ function App() {
                     <a href={`https://map.naver.com/p/search/${encodeURIComponent(popupFacility.name + ' ' + (popupFacility.roadAddress || popupFacility.address))}`} target="_blank" rel="noopener noreferrer" className="popup-btn nav naver" title="네이버지도에서 보기">
                       🗺️ 네이버
                     </a>
-                    <button
-                      className="popup-btn nav roadview"
-                      onClick={() => openStreetView(popupFacility.lat, popupFacility.lng, popupFacility.name)}
-                      title="스트리트뷰 보기"
-                    >
-                      👁️ 스트리트뷰
-                    </button>
+                    <div className="popup-btn-split">
+                      <a
+                        href={`https://map.kakao.com/?q=${encodeURIComponent(popupFacility.name)}&rv=on`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="popup-btn-half kakao"
+                        title="카카오 로드뷰"
+                      >
+                        🟡 로드뷰
+                      </a>
+                      <a
+                        href={`https://map.naver.com/p/search/${encodeURIComponent(popupFacility.name)}?c=${popupFacility.lng},${popupFacility.lat},18,0,0,0,dh`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="popup-btn-half naver"
+                        title="네이버 거리뷰"
+                      >
+                        🟢 거리뷰
+                      </a>
+                    </div>
                     {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
                       <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="popup-btn nav youtube" title="YouTube 채널">
                         ▶️ YouTube
@@ -1863,6 +1915,58 @@ function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 즐겨찾기 플로팅 버튼 */}
+      <button
+        className={`favorites-fab ${showFavoritesPanel ? 'active' : ''}`}
+        onClick={() => setShowFavoritesPanel(!showFavoritesPanel)}
+        title="즐겨찾기"
+      >
+        <span className="fab-icon">★</span>
+        {favorites.length > 0 && <span className="fab-badge">{favorites.length}</span>}
+      </button>
+
+      {/* 즐겨찾기 패널 */}
+      {showFavoritesPanel && (
+        <>
+          <div className="favorites-panel-overlay" onClick={() => setShowFavoritesPanel(false)} />
+          <div className="favorites-panel">
+            <div className="favorites-panel-header">
+              <h3>즐겨찾기 ({favoriteFacilities.length})</h3>
+              <button className="favorites-panel-close" onClick={() => setShowFavoritesPanel(false)}>×</button>
+            </div>
+            <div className="favorites-panel-content">
+              {favoriteFacilities.length === 0 ? (
+                <div className="favorites-empty">
+                  <span className="empty-icon">☆</span>
+                  <p>즐겨찾기한 시설이 없습니다</p>
+                  <p className="empty-hint">시설을 선택하고 ☆ 버튼을 눌러 추가하세요</p>
+                </div>
+              ) : (
+                favoriteFacilities.map(facility => (
+                  <div
+                    key={facility.id}
+                    className="favorites-item"
+                    onClick={() => { handleSearchResultClick(facility); setShowFavoritesPanel(false); }}
+                  >
+                    <span className="favorites-dot" style={{ background: RELIGION_CONFIG[facility.type]?.color }} />
+                    <div className="favorites-info">
+                      <span className="favorites-name">{facility.name}</span>
+                      <span className="favorites-address">{facility.roadAddress || facility.address}</span>
+                    </div>
+                    <button
+                      className="favorites-remove"
+                      onClick={(e) => { e.stopPropagation(); toggleFavorite(facility.id); }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </>
       )}
 
       {/* 바텀시트 - 검색 결과 */}
