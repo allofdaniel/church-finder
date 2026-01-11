@@ -1395,15 +1395,15 @@ function App() {
         'church-icon'
       ],
       'icon-size': ['interpolate', ['linear'], ['zoom'],
-        10, 0.08,
-        12, 0.12,
-        14, 0.18,
-        16, 0.25,
-        18, 0.35
+        10, 0.06,
+        12, 0.10,
+        14, 0.15,
+        16, 0.22,
+        18, 0.30
       ],
-      'icon-allow-overlap': false,
-      'icon-ignore-placement': false,
-      'icon-padding': 8,
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+      'icon-padding': 0,
       // 즐겨찾기 시설 먼저 정렬 (위에 표시)
       'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1],
       // 시설명 라벨도 함께 표시
