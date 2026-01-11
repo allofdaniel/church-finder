@@ -1380,7 +1380,7 @@ function App() {
     }
   }
 
-  // 시설 마커 레이어 - 줌 10 이상에서만 표시 (SVG 아이콘 사용, 즐겨찾기는 더 크게)
+  // 시설 마커 레이어 - 줌 10 이상에서만 표시 (아이콘 크기 축소)
   const facilityMarkerLayer: any = {
     id: 'facility-markers',
     type: 'symbol',
@@ -1395,57 +1395,38 @@ function App() {
         'church-icon'
       ],
       'icon-size': ['interpolate', ['linear'], ['zoom'],
-        10, 0.4,
-        12, 0.5,
-        14, 0.7,
-        16, 0.9,
-        18, 1.1
+        10, 0.08,
+        12, 0.12,
+        14, 0.18,
+        16, 0.25,
+        18, 0.35
       ],
-      'icon-allow-overlap': true,
+      'icon-allow-overlap': false,
       'icon-ignore-placement': false,
+      'icon-padding': 8,
       // 즐겨찾기 시설 먼저 정렬 (위에 표시)
-      'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1]
+      'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1],
+      // 시설명 라벨도 함께 표시
+      'text-field': ['get', 'name'],
+      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      'text-size': ['interpolate', ['linear'], ['zoom'],
+        10, 9,
+        12, 10,
+        14, 11,
+        16, 12
+      ],
+      'text-offset': [0, 1.2],
+      'text-anchor': 'top',
+      'text-max-width': 8,
+      'text-optional': true
+    },
+    paint: {
+      'text-color': darkMode ? '#FFFFFF' : '#1F2937',
+      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+      'text-halo-width': 1.5
     }
   }
 
-  // 시설 라벨 레이어 - 확대 시 이름 + 유형 표시 (즐겨찾기에 별표 추가)
-  const facilityLabelLayer: any = {
-    id: 'facility-labels',
-    type: 'symbol',
-    source: 'facilities',
-    minzoom: 12,
-    layout: {
-      'text-field': ['concat',
-        // 즐겨찾기면 별표 추가
-        ['case', ['==', ['get', 'isFavorite'], 1], '★ ', ''],
-        ['match', ['get', 'type'],
-          'church', '⛪ ',
-          'catholic', '✝️ ',
-          'temple', '☸️ ',
-          'cult', '⚠️ ',
-          ''
-        ],
-        ['get', 'name']
-      ],
-      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
-      'text-size': ['interpolate', ['linear'], ['zoom'], 14, 10, 16, 12, 18, 14],
-      'text-offset': [0, 1.8],
-      'text-anchor': 'top',
-      'text-max-width': 10,
-      'text-allow-overlap': false,
-      // 즐겨찾기 시설 먼저 정렬
-      'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1]
-    },
-    paint: {
-      'text-color': ['case',
-        ['==', ['get', 'isFavorite'], 1],
-        '#F59E0B',  // 즐겨찾기는 황금색
-        darkMode ? '#FFFFFF' : '#1F2937'
-      ],
-      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
-      'text-halo-width': 2
-    }
-  }
 
   return (
     <div className={`app kakao-style ${darkMode ? 'dark' : ''}`}>
@@ -1744,14 +1725,13 @@ function App() {
               <Layer {...sigunguLabelLayer} />
             </Source>
 
-            {/* 개별 시설 이모지 마커 + 라벨 */}
+            {/* 개별 시설 아이콘 마커 + 라벨 (하나의 레이어로 통합) */}
             <Source
               id="facilities"
               type="geojson"
               data={geojsonData}
             >
               <Layer {...facilityMarkerLayer} />
-              <Layer {...facilityLabelLayer} />
             </Source>
 
             {/* 검색된 지역 경계선 표시 */}
