@@ -38,3 +38,4 @@ keystore_base64.txt
 # Scripts (not needed for build)
 *.cjs
 scripts/
+.playwright-mcp/
