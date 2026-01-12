@@ -784,12 +784,12 @@ function App() {
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
-  // 맵 로드 핸들러 - 커스텀 아이콘 로드 (외부 PNG 파일 사용 - Android WebView 호환)
+  // 맵 로드 핸들러 - 커스텀 아이콘 로드 (MapLibre loadImage 사용)
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
     if (!map) return
 
-    // 외부 PNG 파일 경로 사용 (Base64보다 Android WebView에서 안정적)
+    // 외부 PNG 파일 경로 사용
     const icons = [
       { id: 'church-icon', url: '/icons/church.png' },
       { id: 'catholic-icon', url: '/icons/cathedral.png' },
@@ -800,8 +800,8 @@ function App() {
     let loadedCount = 0
     const totalIcons = icons.length
 
-    const refreshIconLayer = () => {
-      // facility-markers 레이어의 icon-image를 강제로 다시 설정하여 아이콘 표시
+    const onAllLoaded = () => {
+      // 모든 아이콘 로드 후 맵 다시 렌더링
       if (map.getLayer('facility-markers')) {
         const currentIconImage = map.getLayoutProperty('facility-markers', 'icon-image')
         if (currentIconImage) {
@@ -811,35 +811,27 @@ function App() {
       map.triggerRepaint()
     }
 
+    // MapLibre의 loadImage 사용 (권장 방식)
     icons.forEach(({ id, url }) => {
       if (!map.hasImage(id)) {
-        const img = new Image()
-        img.crossOrigin = 'anonymous'
-        img.onload = () => {
-          if (!map.hasImage(id)) {
-            map.addImage(id, img, { sdf: false })
+        map.loadImage(url, (error, image) => {
+          if (error) {
+            console.error(`Failed to load icon ${id}:`, error)
+          } else if (image && !map.hasImage(id)) {
+            map.addImage(id, image, { sdf: false })
           }
           loadedCount++
-          // 모든 아이콘이 로드되면 맵 다시 렌더링 (Android WebView 호환성)
           if (loadedCount === totalIcons) {
-            // 약간의 지연 후 레이어 새로고침 (렌더링 사이클 보장)
-            setTimeout(refreshIconLayer, 100)
+            setTimeout(onAllLoaded, 100)
           }
-        }
-        img.onerror = (error) => {
-          console.error(`Failed to load icon ${id}:`, error)
-          loadedCount++
-        }
-        img.src = url
+        })
       } else {
         loadedCount++
+        if (loadedCount === totalIcons) {
+          setTimeout(onAllLoaded, 100)
+        }
       }
     })
-
-    // 이미 모든 아이콘이 로드되어 있으면 바로 새로고침
-    if (loadedCount === totalIcons) {
-      setTimeout(refreshIconLayer, 100)
-    }
   }, [])
 
   // 최적화된 검색 함수 (searchIndex 사용)
