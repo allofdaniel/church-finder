@@ -814,7 +814,7 @@ function App() {
     // MapLibre의 loadImage 사용 (권장 방식)
     icons.forEach(({ id, url }) => {
       if (!map.hasImage(id)) {
-        map.loadImage(url, (error, image) => {
+        map.loadImage(url, (error: Error | undefined, image: ImageBitmap | HTMLImageElement | ImageData | undefined) => {
           if (error) {
             console.error(`Failed to load icon ${id}:`, error)
           } else if (image && !map.hasImage(id)) {
