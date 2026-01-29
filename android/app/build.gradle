@@ -7,9 +7,11 @@ android {
     signingConfigs {
         release {
             storeFile file('release.keystore')
-            storePassword 'churchfinder123'
-            keyAlias 'churchfinder'
-            keyPassword 'churchfinder123'
+            // SECURITY: Use environment variables or local.properties (NOT committed to git)
+            // Set KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD in environment or local.properties
+            storePassword System.getenv('KEYSTORE_PASSWORD') ?: project.findProperty('KEYSTORE_PASSWORD') ?: ''
+            keyAlias System.getenv('KEY_ALIAS') ?: project.findProperty('KEY_ALIAS') ?: ''
+            keyPassword System.getenv('KEY_PASSWORD') ?: project.findProperty('KEY_PASSWORD') ?: ''
         }
     }
 
@@ -17,8 +19,8 @@ android {
         applicationId "com.allofdaniel.churchfinder"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.2.4"
+        versionCode 14
+        versionName "1.2.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

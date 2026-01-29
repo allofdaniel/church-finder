@@ -24,7 +24,15 @@ dist-ssr
 *.sw?
 
 .vercel
+.env
+.env.local
 .env*.local
+
+# Security - Never commit these
+*.keystore
+*.jks
+google-services.json
+release.keystore
 
 # Large files
 BND_ADM_DONG_PG/
@@ -39,3 +47,28 @@ keystore_base64.txt
 *.cjs
 scripts/
 .playwright-mcp/
+
+# Screenshots and test images in root
+*.png
+!public/**/*.png
+!android/**/*.png
+!src/**/*.png
+
+# Stitch design files
+.stitch-project.json
+stitch_main_map_view_redesign/
+
+# Claude config
+.claude/
+
+# Planning docs
+IMPROVEMENT_ROADMAP.md
+PLAN.md
+
+# Misc
+nul
+*.bat
+*.ps1
+
+# Environment (keep example)
+.env.production

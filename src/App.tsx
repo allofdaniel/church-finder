@@ -5,10 +5,7 @@ import { Capacitor } from '@capacitor/core'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './App.css'
 
-import allReligiousData from './data/all-religious.json'
-import sigunguBoundaries from './data/sigungu-boundaries.json'
-import facilitySigunguMap from './data/facility-sigungu-map.json'
-import youtubeChannels from './data/youtube-channels.json'
+// 데이터는 public/data/에서 동적으로 fetch (번들 사이즈 최적화)
 
 // 아이콘은 public/icons/ 폴더의 외부 PNG 파일 사용 (church.png, cathedral.png, buddha.png, caution.png)
 
@@ -121,8 +118,8 @@ const REGION_COORDS: Record<string, { center: [number, number], zoom: number }> 
   '제주': { center: [126.545, 33.379], zoom: 10 }
 }
 
-// Google API Key
-const GOOGLE_API_KEY = 'AIzaSyAz38gk_qzDIQqf3I7lCCnWjtqD9VNykYI'
+// Google API Key (환경변수에서 로드)
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY || ''
 
 // 주소 검색 결과 타입
 interface GeocodingResult {
@@ -269,10 +266,7 @@ const isValidWebsite = (url: string | null): boolean => {
   return !invalidPatterns.some(pattern => url.includes(pattern))
 }
 
-const facilities: ReligiousFacility[] = allReligiousData as ReligiousFacility[]
-
-// 미리 계산된 매핑 데이터 사용
-const sigunguMapping = facilitySigunguMap as Record<string, string>
+// facilities, searchIndex, facilityMap, sigunguMapping, sidoCenters 는 App() 내부 state/useMemo로 이동
 
 // 검색 인덱스 미리 생성 (성능 최적화)
 interface SearchIndex {
@@ -291,37 +285,21 @@ interface SearchIndex {
   lng: number
 }
 
-const searchIndex: SearchIndex[] = facilities.map(f => ({
-  id: f.id,
-  name: f.name,
-  nameLower: f.name.toLowerCase(),
-  nameChosung: getChosung(f.name),
-  address: f.roadAddress || f.address,
-  addressLower: (f.roadAddress || f.address).toLowerCase(),
-  denomination: f.denomination || '',
-  denominationLower: (f.denomination || '').toLowerCase(),
-  type: f.type,
-  region: f.region,
-  districts: extractDistrict(f.roadAddress || f.address),
-  lat: f.lat,
-  lng: f.lng
-}))
-
-// ID로 빠르게 찾기 위한 맵 (globalThis.Map 사용으로 react-map-gl의 Map과 구분)
-const facilityMap: globalThis.Map<string, ReligiousFacility> = new globalThis.Map(facilities.map(f => [f.id, f]))
+// searchIndex, facilityMap은 App() 내부 useMemo로 이동
 
 // 시군구별 시설 수 계산 (미리 계산된 매핑 사용)
-function computeSigunguCounts(facilitiesList: ReligiousFacility[]) {
+function computeSigunguCounts(facilitiesList: ReligiousFacility[], boundariesData: any, mappingData: Record<string, string>) {
+  if (!boundariesData) return {}
   const counts: Record<string, number> = {}
 
   // 모든 시군구 초기화
-  for (const feature of (sigunguBoundaries as any).features) {
+  for (const feature of boundariesData.features) {
     counts[feature.properties.code] = 0
   }
 
   // 미리 계산된 매핑으로 빠르게 카운트
   for (const f of facilitiesList) {
-    const sigunguCode = sigunguMapping[f.id]
+    const sigunguCode = mappingData[f.id]
     if (sigunguCode && counts[sigunguCode] !== undefined) {
       counts[sigunguCode]++
     }
@@ -331,10 +309,11 @@ function computeSigunguCounts(facilitiesList: ReligiousFacility[]) {
 }
 
 // 시도별 시설 수 합산 계산
-function computeSidoCounts(sigunguCounts: Record<string, number>) {
+function computeSidoCounts(sigunguCounts: Record<string, number>, boundariesData: any) {
+  if (!boundariesData) return {}
   const sidoCounts: Record<string, number> = {}
 
-  for (const feature of (sigunguBoundaries as any).features) {
+  for (const feature of boundariesData.features) {
     const sido = feature.properties.sido
     const count = sigunguCounts[feature.properties.code] || 0
     sidoCounts[sido] = (sidoCounts[sido] || 0) + count
@@ -364,26 +343,7 @@ function getPolygonCenter(coordinates: any): [number, number] {
   return count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
 }
 
-// 시도별 중심점 계산 (미리 계산)
-const sidoCenters: Record<string, [number, number]> = {}
-const sidoFeatures: Record<string, any[]> = {}
-
-for (const feature of (sigunguBoundaries as any).features) {
-  const sido = feature.properties.sido
-  if (!sidoFeatures[sido]) sidoFeatures[sido] = []
-  sidoFeatures[sido].push(feature)
-}
-
-for (const [sido, features] of Object.entries(sidoFeatures)) {
-  let sumLng = 0, sumLat = 0, count = 0
-  for (const f of features) {
-    const center = getPolygonCenter(f.geometry.coordinates)
-    sumLng += center[0]
-    sumLat += center[1]
-    count++
-  }
-  sidoCenters[sido] = count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
-}
+// sidoCenters는 App() 내부 useMemo로 이동
 
 
 // 키워드 하이라이트 함수
@@ -453,6 +413,101 @@ function App() {
   const [favorites, setFavorites] = useLocalStorage<string[]>('favorites', [])
   const [recentViewed, setRecentViewed] = useLocalStorage<string[]>('recentViewed', [])
   const { getParams, setParams } = useUrlParams()
+
+  // === 데이터 로딩 (public/data/에서 동적 fetch) ===
+  const [facilities, setFacilities] = useState<ReligiousFacility[]>([])
+  const [sigunguBoundariesData, setSigunguBoundariesData] = useState<any>(null)
+  const [sigunguMappingData, setSigunguMappingData] = useState<Record<string, string>>({})
+  const [youtubeChannelsData, setYoutubeChannelsData] = useState<Record<string, string>>({})
+  const [isDataLoading, setIsDataLoading] = useState(true)
+  const [dataLoadError, setDataLoadError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadData() {
+      try {
+        const [religousRes, boundariesRes, mappingRes, youtubeRes] = await Promise.all([
+          fetch('/data/all-religious.json'),
+          fetch('/data/sigungu-boundaries.json'),
+          fetch('/data/facility-sigungu-map.json'),
+          fetch('/data/youtube-channels.json')
+        ])
+        // HTTP 에러 체크
+        if (!religousRes.ok || !boundariesRes.ok || !mappingRes.ok || !youtubeRes.ok) {
+          throw new Error('데이터 파일을 불러올 수 없습니다')
+        }
+        const [religious, boundaries, mapping, youtube] = await Promise.all([
+          religousRes.json(),
+          boundariesRes.json(),
+          mappingRes.json(),
+          youtubeRes.json()
+        ])
+        if (!cancelled) {
+          setFacilities(religious as ReligiousFacility[])
+          setSigunguBoundariesData(boundaries)
+          setSigunguMappingData(mapping as Record<string, string>)
+          setYoutubeChannelsData(youtube as Record<string, string>)
+          setIsDataLoading(false)
+        }
+      } catch (err) {
+        console.error('데이터 로딩 실패:', err)
+        if (!cancelled) {
+          setDataLoadError(err instanceof Error ? err.message : '데이터 로딩 실패')
+          setIsDataLoading(false)
+        }
+      }
+    }
+    loadData()
+    return () => { cancelled = true }
+  }, [])
+
+  // 검색 인덱스 (데이터 로딩 후 계산)
+  const searchIndex = useMemo<SearchIndex[]>(() => {
+    if (facilities.length === 0) return []
+    return facilities.map(f => ({
+      id: f.id,
+      name: f.name,
+      nameLower: f.name.toLowerCase(),
+      nameChosung: getChosung(f.name),
+      address: f.roadAddress || f.address,
+      addressLower: (f.roadAddress || f.address).toLowerCase(),
+      denomination: f.denomination || '',
+      denominationLower: (f.denomination || '').toLowerCase(),
+      type: f.type,
+      region: f.region,
+      districts: extractDistrict(f.roadAddress || f.address),
+      lat: f.lat,
+      lng: f.lng
+    }))
+  }, [facilities])
+
+  // ID로 빠르게 찾기 위한 맵
+  const facilityMap = useMemo(() => {
+    return new globalThis.Map<string, ReligiousFacility>(facilities.map(f => [f.id, f]))
+  }, [facilities])
+
+  // 시도별 중심점 계산
+  const sidoCenters = useMemo<Record<string, [number, number]>>(() => {
+    if (!sigunguBoundariesData) return {}
+    const features: Record<string, any[]> = {}
+    for (const feature of sigunguBoundariesData.features) {
+      const sido = feature.properties.sido
+      if (!features[sido]) features[sido] = []
+      features[sido].push(feature)
+    }
+    const centers: Record<string, [number, number]> = {}
+    for (const [sido, feats] of Object.entries(features)) {
+      let sumLng = 0, sumLat = 0, count = 0
+      for (const f of feats) {
+        const center = getPolygonCenter(f.geometry.coordinates)
+        sumLng += center[0]
+        sumLat += center[1]
+        count++
+      }
+      centers[sido] = count > 0 ? [sumLng / count, sumLat / count] : [127.5, 36.5]
+    }
+    return centers
+  }, [sigunguBoundariesData])
 
   // URL 파라미터 초기화
   useEffect(() => {
@@ -784,6 +839,13 @@ function App() {
     localStorage.setItem('darkMode', String(darkMode))
   }, [darkMode])
 
+  // 네이티브 앱 감지 - status bar 높이 조정용
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      document.body.classList.add('native')
+    }
+  }, [])
+
   // 맵 로드 핸들러 - 커스텀 아이콘 로드 (MapLibre loadImage 사용)
   const handleMapLoad = useCallback(() => {
     const map = mapRef.current?.getMap()
@@ -920,17 +982,17 @@ function App() {
 
     // ID로 실제 facility 객체 조회 (facilityMap 사용으로 O(1))
     return results.map(r => facilityMap.get(r.idx.id)!).filter(Boolean)
-  }, [selectedTypes, selectedRegion, debouncedSearchQuery, fastSearch])
+  }, [selectedTypes, selectedRegion, debouncedSearchQuery, fastSearch, searchIndex, facilityMap, facilities])
 
   // 시군구별 시설 수 계산 (필터된 데이터 기준)
   const sigunguCounts = useMemo(() => {
-    return computeSigunguCounts(filteredFacilities)
-  }, [filteredFacilities])
+    return computeSigunguCounts(filteredFacilities, sigunguBoundariesData, sigunguMappingData)
+  }, [filteredFacilities, sigunguBoundariesData, sigunguMappingData])
 
   // 시도별 시설 수 합산 계산
   const sidoCounts = useMemo(() => {
-    return computeSidoCounts(sigunguCounts)
-  }, [sigunguCounts])
+    return computeSidoCounts(sigunguCounts, sigunguBoundariesData)
+  }, [sigunguCounts, sigunguBoundariesData])
 
   // 시도별 라벨 데이터 (줌 레벨 8 이하)
   const sidoLabelData = useMemo(() => {
@@ -974,11 +1036,12 @@ function App() {
 
   // choropleth geojson 데이터 생성
   const choroplethData = useMemo(() => {
+    if (!sigunguBoundariesData) return { type: 'FeatureCollection' as const, features: [] }
     const maxCount = Math.max(...Object.values(sigunguCounts), 1)
 
     return {
       type: 'FeatureCollection' as const,
-      features: (sigunguBoundaries as any).features.map((feature: any) => ({
+      features: sigunguBoundariesData.features.map((feature: any) => ({
         ...feature,
         properties: {
           ...feature.properties,
@@ -987,13 +1050,14 @@ function App() {
         }
       }))
     }
-  }, [sigunguCounts])
+  }, [sigunguCounts, sigunguBoundariesData])
 
   // 시군구 중심점에 숫자 표시를 위한 데이터
   const sigunguLabelData = useMemo(() => {
+    if (!sigunguBoundariesData) return { type: 'FeatureCollection' as const, features: [] }
     return {
       type: 'FeatureCollection' as const,
-      features: (sigunguBoundaries as any).features.map((feature: any) => {
+      features: sigunguBoundariesData.features.map((feature: any) => {
         const center = getPolygonCenter(feature.geometry.coordinates)
         const count = sigunguCounts[feature.properties.code] || 0
         return {
@@ -1011,7 +1075,7 @@ function App() {
         }
       }).filter((f: any) => f.properties.count > 0)  // 0개인 지역은 숨김
     }
-  }, [sigunguCounts])
+  }, [sigunguCounts, sigunguBoundariesData])
 
   // 모든 필터된 시설을 GeoJSON으로 변환 (클러스터링 없이 직접 표시)
   const geojsonData = useMemo(() => {
@@ -1411,7 +1475,7 @@ function App() {
     }
   }
 
-  // 시설 마커 레이어 - 줌 10 이상에서만 표시 (아이콘 크기 축소)
+  // 시설 마커 레이어 - 줌 10부터 아이콘과 이름 동시 표시
   const facilityMarkerLayer: any = {
     id: 'facility-markers',
     type: 'symbol',
@@ -1426,38 +1490,65 @@ function App() {
         'church-icon'
       ],
       'icon-size': ['interpolate', ['linear'], ['zoom'],
-        10, 0.06,
-        12, 0.10,
-        14, 0.15,
-        16, 0.22,
-        18, 0.30
+        10, 0.08,
+        12, 0.15,
+        14, 0.25,
+        16, 0.35,
+        18, 0.45
       ],
-      'icon-allow-overlap': true,
-      'icon-ignore-placement': true,
-      'icon-padding': 0,
+      'icon-allow-overlap': false,
+      'icon-ignore-placement': false,
+      'icon-padding': 2,
       // 즐겨찾기 시설 먼저 정렬 (위에 표시)
       'symbol-sort-key': ['case', ['==', ['get', 'isFavorite'], 1], 0, 1],
-      // 시설명 라벨도 함께 표시
-      'text-field': ['get', 'name'],
-      'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
+      // 시설명 라벨 - 줌 10부터 표시 (아이콘과 동시에)
+      'text-field': ['step', ['zoom'], '', 10, ['get', 'name']],
+      'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
       'text-size': ['interpolate', ['linear'], ['zoom'],
-        10, 9,
+        10, 8,
         12, 10,
-        14, 11,
-        16, 12
+        14, 12,
+        16, 14,
+        18, 16
       ],
-      'text-offset': [0, 1.2],
+      'text-offset': [0, 1.5],
       'text-anchor': 'top',
       'text-max-width': 8,
       'text-optional': true
     },
     paint: {
-      'text-color': darkMode ? '#FFFFFF' : '#1F2937',
-      'text-halo-color': darkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
-      'text-halo-width': 1.5
+      'text-color': '#FFFFFF',
+      'text-halo-color': 'rgba(0, 0, 0, 0.7)',
+      'text-halo-width': 2
     }
   }
 
+
+  // 데이터 로딩 중 스피너 / 에러 표시
+  if (isDataLoading || dataLoadError) {
+    return (
+      <div className={`app kakao-style ${darkMode ? 'dark' : ''}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '16px' }}>
+        {dataLoadError ? (
+          <>
+            <p style={{ color: '#EF4444', fontSize: 16, fontWeight: 600 }}>오류 발생</p>
+            <p style={{ color: '#6b7280', fontSize: 14 }}>{dataLoadError}</p>
+            <button
+              onClick={() => window.location.reload()}
+              style={{ marginTop: 8, padding: '10px 24px', background: '#6366F1', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, cursor: 'pointer' }}
+            >
+              새로고침
+            </button>
+          </>
+        ) : (
+          <>
+            <div style={{ width: 48, height: 48, border: '4px solid #e5e7eb', borderTopColor: '#6366F1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            <p style={{ color: '#6b7280', fontSize: 14 }}>데이터 로딩 중...</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+          </>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className={`app kakao-style ${darkMode ? 'dark' : ''}`}>
@@ -1746,15 +1837,7 @@ function App() {
               <Layer {...sigunguLineLayer} />
             </Source>
 
-            {/* 시도 라벨 - 줌 8 이하 */}
-            <Source id="sido-labels" type="geojson" data={sidoLabelData}>
-              <Layer {...sidoLabelLayer} />
-            </Source>
-
-            {/* 시군구 라벨 - 줌 8~13 */}
-            <Source id="sigungu-labels" type="geojson" data={sigunguLabelData}>
-              <Layer {...sigunguLabelLayer} />
-            </Source>
+            {/* 시도/시군구 라벨 제거 - 개별 마커만 표시 */}
 
             {/* 개별 시설 아이콘 마커 + 라벨 (하나의 레이어로 통합) */}
             <Source
@@ -1844,8 +1927,8 @@ function App() {
                         🟢 거리뷰
                       </a>
                     </div>
-                    {(youtubeChannels as Record<string, string>)[popupFacility.id] && (
-                      <a href={(youtubeChannels as Record<string, string>)[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="popup-btn nav youtube" title="YouTube 채널">
+                    {youtubeChannelsData[popupFacility.id] && (
+                      <a href={youtubeChannelsData[popupFacility.id]} target="_blank" rel="noopener noreferrer" className="popup-btn nav youtube" title="YouTube 채널">
                         ▶️ YouTube
                       </a>
                     )}

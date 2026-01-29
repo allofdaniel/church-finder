@@ -33,15 +33,6 @@ export default defineConfig({
           if (id.includes('maplibre-gl')) {
             return 'maplibre'
           }
-          if (id.includes('all-religious.json')) {
-            return 'religious-data'
-          }
-          if (id.includes('sigungu-boundaries.json')) {
-            return 'sigungu-data'
-          }
-          if (id.includes('facility-sigungu-map.json')) {
-            return 'facility-map'
-          }
         }
       }
     }
