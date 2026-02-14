@@ -199,7 +199,7 @@ export const FacilityPopup = memo(function FacilityPopup({
           </button>
           <button
             onClick={() => {
-              window.location.href = `nmap://panorama?lat=${facility.lat}&lng=${facility.lng}&appname=com.allofdaniel.churchfinder`
+              window.location.href = `nmap://panorama?lat=${facility.lat}&lng=${facility.lng}&appname=com.allofdaniel.koreareligionmap`
             }}
             className="popup-btn streetview"
             title={t.streetview}

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">ChurchFinder</string>
-    <string name="title_activity_main">ChurchFinder</string>
-    <string name="package_name">com.allofdaniel.churchfinder</string>
-    <string name="custom_url_scheme">com.allofdaniel.churchfinder</string>
+    <string name="app_name">Korea Religion Map</string>
+    <string name="title_activity_main">Korea Religion Map</string>
+    <string name="package_name">com.allofdaniel.koreareligionmap</string>
+    <string name="custom_url_scheme">com.allofdaniel.koreareligionmap</string>
 </resources>

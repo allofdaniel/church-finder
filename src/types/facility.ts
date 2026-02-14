@@ -61,6 +61,7 @@ export interface ViewState {
 
 export interface ReligionConfig {
   icon: string
+  iconPath: string
   label: string
   color: string
 }

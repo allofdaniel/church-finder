@@ -2,13 +2,15 @@ import type { ReligionType, ReligionConfig, RegionCoord, Language } from '../typ
 
 // Google API Key (loaded from environment variable)
 export const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY || ''
+// V-World API Key (for satellite tiles)
+export const VWORLD_API_KEY = import.meta.env.VITE_VWORLD_API_KEY || ''
 
 // Religion/Facility Type Configuration
 export const RELIGION_CONFIG: Record<ReligionType, ReligionConfig> = {
-  church: { icon: '\u26ea', label: '교회', color: '#6366F1' },
-  catholic: { icon: '\u271d\ufe0f', label: '성당', color: '#EC4899' },
-  temple: { icon: '\u2638\ufe0f', label: '사찰', color: '#10B981' },
-  cult: { icon: '\u26a0\ufe0f', label: '이단의심', color: '#F59E0B' }
+  church: { icon: '\u26ea', iconPath: '/icons/church.png', label: '교회', color: '#6366F1' },
+  catholic: { icon: '\u271d\ufe0f', iconPath: '/icons/cathedral.png', label: '성당', color: '#EC4899' },
+  temple: { icon: '\u2638\ufe0f', iconPath: '/icons/buddha.png', label: '사찰', color: '#10B981' },
+  cult: { icon: '\ud83d\udd2e', iconPath: '/icons/newreligion.png', label: '신흥종교', color: '#F59E0B' }
 }
 
 // Region Coordinates
@@ -49,12 +51,15 @@ export const MAP_STYLES = {
   dark: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
   satellite: {
     version: 8 as const,
+    glyphs: 'https://tiles.basemaps.cartocdn.com/fonts/{fontstack}/{range}.pbf',
     sources: {
       'satellite': {
         type: 'raster' as const,
-        tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+        tiles: [`https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_API_KEY}/Satellite/{z}/{y}/{x}.jpeg`],
         tileSize: 256,
-        attribution: '© Esri'
+        minzoom: 6,
+        maxzoom: 18,
+        attribution: '© VWorld'
       }
     },
     layers: [
@@ -95,7 +100,7 @@ export const SIDO_COLORS: Record<string, string> = {
 }
 
 // Data Update Date
-export const DATA_UPDATE_DATE = '2024.12.14'
+export const DATA_UPDATE_DATE = '2025.01.31'
 
 // Cult Information (Source: 이단대책협의회, 한국기독교이단상담소)
 export const CULT_INFO: Record<string, { name: string; source: string }> = {

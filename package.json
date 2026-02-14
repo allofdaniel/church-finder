@@ -1,7 +1,7 @@
 {
   "name": "church-finder",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,9 +11,17 @@
     "android:sync": "npx cap sync android",
     "android:build": "npm run build && npm run android:sync && cd android && ./gradlew assembleDebug",
     "android:build:release": "npm run build && npm run android:sync && cd android && ./gradlew assembleRelease",
-    "android:install": "adb install android/app/build/outputs/apk/debug/app-debug.apk"
+    "android:install": "adb install android/app/build/outputs/apk/debug/app-debug.apk",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:quick": "playwright test quick-performance.spec.ts",
+    "test:performance": "playwright test performance-console.spec.ts",
+    "test:report": "playwright show-report"
   },
   "dependencies": {
+    "@capacitor-community/safe-area": "^8.0.1",
     "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
@@ -29,10 +37,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
-    "@vercel/node": "^5.5.23",
+    "@vercel/node": "^4.0.0",
     "@vitejs/plugin-react": "^5.1.1",
     "canvas": "^3.2.0",
     "eslint": "^9.39.1",

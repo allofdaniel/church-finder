@@ -112,7 +112,7 @@ export const useUIStore = create<UIState>()(
       })
     }),
     {
-      name: 'church-finder-ui',
+      name: 'korea-religion-map-ui',
       partialize: (state) => ({ darkMode: state.darkMode })
     }
   )
@@ -166,7 +166,7 @@ export const useFavoritesStore = create<FavoritesState>()(
       clearRecentViewed: () => set({ recentViewed: [] })
     }),
     {
-      name: 'church-finder-favorites'
+      name: 'korea-religion-map-favorites'
     }
   )
 )
@@ -184,7 +184,7 @@ export const useLanguageStore = create<LanguageState>()(
       setLanguage: (lang) => set({ language: lang })
     }),
     {
-      name: 'church-finder-language'
+      name: 'korea-religion-map-language'
     }
   )
 )

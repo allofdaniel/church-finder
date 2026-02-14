@@ -56,7 +56,7 @@ export interface TranslationStrings {
 
 export const TRANSLATIONS: Record<Language, TranslationStrings> = {
   ko: {
-    appTitle: '종교시설 찾기',
+    appTitle: 'Korea Religion Map',
     appSubtitle: '개 시설',
     search: '검색',
     searchPlaceholder: '시설명, 주소 검색',
@@ -66,7 +66,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     church: '교회',
     catholic: '성당',
     temple: '사찰',
-    cult: '이단의심',
+    cult: '신흥종교',
     favorite: '즐겨찾기',
     share: '공유',
     roadview: '로드뷰',
@@ -109,7 +109,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     facilityResults: '시설 검색 결과'
   },
   en: {
-    appTitle: 'Religious Places',
+    appTitle: 'Korea Religion Map',
     appSubtitle: ' facilities',
     search: 'Search',
     searchPlaceholder: 'Search by name, address',
@@ -119,7 +119,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     church: 'Church',
     catholic: 'Catholic',
     temple: 'Temple',
-    cult: 'Suspicious',
+    cult: 'New Religion',
     favorite: 'Favorite',
     share: 'Share',
     roadview: 'Roadview',
@@ -162,7 +162,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     facilityResults: 'Facility Results'
   },
   zh: {
-    appTitle: '宗教设施搜索',
+    appTitle: 'Korea Religion Map',
     appSubtitle: '个设施',
     search: '搜索',
     searchPlaceholder: '搜索名称、地址',
@@ -172,7 +172,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     church: '教会',
     catholic: '天主教堂',
     temple: '寺庙',
-    cult: '可疑',
+    cult: '新兴宗教',
     favorite: '收藏',
     share: '分享',
     roadview: '街景',
@@ -215,7 +215,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     facilityResults: '设施搜索结果'
   },
   ja: {
-    appTitle: '宗教施設検索',
+    appTitle: 'Korea Religion Map',
     appSubtitle: '施設',
     search: '検索',
     searchPlaceholder: '名前、住所で検索',
@@ -225,7 +225,7 @@ export const TRANSLATIONS: Record<Language, TranslationStrings> = {
     church: '教会',
     catholic: '聖堂',
     temple: '寺院',
-    cult: '疑わしい',
+    cult: '新興宗教',
     favorite: 'お気に入り',
     share: '共有',
     roadview: 'ストリートビュー',

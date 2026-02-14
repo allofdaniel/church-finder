@@ -1,26 +1,29 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.allofdaniel.churchfinder"
+    namespace = "com.allofdaniel.koreareligionmap"
     compileSdk = rootProject.ext.compileSdkVersion
 
     signingConfigs {
         release {
+            def props = new Properties()
+            def localPropsFile = rootProject.file('local.properties')
+            if (localPropsFile.exists()) {
+                props.load(new FileInputStream(localPropsFile))
+            }
             storeFile file('release.keystore')
-            // SECURITY: Use environment variables or local.properties (NOT committed to git)
-            // Set KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD in environment or local.properties
-            storePassword System.getenv('KEYSTORE_PASSWORD') ?: project.findProperty('KEYSTORE_PASSWORD') ?: ''
-            keyAlias System.getenv('KEY_ALIAS') ?: project.findProperty('KEY_ALIAS') ?: ''
-            keyPassword System.getenv('KEY_PASSWORD') ?: project.findProperty('KEY_PASSWORD') ?: ''
+            storePassword props.getProperty('KEYSTORE_PASSWORD', System.getenv('KEYSTORE_PASSWORD') ?: '')
+            keyAlias props.getProperty('KEY_ALIAS', System.getenv('KEY_ALIAS') ?: '')
+            keyPassword props.getProperty('KEY_PASSWORD', System.getenv('KEY_PASSWORD') ?: '')
         }
     }
 
     defaultConfig {
-        applicationId "com.allofdaniel.churchfinder"
+        applicationId "com.allofdaniel.koreareligionmap"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 14
-        versionName "1.2.9"
+        versionCode 18
+        versionName "1.5.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

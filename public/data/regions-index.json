@@ -1,0 +1,87 @@
+{
+  "seoul": {
+    "count": 9522,
+    "size": 4783476,
+    "file": "regions/seoul.json"
+  },
+  "gyeonggi": {
+    "count": 15533,
+    "size": 8156944,
+    "file": "regions/gyeonggi.json"
+  },
+  "incheon": {
+    "count": 3127,
+    "size": 1587738,
+    "file": "regions/incheon.json"
+  },
+  "busan": {
+    "count": 3107,
+    "size": 1572319,
+    "file": "regions/busan.json"
+  },
+  "gyeongnam": {
+    "count": 5053,
+    "size": 2647041,
+    "file": "regions/gyeongnam.json"
+  },
+  "daegu": {
+    "count": 2517,
+    "size": 1265286,
+    "file": "regions/daegu.json"
+  },
+  "gyeongbuk": {
+    "count": 5353,
+    "size": 2791886,
+    "file": "regions/gyeongbuk.json"
+  },
+  "gwangju": {
+    "count": 2080,
+    "size": 1035728,
+    "file": "regions/gwangju.json"
+  },
+  "jeonnam": {
+    "count": 4595,
+    "size": 2379516,
+    "file": "regions/jeonnam.json"
+  },
+  "daejeon": {
+    "count": 2483,
+    "size": 1241322,
+    "file": "regions/daejeon.json"
+  },
+  "chungbuk": {
+    "count": 3295,
+    "size": 1750456,
+    "file": "regions/chungbuk.json"
+  },
+  "chungnam": {
+    "count": 4518,
+    "size": 2392919,
+    "file": "regions/chungnam.json"
+  },
+  "sejong": {
+    "count": 426,
+    "size": 227240,
+    "file": "regions/sejong.json"
+  },
+  "ulsan": {
+    "count": 1039,
+    "size": 524329,
+    "file": "regions/ulsan.json"
+  },
+  "gangwon": {
+    "count": 3425,
+    "size": 1938994,
+    "file": "regions/gangwon.json"
+  },
+  "jeonbuk": {
+    "count": 4744,
+    "size": 2686760,
+    "file": "regions/jeonbuk.json"
+  },
+  "jeju": {
+    "count": 933,
+    "size": 528919,
+    "file": "regions/jeju.json"
+  }
+}
